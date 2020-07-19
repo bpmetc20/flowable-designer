@@ -132,9 +132,19 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  return INSTANCE; 
   }  
   
-  public IFile getCurrentDiagramFile() {
+  public String getCurrentDiagramName() {
 	  final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) getEditorInput();
-	  return adei.getDataFile();
+	  String diagramName = "";
+	  
+	  try {
+		  final IFile dataFile = adei.getDataFile();
+	      final String diagramFileString = dataFile.getLocationURI().getPath();
+	      Path p = Paths.get(diagramFileString);
+	      diagramName = p.getFileName().toString();
+	  } catch (Exception e) {
+	      
+	  }  
+	  return diagramName;
   }
 
   public ActivitiDiagramEditor() {	  

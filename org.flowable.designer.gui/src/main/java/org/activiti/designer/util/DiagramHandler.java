@@ -38,14 +38,13 @@ import org.activiti.designer.eclipse.util.FileService;
 
 public class DiagramHandler {
 	public static final String processesFolder = System.getProperty("user.home") + 
-			"/Desktop/FtdSolution/runtime-EclipseApplication/FTDSolutionDesigner/target/";
+			"/Desktop/FTDDevelopment/runtime-EclipseApplication/FlowableProject/";
 	public static final String newProcessName = "NewProcess";
 
-	public static final String fullDiagramPath = System.getProperty("user.home") + "/Desktop/FtdSolution/runtime-EclipseApplication/FTDSolutionDesigner/target/";
+	public static final String fullDiagramPath = System.getProperty("user.home") + 
+				"/Desktop/FTDDevelopment/runtime-EclipseApplication/FlowableProject/";
 	public static final String errorMessage = "Error Opening Activiti Diagram";
 	public static final String errorSaveMessage = "Error Saving Activiti Diagram";
-	
-	private IFile diagramFile;
 	
 	public static String createNewProcessFolder() {
 		int i = 0;
@@ -105,11 +104,11 @@ public class DiagramHandler {
 		}
 		
 		boolean reloadModelFromCloud = false;
-				
-		if(!isDiagramExist(modelName)) 
+		String fullFileName = fullDiagramPath +  modelName +  ".bpmn";
+		
+		if(!isDiagramExist(fullFileName)) 
 			reloadModelFromCloud = true;
 		else {
-			String fullFileName = fullDiagramPath +  modelName +  ".bpmn";
 			java.nio.file.Path path = Paths.get(fullFileName);
 			try {
 				FileTime fileTime = Files.getLastModifiedTime(path);
@@ -122,7 +121,7 @@ public class DiagramHandler {
 			
 		if (reloadModelFromCloud) {
 			String diagram = RestClient.getModelSource(modelId);				
-			if (diagram.isEmpty() || !DiagramHandler.writeDiagramToFile(modelName, diagram)) {						
+			if (diagram.isEmpty() || !DiagramHandler.writeDiagramToFile(fullFileName, diagram)) {						
 				ErrorDialog.openError(shell, DiagramHandler.errorMessage, modelName, 
 						new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
 								new PartInitException("Can't write diagram")));
@@ -182,9 +181,9 @@ public class DiagramHandler {
 		 return values.toArray(new String[0]);
 	 }
 	 
-	 public static IFile getCurrentDiagramFile() {
-		 return ActivitiDiagramEditor.get().getCurrentDiagramFile();
-	  }
+	 public static String getCurrentDiagramName() {
+		 return ActivitiDiagramEditor.get().getCurrentDiagramName();
+	 }
 	 
 	 public static boolean saveDiagram() {
 		 //final Set<IFile> result = new HashSet<IFile>();
@@ -200,14 +199,12 @@ public class DiagramHandler {
 			return openDiagramForBpmnFile(ifile);
 		}
 		
-		private static boolean isDiagramExist(String diagramName) {
-			String fullFileName = fullDiagramPath +  diagramName +  ".bpmn";					
+		private static boolean isDiagramExist(String fullFileName) {
 			File file  = new File(fullFileName);
 			return file.exists() && !file.isDirectory();  
 		}
 		
-		private static boolean writeDiagramToFile(String diagramName, String xmlString) {
-			String fullFileName = fullDiagramPath +  diagramName +  ".bpmn";
+		private static boolean writeDiagramToFile(String fullFileName, String xmlString) {
 			try {
 				Files.write(Paths.get(fullFileName), xmlString.getBytes(), StandardOpenOption.CREATE);
 				return true;
