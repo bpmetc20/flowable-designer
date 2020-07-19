@@ -31,7 +31,7 @@ public class ActivitiDiagramEditorInput extends DiagramEditorInput {
   }
 
   public void setDiagramFile(IFile diagramFileName) {
-    this.diagramFile = diagramFileName;
+    this.diagramFile = diagramFileName;    
   }
 
   public IFile getDataFile() {

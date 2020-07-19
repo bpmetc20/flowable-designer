@@ -29,6 +29,7 @@ import org.activiti.designer.integration.annotation.Locales;
 import org.activiti.designer.integration.annotation.Property;
 import org.activiti.designer.integration.annotation.TaskName;
 import org.activiti.designer.integration.annotation.TaskNames;
+import org.activiti.designer.integration.usertask.AbstractCustomUserTask;
 import org.activiti.designer.integration.usertask.CustomUserTask;
 import org.activiti.designer.property.extension.field.FieldInfo;
 import org.activiti.designer.util.bpmn.BpmnExtensions;
@@ -60,7 +61,7 @@ public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
     UserTask newUserTask = new UserTask();
     newUserTask.setExtensionId(customUserTaskId);
     
-    boolean isCustomNameSet = false;
+    boolean isCustomNameSet = false; 
     
     // Process custom user tasks
     if (newUserTask.isExtended()) {
@@ -142,8 +143,8 @@ public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
       }
     }
     
-    if (isCustomNameSet == false) {
-      addObjectToContainer(context, newUserTask, "User Task");
+    if (!newUserTask.isExtended()) {
+      addObjectToContainer(context, newUserTask, "FTD Generic");
     } else {
       addObjectToContainer(context, newUserTask);
     }

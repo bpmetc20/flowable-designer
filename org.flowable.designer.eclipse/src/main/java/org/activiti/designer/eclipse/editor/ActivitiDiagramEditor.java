@@ -117,13 +117,29 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
 public class ActivitiDiagramEditor extends DiagramEditor {
+	
+  public static ActivitiDiagramEditor INSTANCE;
 
   private static GraphicalViewer activeGraphicalViewer;
 
   private TransactionalEditingDomain transactionalEditingDomain;
+   
+  public static ActivitiDiagramEditor get() {
+	  return INSTANCE; 
+  }
+  
+  public boolean doSave() {
+	  return save();	  
+  }
+  
+  public IFile getCurrentDiagramFile() {
+	  final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) getEditorInput();
+	  return adei.getDataFile();
+  }
 
-  public ActivitiDiagramEditor() {
+  public ActivitiDiagramEditor() {	  
     super();
+    INSTANCE = this;
   }
 
   @Override
@@ -177,33 +193,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   public void doSave(IProgressMonitor monitor) {
     super.doSave(monitor);
 
-    final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) getEditorInput();
-
-    try {
-      final IFile dataFile = adei.getDataFile();
-      final String diagramFileString = dataFile.getLocationURI().getPath();
-      BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
-
-      // Save the bpmn diagram file
-      doSaveToBpmn(model, diagramFileString);
-
-      // Save an image of the diagram
-      doSaveImage(diagramFileString, model);
-
-      // Refresh the resources in the workspace before invoking export
-      // marshallers, as they may need access to resources
-      dataFile.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
-
-      // Invoke export marshallers to produce additional output
-      doInvokeExportMarshallers(model);
-
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-
-    ((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
-    updateDirtyState();
+    save();
   }
 
   protected void doSaveToBpmn(final BpmnMemoryModel model, final String diagramFileString) throws Exception {
@@ -227,6 +217,41 @@ public class ActivitiDiagramEditor extends DiagramEditor {
       messageBox.open();
     }
 
+  }
+  
+  private boolean save() {
+	  boolean saved = false;
+	  
+	  final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) getEditorInput();
+
+	  try {
+		  final IFile dataFile = adei.getDataFile();
+	      final String diagramFileString = dataFile.getLocationURI().getPath();
+	      BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
+
+	      // Save the bpmn diagram file
+	      doSaveToBpmn(model, diagramFileString);
+
+	      // Save an image of the diagram
+	      doSaveImage(diagramFileString, model);
+
+	      // Refresh the resources in the workspace before invoking export
+	      // marshallers, as they may need access to resources
+	      dataFile.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+
+	      // Invoke export marshallers to produce additional output
+	      doInvokeExportMarshallers(model);
+	      saved = true;
+	      
+	    } catch (Exception e) {
+	      // TODO Auto-generated catch block
+	      e.printStackTrace();
+	    }
+
+	    ((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
+	    updateDirtyState();
+	    
+	    return saved;
   }
 
   private void doSaveImage(final String diagramFileString, BpmnMemoryModel model) {

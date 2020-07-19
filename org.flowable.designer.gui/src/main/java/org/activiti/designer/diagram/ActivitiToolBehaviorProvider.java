@@ -159,7 +159,7 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
 
   public ActivitiToolBehaviorProvider(IDiagramTypeProvider dtp) {
     super(dtp);
-
+    
     // Setup tool mappings to palette entries
     toolMapping.put(CreateStartEventFeature.class, PaletteEntry.START_EVENT);
     toolMapping.put(CreateTimerStartEventFeature.class, PaletteEntry.TIMER_START_EVENT);
@@ -250,10 +250,10 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
 
       CreateUserTaskFeature userTaskfeature = new CreateUserTaskFeature(getFeatureProvider());
       ContextButtonEntry newUserTaskButton = new ContextButtonEntry(userTaskfeature, taskContext);
-      newUserTaskButton.setText("new user task"); //$NON-NLS-1$
-      newUserTaskButton.setDescription("Create a new task"); //$NON-NLS-1$
+      newUserTaskButton.setText("new FTD Generic user task"); //$NON-NLS-1$
+      newUserTaskButton.setDescription("Create a new FTD Generic task"); //$NON-NLS-1$
       newUserTaskButton.setIconId(PluginImage.IMG_USERTASK.getImageKey());
-      data.getDomainSpecificContextButtons().add(newUserTaskButton);
+      data.getDomainSpecificContextButtons().add(newUserTaskButton); //do not allow to create new task from diagram 
 
       CreateExclusiveGatewayFeature exclusiveGatewayFeature = new CreateExclusiveGatewayFeature(getFeatureProvider());
       ContextButtonEntry newExclusiveGatewayButton = new ContextButtonEntry(exclusiveGatewayFeature, taskContext);
@@ -302,7 +302,7 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
       otherElementButton.setText("new element"); //$NON-NLS-1$
       otherElementButton.setDescription("Create a new element"); //$NON-NLS-1$
       otherElementButton.setIconId(PluginImage.NEW_ICON.getImageKey());
-      data.getDomainSpecificContextButtons().add(otherElementButton);
+      //data.getDomainSpecificContextButtons().add(otherElementButton);
 
       addContextButton(otherElementButton, new CreateServiceTaskFeature(getFeatureProvider()), taskContext, "Create service task", "Create a new service task", PluginImage.IMG_SERVICETASK);
       addContextButton(otherElementButton, new CreateScriptTaskFeature(getFeatureProvider()), taskContext, "Create script task", "Create a new script task", PluginImage.IMG_SCRIPTTASK);

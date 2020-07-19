@@ -24,7 +24,8 @@ Require-Bundle: org.eclipse.ui,
  org.flowable.designer.eclipse,
  org.flowable.designer.libs
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8,
+ JavaSE-13
 Export-Package: org.activiti.designer,
  org.activiti.designer.command,
  org.activiti.designer.diagram,
@@ -36,3 +37,4 @@ Bundle-Activator: org.activiti.designer.Activator
 Bundle-ClassPath: .,
  jdi.jar,
  jdimodel.jar
+Import-Package: org.apache.commons.io

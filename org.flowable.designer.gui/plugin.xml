@@ -443,5 +443,87 @@
             class="org.activiti.designer.diagram.DefaultIconProvider">
       </ImageProvider>
    </extension>
-
-</plugin>
+   <extension
+      point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.activiti.designer.handlers.NewProcessHandler"
+            id="org.activiti.designer.commands.NewProcessHandler"
+            name="NewProcess">
+      </command>
+      <command
+            defaultHandler="org.activiti.designer.handlers.LoadProcessHandler"
+            id="org.activiti.designer.commands.LoadProcessHandler"
+            name="LoadProcess">
+      </command>
+      <command
+            defaultHandler="org.activiti.designer.handlers.DeploymenProcesstHandler"
+            id="org.activiti.designer.commands.DeploymenProcesstHandler"
+            name="Deploy Process">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+         locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+           id="processMenu"
+           label="Processes">
+          		<command
+                  	icon="icons/type.user.png"
+                  	commandId="org.activiti.designer.commands.NewProcessHandler"
+                  	label="New"
+                  	style="push"
+                  	tooltip="Create new process and diagrams">
+            	</command>
+         </menu> 
+         <menu
+            id="processMenu"
+            label="Processes">
+          		<command
+                  	icon="icons/type.user.png"
+                  	commandId="org.activiti.designer.commands.LoadProcessHandler"
+                  	label="Load"
+                  	style="push"
+                  	tooltip="Load process and diagrams">
+            	</command>            	         	          
+         </menu> 
+         <menu
+            id="processMenu"
+            label="Processes">
+          		<command
+                  	icon="icons/type.user.png"
+                  	commandId="org.activiti.designer.commands.LoadProcessHandler"
+                  	label="Save"
+                  	style="push"
+                  	tooltip="Save process and diagrams">
+            	</command>            	
+         </menu> 
+         <menu
+            id="processMenu"
+            label="Processes">
+          		<command
+                  	icon="icons/type.user.png"
+                  	commandId="org.activiti.designer.commands.LoadProcessHandler"
+                  	label="Save As..."
+                  	style="push"
+                  	tooltip="Save As process and diagrams">
+            	</command> 
+            	<separator
+                  name="additions"
+                  visible="true">
+            </separator>            	          
+         </menu>                    
+         <menu         	 
+             id="processMenu"
+             label="Processes">
+            	<command
+                	icon="icons/flowable.logo.16x16.png"
+                	commandId="org.activiti.designer.commands.DeploymenProcesstHandler"
+                	label="Create deployment process"
+                	style="push"
+                	tooltip="Deploy process and diagrams">
+            	</command>
+         </menu>
+      </menuContribution>
+   </extension>  
+   </plugin>

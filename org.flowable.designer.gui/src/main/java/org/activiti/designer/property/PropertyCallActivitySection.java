@@ -20,12 +20,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.activiti.bpmn.model.CallActivity;
-import org.activiti.designer.Activator;
-import org.activiti.designer.PluginImage;
 import org.activiti.designer.command.BpmnProcessModelUpdater;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
-import org.activiti.designer.util.ActivitiConstants;
-import org.activiti.designer.util.dialog.ActivitiResourceSelectionDialog;
+import org.activiti.designer.util.DiagramHandler;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;
@@ -42,14 +39,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.TwoPaneElementSelector;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertyConstants;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -64,7 +58,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class PropertyCallActivitySection extends ActivitiPropertySection implements ITabbedPropertyConstants {
 
   /** The text field of the process ID to call */
-  private Text calledElementText;
+  private Combo calledElementCombo;   
 
   /**
    * A button that becomes active in case a process is found in the current workspace with this
@@ -75,37 +69,76 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
   /**
    * A button that allows to choose a called element among all currently found processes.
    */
-  private Button chooseCalledElementButton;
+  private Button chooseCalledElementButton; 
   
+  private List<Map<String, String>> loadModels; 
+    
+  protected Combo createComboboxMy(String[] values, int defaultSelectionIndex) {
+		Combo comboControl = new Combo(formComposite, SWT.READ_ONLY);
+		FormData data = new FormData();
+		data.left = new FormAttachment(0, 200);
+		data.right = new FormAttachment(70, 0);
+		data.top = createTopFormAttachment();
+		comboControl.setLayoutData(data);
+
+		// Set possible values
+		if (values != null && values.length > 0) {
+			comboControl.setItems(values);
+
+			if (defaultSelectionIndex >= 0) {
+				comboControl.select(defaultSelectionIndex);
+				// Store the default-selection as "data", so we can reselect it when
+				// the combo needs to be reset
+				comboControl.setData(defaultSelectionIndex);
+			}
+		}
+
+		comboControl.addSelectionListener(selectionListener);
+		registerControl(comboControl);
+		return comboControl;
+	}  
+
   
   @Override
   public void createFormControls(TabbedPropertySheetPage aTabbedPropertySheetPage) {
-    openCalledElementButton = getWidgetFactory().createButton(formComposite, StringUtils.EMPTY, SWT.PUSH);
-    openCalledElementButton.setImage(Activator.getImage(PluginImage.ACTION_GO));
-    FormData data = new FormData();
-    data.right = new FormAttachment(100, -HSPACE);
-    openCalledElementButton.setLayoutData(data);
-    openCalledElementButton.addSelectionListener(openCalledElementSelected);
-
-    chooseCalledElementButton = getWidgetFactory().createButton(formComposite, "\u2026", SWT.PUSH);
-    chooseCalledElementButton.setToolTipText(
-            "Click to open a dialog to choose from all found processes.");
-
-    data = new FormData();
-    data.right = new FormAttachment(openCalledElementButton, -HSPACE);
-    chooseCalledElementButton.setLayoutData(data);
-    chooseCalledElementButton.addSelectionListener(chooseCalledElementSelected);
+	//openCalledElementButton = getWidgetFactory().createButton(formComposite, StringUtils.EMPTY, SWT.PUSH);
+    //openCalledElementButton.setImage(Activator.getImage(PluginImage.ACTION_GO));
+    //FormData data = new FormData();
+    //data.right = new FormAttachment(100, -HSPACE);
+    //openCalledElementButton.setLayoutData(data);
     
-    calledElementText = createTextControl(false);
-    FormData formData = (FormData) calledElementText.getLayoutData();
+
+    //chooseCalledElementButton = getWidgetFactory().createButton(formComposite, "\u2026", SWT.PUSH);
+    //chooseCalledElementButton.setToolTipText(
+    //        "Click to open a dialog to choose from all found processes.");
+
+    //data = new FormData();
+    //data.right = new FormAttachment(openCalledElementButton, -HSPACE);
+    //chooseCalledElementButton.setLayoutData(data);
+    //chooseCalledElementButton.addSelectionListener(chooseCalledElementSelected);
+    
+	loadModels = DiagramHandler.loadModels();
+	String[] tasksArray = DiagramHandler.buildListFromList(loadModels, "name");
+	calledElementCombo = createComboboxMy(tasksArray, 0 );
+    FormData formData = (FormData) calledElementCombo.getLayoutData();
     formData.right.offset = -80;
-    createLabel("Called element", calledElementText);
+    createLabel("Called element", calledElementCombo);
+    
+    openCalledElementButton = getWidgetFactory().createButton(formComposite, "Show Diagram", SWT.PUSH);
+    openCalledElementButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+    FormData data = new FormData();
+	data.left = new FormAttachment(calledElementCombo, 0);
+	data.right = new FormAttachment(90, 0);
+	data.top = new FormAttachment(calledElementCombo, -2, SWT.TOP);
+	openCalledElementButton.setLayoutData(data);
+	openCalledElementButton.addSelectionListener(openCalledElementSelected);	
+	
   }
 
   @Override
   protected Object getModelValueForControl(Control control, Object businessObject) {
     CallActivity activity = (CallActivity) businessObject;
-    if (control == calledElementText) {
+    if (control == calledElementCombo) {
       return activity.getCalledElement();
     }
     return null;
@@ -115,9 +148,9 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
   protected void storeValueInModel(Control control, Object businessObject) {
     CallActivity activity = (CallActivity) businessObject;
     
-    if (control == calledElementText) {
-      evaluateOpenCalledElementButtonEnabledStatus();
-      activity.setCalledElement(calledElementText.getText());
+    if (control == calledElementCombo) {
+      //evaluateOpenCalledElementButtonEnabledStatus();
+      activity.setCalledElement(calledElementCombo.getText());
     }
   }
 
@@ -139,7 +172,7 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
    * disabled, otherwise enabled.
    */
   private void evaluateOpenCalledElementButtonEnabledStatus() {
-    final String calledElement = calledElementText.getText();
+    final String calledElement = calledElementCombo.getText();
 
     if (StringUtils.isBlank(calledElement) || !isCalledElementExisting(calledElement)) {
       openCalledElementButton.setEnabled(false);
@@ -188,12 +221,12 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
       if (dialog.open() == Window.OK) {
         final Object[] data = (Object[]) dialog.getFirstResult();
 
-        calledElementText.setText((String) data[1]);
+        calledElementCombo.setText((String) data[1]);
         
         //Fix "called element" value not save when select from pop up.
         BpmnProcessModelUpdater updater = getProcessModelUpdater();
         Object updatableBo = updater.getUpdatableBusinessObject();
-        storeValueInModel(calledElementText, updatableBo);
+        storeValueInModel(calledElementCombo, updatableBo);
         executeModelUpdater();
       }
     }
@@ -212,7 +245,20 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
 
     @Override
     public void widgetSelected(SelectionEvent event) {
-      final String calledElement = calledElementText.getText();
+    	String modelName = calledElementCombo.getText();
+    	
+    	for(Map<String, String> model : loadModels) {
+			if (model.get("name").equals(modelName)) {
+				DiagramHandler.openDiagram(model, Display.getCurrent().getActiveShell());
+				return;
+			}
+		}										
+		ErrorDialog.openError(Display.getCurrent().getActiveShell(), DiagramHandler.errorMessage, modelName, 
+				new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", new PartInitException("Can't find diagram")));
+	
+   	
+      /*
+       * final String calledElement = calledElementCombo.getText();
 
       final Set<IFile> resources = ActivitiWorkspaceUtil.getDiagramDataFilesByProcessId(calledElement);
 
@@ -235,32 +281,8 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
           openDiagramForBpmnFile((IFile) result[0]);
         }
       }
-    }
-
-    /**
-     * Opens the given diagram specified by the given data file in a new editor. In case an error
-     * occurs while doing so, opens an error dialog.
-     *
-     * @param dataFile the data file to use for the new editor to open
-     */
-    private void openDiagramForBpmnFile(IFile dataFile) {
-
-      if (dataFile.exists())
-      {
-        final IWorkbenchPage activePage
-          = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-
-        try {
-          IDE.openEditor(activePage, dataFile, ActivitiConstants.DIAGRAM_EDITOR_ID, true);
-        } catch (PartInitException exception) {
-          final IStatus status = new Status(IStatus.ERROR, ActivitiPlugin.getID()
-                                          , "Error while opening new editor.", exception);
-
-          ErrorDialog.openError(Display.getCurrent().getActiveShell()
-                              , "Error Opening Activiti Diagram", null, status);
-        }
-      }
-    }
+      */
+    }    
 
     @Override
     public void widgetDefaultSelected(SelectionEvent event) {
@@ -304,5 +326,6 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
       return resource.getFullPath().makeRelative().toString();
     }
 
-  }
+  }   
+  
 }
