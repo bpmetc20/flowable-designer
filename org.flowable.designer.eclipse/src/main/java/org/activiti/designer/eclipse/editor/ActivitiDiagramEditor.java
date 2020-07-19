@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -78,6 +80,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.SWTGraphics;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -126,11 +130,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
    
   public static ActivitiDiagramEditor get() {
 	  return INSTANCE; 
-  }
-  
-  public boolean doSave() {
-	  return save();	  
-  }
+  }  
   
   public IFile getCurrentDiagramFile() {
 	  final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) getEditorInput();
@@ -188,12 +188,16 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 
     return creator.createBpmnDiagram(dataFile, diagramFile, this, false);
   }
+  
+  public boolean doSave() {
+	  return save(true);	  
+  }
 
   @Override
   public void doSave(IProgressMonitor monitor) {
     super.doSave(monitor);
 
-    save();
+    save(false);
   }
 
   protected void doSaveToBpmn(final BpmnMemoryModel model, final String diagramFileString) throws Exception {
@@ -219,7 +223,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 
   }
   
-  private boolean save() {
+  private boolean save(boolean showDialog) {
 	  boolean saved = false;
 	  
 	  final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) getEditorInput();
@@ -227,6 +231,25 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  try {
 		  final IFile dataFile = adei.getDataFile();
 	      final String diagramFileString = dataFile.getLocationURI().getPath();
+	      Path p = Paths.get(diagramFileString);
+	      String fileName = p.getFileName().toString();
+	      
+	      IStatus status =  new Status(IStatus.INFO, ActivitiPlugin.getID(), "hello", 
+	    		  new PartInitException("Can't find diagram"));
+	      
+	      if (showDialog) {
+	    	  MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.NO | SWT.YES );
+	    	  messageBox.setText("Info");
+	    	  messageBox.setMessage("Would you like to save " + fileName);
+	    	  int result = messageBox.open();
+	    	  switch(result) {
+	    	  	case SWT.NO:	    	  			
+	    	  	return false;
+	    	  	case SWT.YES:
+		    	break;
+	    	  }
+	  	  }
+	      
 	      BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
 
 	      // Save the bpmn diagram file
@@ -245,7 +268,10 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	      
 	    } catch (Exception e) {
 	      // TODO Auto-generated catch block
-	      e.printStackTrace();
+	    	MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK);
+	        messageBox.setText("Warning");
+	        messageBox.setMessage("Error while saving the model " + e.getLocalizedMessage());
+	        messageBox.open();
 	    }
 
 	    ((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
@@ -253,7 +279,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	    
 	    return saved;
   }
-
+  
   private void doSaveImage(final String diagramFileString, BpmnMemoryModel model) {
     boolean saveImage = PreferencesUtil.getBooleanPreference(Preferences.SAVE_IMAGE, ActivitiPlugin.getDefault());
     if (saveImage) {

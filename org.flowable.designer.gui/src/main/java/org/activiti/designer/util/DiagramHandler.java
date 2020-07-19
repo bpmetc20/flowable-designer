@@ -186,10 +186,10 @@ public class DiagramHandler {
 		 return ActivitiDiagramEditor.get().getCurrentDiagramFile();
 	  }
 	 
-	 public static void saveDiagram() {
+	 public static boolean saveDiagram() {
 		 //final Set<IFile> result = new HashSet<IFile>();
 		 //final Set<IFile> projectResources = ActivitiWorkspaceUtil.getAllDiagramDataFiles();
-		 ActivitiDiagramEditor.get().doSave();
+		 return ActivitiDiagramEditor.get().doSave();
      }		 
 	 
 	 private static IStatus openDiagramForBpmnFile(String diagramName) {
