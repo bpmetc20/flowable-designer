@@ -125,7 +125,7 @@ public class DiagramHandler {
 			}
 		}
 			
-		if (reloadModelFromCloud) {
+		if (true /*reloadModelFromCloud*/) {
 			String diagram = RestClient.getModelSource(modelId);				
 			if (diagram.isEmpty() || !DiagramHandler.writeDiagramToFile(fullFileName, diagram)) {						
 				ErrorDialog.openError(shell, DiagramHandler.errorMessage, modelName, 
@@ -145,23 +145,7 @@ public class DiagramHandler {
 	 }
 	 
 	 public static Map<String, String> loadForms() { 
-		 Map<String, String> loadedForms = new HashMap<String, String>();
-		 loadedForms.put("2a3d7d0e3e4aca9a24893aaaf2e449e837de1f5c", "Propose PO");
-		 loadedForms.put("d547a52eeae2e8145fe314d2410aaf867146502c", "Approve PO");
-		 loadedForms.put("650e3c8dc56fcc9bcc35070ee744789b8073d245", "Escalate PO");
-		 loadedForms.put("683a021ac763b3f0cec9ecc2991e5e72e4132581", "Review Proposal");
-			
-			
-		 loadedForms.put("f0b4e925b681ef2dcedb843a62c12293b2ee1f21", "Gather New Project Information");
-		 loadedForms.put("8090badbafc70ffb64ec241b74ebf540a1b2e001", "Assign Proposal Team");
-		 loadedForms.put("d96f949174e29627f1b1a4cbab90e1e27d2ae931", "Contact External Expert for Proposal Input and Availability");
-		 loadedForms.put("3b40393d4dc8fd2f76080165566a5ffcf5bb4beb", "Project Startup Data");
-			
-		 loadedForms.put("f328f5aa5feaa1dec8401a47b1badd99afcf70b5", "Submit Draft Proposal to Client");
-		 loadedForms.put("efcb7c34073379e84986006957d3d7203b4efa29", "Submit Proposal");
-		 loadedForms.put("ed2e8dfd324d9a11e5cf28aa7ef8f82950c32397", "Submit Proposal to PST");
-		 loadedForms.put("173d32236635b57bd09896e6bd7e51d548b77bf2", "PST Proposal Approval");
-		 return loadedForms;
+		return RestClient.getForms();
 	 }	 
 	 
 	 public static Map<String, String> loadUsers() {

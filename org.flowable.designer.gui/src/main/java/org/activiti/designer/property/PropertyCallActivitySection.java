@@ -248,7 +248,8 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
     	String modelName = calledElementCombo.getText();
     	
     	for(Map<String, String> model : loadModels) {
-			if (model.get("name").equals(modelName)) {
+    		String diagramName = DiagramHandler.getDiagramName(model);
+	 		if (modelName.equals(diagramName)) { 
 				DiagramHandler.openDiagram(model, Display.getCurrent().getActiveShell());
 				return;
 			}
