@@ -133,18 +133,21 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   }  
   
   public String getCurrentDiagramName() {
-	  final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) getEditorInput();
 	  String diagramName = "";
 	  
 	  try {
-		  final IFile dataFile = adei.getDataFile();
-	      final String diagramFileString = dataFile.getLocationURI().getPath();
-	      Path p = Paths.get(diagramFileString);
-	      diagramName = p.getFileName().toString();
+		  Path p = Paths.get(getCurrentDiagramFullPath());
+	      diagramName = p.getFileName().toString();	      
 	  } catch (Exception e) {
 	      
 	  }  
-	  return diagramName;
+	  return diagramName.isEmpty() ? "" : diagramName.substring(0, diagramName.lastIndexOf('.'));
+  }
+  
+  public String getCurrentDiagramFullPath() {
+	  final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) getEditorInput();
+	  final IFile dataFile = adei.getDataFile();
+	  return dataFile.getLocationURI().getPath();	      
   }
 
   public ActivitiDiagramEditor() {	  

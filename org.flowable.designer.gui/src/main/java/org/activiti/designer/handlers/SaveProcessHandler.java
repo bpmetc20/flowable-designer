@@ -19,6 +19,6 @@ public class SaveProcessHandler extends AbstractHandler {
 	    	  messageBox.open();
 	    	  return diagramName;
 		}		
-		return Boolean.toString(DiagramHandler.saveDiagram());
+		return Boolean.toString(DiagramHandler.saveDiagram(diagramName));
 	}	
 }

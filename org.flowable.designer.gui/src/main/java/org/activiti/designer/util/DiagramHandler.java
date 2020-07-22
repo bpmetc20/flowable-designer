@@ -1,7 +1,10 @@
 package org.activiti.designer.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -16,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
@@ -28,7 +32,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -185,11 +191,65 @@ public class DiagramHandler {
 		 return ActivitiDiagramEditor.get().getCurrentDiagramName();
 	 }
 	 
-	 public static boolean saveDiagram() {
+	 public static boolean saveDiagram(String diagramName) {
 		 //final Set<IFile> result = new HashSet<IFile>();
 		 //final Set<IFile> projectResources = ActivitiWorkspaceUtil.getAllDiagramDataFiles();
-		 return ActivitiDiagramEditor.get().doSave();
-     }		 
+		 //find diagram id first
+		 final Map<String, String> model = getDiagramByName(diagramName);			
+		 if (model.isEmpty()) {   
+			 showSaveMessageBoxError(diagramName);
+			 return false;
+		 }
+		 String id = getDiagramId(model);
+		 if (id.isEmpty()) {
+			 showSaveMessageBoxError(diagramName);
+			 return false;
+		 } 
+		
+		 //saving file first
+		 if (!ActivitiDiagramEditor.get().doSave()) {
+			 //no message box needed
+			 return false;
+		 } 
+			 
+		 //saved, now saving on cloud
+		 StringBuilder contentBuilder = new StringBuilder();					 
+		 try (Stream<String> stream = Files.lines( Paths.get(
+				 ActivitiDiagramEditor.get().getCurrentDiagramFullPath()), 
+			     StandardCharsets.UTF_8)) {
+		         stream.forEach(s -> contentBuilder.append(s).append("\n")); 					 
+		 } catch (IOException e) {
+			 e.printStackTrace();
+		 	 showSaveMessageBoxError(diagramName);			 
+			 return false;
+		 }		 
+		 if (!RestClient.updateModelSource(id, contentBuilder.toString())) {
+			 showSaveMessageBoxError(diagramName);			 
+			 return false;
+		 }
+		 return true;	 
+     }
+	 
+	 public static Map<String, String> getDiagramByName(String diagramName) {
+		 if (!diagramName.isEmpty()) {
+			 List<Map<String, String>> loadedModels = loadModels();
+		 
+		 	for(Map<String, String> model : loadedModels) {
+		 		String modelName = getDiagramName(model);
+		 		if (modelName.equals(diagramName)) 
+		 			return model;			
+		 	}
+	 	 }
+		 return new HashMap<String, String>();
+	 }
+	 
+	 public static String getDiagramName(Map<String, String> model) {
+		 return model.get("name");
+	 }
+	 
+	 public static String getDiagramId(Map<String, String> model) {
+		 return model.get("id");
+	 }
 	 
 	 private static IStatus openDiagramForBpmnFile(String diagramName) {
 			String fullFileName = fullDiagramPath +  diagramName +  ".bpmn";
@@ -235,5 +295,12 @@ public class DiagramHandler {
 		        }
 			}
 			return new Status(IStatus.INFO, ActivitiPlugin.getID(), errorMessage, new PartInitException("Can't find diagram")); 
-		 }
+		}
+		
+		private static void showSaveMessageBoxError(String diagramName) {
+			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK);
+		    messageBox.setText("Warning");
+		    messageBox.setMessage("Error while saving the model " + diagramName);
+		    messageBox.open();	
+		}
 }
