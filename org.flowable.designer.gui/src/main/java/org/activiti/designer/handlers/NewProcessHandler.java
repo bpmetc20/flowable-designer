@@ -40,23 +40,8 @@ public class NewProcessHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		/*
-		String newProcessName = DiagramHandler.createNewProcessFolder();
-		if (newProcessName.isEmpty())
-			System.out.println("Can't create directory");
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		InputStream is  = cl.getResourceAsStream("FTDNew.bpmn");
-		return newProcessName;
-		*/
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		String result = MyFileDialog.openDialog(window.getShell());
-		if (!result.isEmpty()) {
-			String diagramFullPath = DiagramHandler.processesFolder + result + ".bpmn";
-			File file  = new File(diagramFullPath);
-			IPath location= Path.fromOSString(file.getAbsolutePath()); 
-			IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
-			//DiagramHandler.openDiagramForBpmnFile(ifile);
-		}	
+		DiagramHandler.createNewDiagram(window.getShell());
 		return window;
 	}	
 	

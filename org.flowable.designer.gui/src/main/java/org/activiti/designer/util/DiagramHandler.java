@@ -43,51 +43,12 @@ import org.eclipse.ui.ide.IDE;
 import org.activiti.designer.eclipse.util.FileService;
 
 public class DiagramHandler {
-	public static final String processesFolder = System.getProperty("user.home") + 
-			"/Desktop/FTDDevelopment/runtime-EclipseApplication/FlowableProject/";
-	public static final String newProcessName = "NewProcess";
-
+	public static final String newModelName = "NewDiagram";
 	public static final String fullDiagramPath = System.getProperty("user.home") + 
 				"/Desktop/FTDDevelopment/runtime-EclipseApplication/FlowableProject/";
 	public static final String errorMessage = "Error Opening Activiti Diagram";
 	public static final String errorSaveMessage = "Error Saving Activiti Diagram";
-	
-	public static String createNewProcessFolder() {
-		int i = 0;
 		
-		File theDir = new File(processesFolder);
-		if (!theDir.exists()) {
-			try {
-		        theDir.mkdir();		         
-		    } 
-		    catch(Exception e){
-		    	System.out.println(e.getMessage()); 
-		    	return "";
-		    }       
-		}
-			
-		
-		while(true) {
-			i++;
-			
-			String processName = newProcessName + Integer.toString(i);
-			String dirName = processesFolder + "/" + processName;
-			theDir = new File(dirName);
-			// if the directory does not exist, create it
-			if (theDir.exists())  
-				continue;
-		    
-			try {
-		        theDir.mkdir();
-		        return processName; 
-		    } 
-		    catch(Exception e){
-		    	System.out.println(e.getMessage()); 
-		    }        
-			return "";
-		}		
-	}
-	
 	public static void openDiagram(Map<String, String> model, Shell shell) {
 		String modelId = model.get("id");;
 		String modelName = model.get("name");
@@ -138,7 +99,23 @@ public class DiagramHandler {
 		if (!status.isOK()) {
 			ErrorDialog.openError(shell, "Error Opening Activiti Diagram", modelName, status);
 		}		
-	}	
+	 }
+	
+	 public static void createNewDiagram(Shell shell) {
+		 String fullFileName = fullDiagramPath +  newModelName +  ".bpmn";
+		 
+		 try {
+			 File file = new File(fullFileName);
+			 file.createNewFile();
+			 IPath location= Path.fromOSString(file.getAbsolutePath()); 
+			 IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);			 
+			 ActivitiDiagramEditor.get().createNewDiagram(ifile);
+		 } catch(Exception e) {
+			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, newModelName, 
+				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
+						 new PartInitException("Can't create diagram")));
+		 }		 
+	 }
 	
 	 public static List<Map<String, String>> loadModels() { 
 		return RestClient.getModels();
@@ -236,12 +213,12 @@ public class DiagramHandler {
 	 }
 	 
 	 private static IStatus openDiagramForBpmnFile(String diagramName) {
-			String fullFileName = fullDiagramPath +  diagramName +  ".bpmn";
-			File file  = new File(fullFileName);
-			IPath location= Path.fromOSString(file.getAbsolutePath()); 
-			IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
-			return openDiagramForBpmnFile(ifile);
-		}
+		 String fullFileName = fullDiagramPath +  diagramName +  ".bpmn";
+		 File file  = new File(fullFileName);
+		 IPath location= Path.fromOSString(file.getAbsolutePath()); 
+		 IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
+		 return openDiagramForBpmnFile(ifile);
+	 }
 		
 		private static boolean isDiagramExist(String fullFileName) {
 			File file  = new File(fullFileName);

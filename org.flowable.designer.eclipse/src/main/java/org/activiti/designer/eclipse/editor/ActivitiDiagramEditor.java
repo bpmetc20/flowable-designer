@@ -149,6 +149,23 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  final IFile dataFile = adei.getDataFile();
 	  return dataFile.getLocationURI().getPath();	      
   }
+  
+  public void createNewDiagram(IFile dataFile) throws CoreException {
+	  
+	  // now generate the temporary diagram file
+	  final IPath dataFilePath = dataFile.getFullPath();
+
+	  // get or create the corresponding temporary folder
+	  final IFolder tempFolder = FileService.getOrCreateTempFolder(dataFilePath);
+
+	  // finally get the diagram file that corresponds to the data file
+	  final IFile diagramFile = FileService.getTemporaryDiagramFile(dataFilePath, tempFolder);
+
+	  // Create new temporary diagram file
+	  Bpmn2DiagramCreator creator = new Bpmn2DiagramCreator();
+
+	  creator.createBpmnDiagram(dataFile, diagramFile, this, true);
+  }
 
   public ActivitiDiagramEditor() {	  
     super();
