@@ -129,6 +129,8 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   private TransactionalEditingDomain transactionalEditingDomain;
    
   public static ActivitiDiagramEditor get() {
+	  if (INSTANCE == null)
+		  INSTANCE = new ActivitiDiagramEditor();
 	  return INSTANCE; 
   }  
   
