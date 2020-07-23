@@ -156,17 +156,10 @@ public class DiagramHandler {
 		 //final Set<IFile> result = new HashSet<IFile>();
 		 //final Set<IFile> projectResources = ActivitiWorkspaceUtil.getAllDiagramDataFiles();
 		 //find diagram id first
+		 
 		 final Map<String, String> model = getDiagramByName(diagramName);			
-		 if (model.isEmpty()) {   
-			 showSaveMessageBoxError(diagramName);
-			 return false;
-		 }
-		 String id = getDiagramId(model);
-		 if (id.isEmpty()) {
-			 showSaveMessageBoxError(diagramName);
-			 return false;
-		 } 
-		
+		 boolean existInCloud = model.isEmpty() ? false : true;    
+			 	
 		 //saving file first
 		 if (!ActivitiDiagramEditor.get().doSave()) {
 			 //no message box needed
@@ -183,10 +176,23 @@ public class DiagramHandler {
 			 e.printStackTrace();
 		 	 showSaveMessageBoxError(diagramName);			 
 			 return false;
-		 }		 
-		 if (!RestClient.updateModelSource(id, contentBuilder.toString())) {
-			 showSaveMessageBoxError(diagramName);			 
-			 return false;
+		 }	
+		 
+		 if (existInCloud) {
+			 String id = getDiagramId(model);
+			 if (id.isEmpty()) {
+				 showSaveMessageBoxError(diagramName);
+				 return false;
+			 } 
+			 if (!RestClient.updateModelSource(id, contentBuilder.toString())) {
+				 showSaveMessageBoxError(diagramName);			 
+				 return false;
+			 }
+		 } else {
+			 if (RestClient.saveNewModel(diagramName, contentBuilder.toString()) == null) {
+				 showSaveMessageBoxError(diagramName);			 
+				 return false;
+			 }
 		 }
 		 return true;	 
      }
