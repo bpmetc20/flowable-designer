@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 import java.text.ParseException;
@@ -150,6 +151,31 @@ public class DiagramHandler {
 	 
 	 public static String getCurrentDiagramName() {
 		 return ActivitiDiagramEditor.get().getCurrentDiagramName();
+	 }
+	 
+	 public static boolean saveDiagramAS(String currentDiagramName, String newDiagramName, Shell shell) {
+		 String currentFileName = fullDiagramPath +  currentDiagramName +  ".bpmn";
+		 String newFileName = fullDiagramPath +  newDiagramName +  ".bpmn";		 
+		 
+		 try {
+			 Files.copy(Paths.get(currentFileName.toString()), Paths.get(newFileName.toString()), 
+					 StandardCopyOption.REPLACE_EXISTING);
+			 //saved, now saving on cloud
+			 StringBuilder contentBuilder = new StringBuilder();					 
+			 try (Stream<String> stream = Files.lines(Paths.get(newFileName.toString()), 
+				StandardCharsets.UTF_8)) {
+				stream.forEach(s -> contentBuilder.append(s).append("\n")); 
+			    if (RestClient.saveNewModel(newDiagramName, contentBuilder.toString()) != null) 
+			    	return true;					 
+			    Files.delete(Paths.get(newFileName.toString()));
+			 } catch (IOException e) {				 
+			 }	
+		 } catch(Exception e) {			 
+		 }		 
+		 ErrorDialog.openError(shell, DiagramHandler.errorMessage, newModelName, 
+				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
+						 new PartInitException("Can't save diagram" + newDiagramName)));
+		 return false;
 	 }
 	 
 	 public static boolean saveDiagram(String diagramName) {

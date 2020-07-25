@@ -461,6 +461,11 @@
             name="SaveDiagram">
       </command> 
       <command
+            defaultHandler="org.activiti.designer.handlers.SaveAsProcessHandler"
+            id="org.activiti.designer.commands.SaveAsProcessHandler"
+            name="SaveAsDiagram">
+      </command> 
+      <command
             defaultHandler="org.activiti.designer.handlers.DeploymenProcesstHandler"
             id="org.activiti.designer.commands.DeploymenProcesstHandler"
             name="Deploy Process">
@@ -508,7 +513,7 @@
             label="Processes">
           		<command
                   	icon="icons/type.user.png"
-                  	commandId="org.activiti.designer.commands.LoadProcessHandler"
+                  	commandId="org.activiti.designer.commands.SaveAsProcessHandler"
                   	label="Save As..."
                   	style="push"
                   	tooltip="Save As process and diagrams">
