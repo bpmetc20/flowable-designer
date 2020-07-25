@@ -25,9 +25,17 @@ import org.eclipse.jface.window.*;
 public class SaveAsProcessHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		
+		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);		
 		String currentDiagramName = DiagramHandler.getCurrentDiagramName();
+		
+		if (currentDiagramName.isEmpty()) {
+			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK );
+	    	  messageBox.setText("Info");
+	    	  messageBox.setMessage("Can't find digram. Please open diagram and try again ...");
+	    	  messageBox.open();
+	    	  return window;
+		}	
+		
 		MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), currentDiagramName);
 		dialog.create();
 		if (dialog.open() == Window.OK) {

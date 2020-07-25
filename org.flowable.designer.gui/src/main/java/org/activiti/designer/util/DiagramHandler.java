@@ -153,6 +153,53 @@ public class DiagramHandler {
 		 return ActivitiDiagramEditor.get().getCurrentDiagramName();
 	 }
 	 
+	 public static boolean deleteDiagram(String diagramName, Shell shell) {
+		 MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), 
+				 SWT.ICON_QUESTION | SWT.NO | SWT.YES );
+   	  	 messageBox.setText("Info");
+   	  	 messageBox.setMessage("Would you like to delete " + diagramName);
+   	  	 int result = messageBox.open();
+   	  	 switch(result) {
+   	  	 	case SWT.NO:	    	  			
+   	  	 	return false;
+   	  	 	case SWT.YES:
+	    	break;
+   	  	 } 	  
+		 
+		 final Map<String, String> model = getDiagramByName(diagramName);
+		 if (model.isEmpty()) {
+			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, diagramName, 
+				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while deleting diagram.", 
+					 new PartInitException("Can't find diagram" + diagramName)));
+	    	  return false; 
+		 }
+		 
+		 String id = getDiagramId(model);
+		 if (id.isEmpty()) {
+			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, diagramName, 
+					 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while deleting diagram.", 
+						 new PartInitException("Can't find diagram" + diagramName)));
+			 return false;
+		 } 
+		 
+		 //delete from cloud first
+		 if (!RestClient.deleteModel(id)) {
+			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, diagramName, 
+					 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while deleting diagram.", 
+						 new PartInitException("Can't delete diagram" + diagramName)));		 
+			 return false;
+		 }
+		 
+		 //delete file
+		 String fullFileName = fullDiagramPath +  diagramName +  ".bpmn";
+		 try {
+			 File file = new File(fullFileName);
+			 file.delete();			 
+		 } catch(Exception e) {			 
+		 }			 
+		 return true;
+	 }
+	 
 	 public static boolean saveDiagramAS(String currentDiagramName, String newDiagramName, Shell shell) {
 		 String currentFileName = fullDiagramPath +  currentDiagramName +  ".bpmn";
 		 String newFileName = fullDiagramPath +  newDiagramName +  ".bpmn";		 

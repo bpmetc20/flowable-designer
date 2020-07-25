@@ -455,7 +455,7 @@
             id="org.activiti.designer.commands.LoadProcessHandler"
             name="LoadProcess">
       </command>
-     <command
+      <command
             defaultHandler="org.activiti.designer.handlers.SaveProcessHandler"
             id="org.activiti.designer.commands.SaveProcessHandler"
             name="SaveDiagram">
@@ -463,7 +463,12 @@
       <command
             defaultHandler="org.activiti.designer.handlers.SaveAsProcessHandler"
             id="org.activiti.designer.commands.SaveAsProcessHandler"
-            name="SaveAsDiagram">
+            name="SaveAsDiagramAs">
+      </command> 
+      <command
+            defaultHandler="org.activiti.designer.handlers.DeleteProcessHandler"
+            id="org.activiti.designer.commands.DeleteProcessHandler"
+            name="Delete Diagram">
       </command> 
       <command
             defaultHandler="org.activiti.designer.handlers.DeploymenProcesstHandler"
@@ -517,13 +522,24 @@
                   	label="Save As..."
                   	style="push"
                   	tooltip="Save As process and diagrams">
-            	</command> 
-            	<separator
-                  name="additions"
-                  visible="true">
-            </separator>            	          
-         </menu>                    
+            	</command>             	                   	          
+         </menu>
          <menu         	 
+             id="processMenu"
+             label="Processes">
+            	<command
+                	icon="icons/type.user.png"
+                	commandId="org.activiti.designer.commands.DeleteProcessHandler"
+                	label="Delete"
+                	style="push"
+                	tooltip="Delete diagrams">
+            	</command>  
+            	<separator
+          	name="additions"
+            visible="true">  
+         	</separator>  	    	          
+         </menu>                                       
+         <menu          	       	         	 
              id="processMenu"
              label="Processes">
             	<command
