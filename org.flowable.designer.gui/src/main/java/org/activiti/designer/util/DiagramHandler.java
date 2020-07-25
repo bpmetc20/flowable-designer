@@ -149,8 +149,8 @@ public class DiagramHandler {
 		 return values.toArray(new String[0]);
 	 }
 	 
-	 public static String getCurrentDiagramName() {
-		 return ActivitiDiagramEditor.get().getCurrentDiagramName();
+	 public static String getDiagramName(boolean current) {
+		 return ActivitiDiagramEditor.get().getDiagramName(current);
 	 }
 	 
 	 public static boolean deleteDiagram(String diagramName, Shell shell) {
@@ -196,8 +196,13 @@ public class DiagramHandler {
 			 File file = new File(fullFileName);
 			 file.delete();			 
 		 } catch(Exception e) {			 
-		 }			 
-		 return true;
+		 }	
+		 //switch to previous one
+		 fullFileName = ActivitiDiagramEditor.get().getDiagramFullPath(false);
+		 File file  = new File(fullFileName);
+		 IPath location= Path.fromOSString(file.getAbsolutePath()); 
+		 IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
+		 return openDiagramForBpmnFile(ifile).isOK();		 
 	 }
 	 
 	 public static boolean saveDiagramAS(String currentDiagramName, String newDiagramName, Shell shell) {
@@ -212,8 +217,12 @@ public class DiagramHandler {
 			 try (Stream<String> stream = Files.lines(Paths.get(newFileName.toString()), 
 				StandardCharsets.UTF_8)) {
 				stream.forEach(s -> contentBuilder.append(s).append("\n")); 
-			    if (RestClient.saveNewModel(newDiagramName, contentBuilder.toString()) != null) 
-			    	return true;					 
+			    if (RestClient.saveNewModel(newDiagramName, contentBuilder.toString()) != null) {
+			    	File file  = new File(newFileName);
+					IPath location= Path.fromOSString(file.getAbsolutePath()); 
+					IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
+					openDiagramForBpmnFile(ifile).isOK();					
+			    }
 			    Files.delete(Paths.get(newFileName.toString()));
 			 } catch (IOException e) {				 
 			 }	
@@ -242,7 +251,7 @@ public class DiagramHandler {
 		 //saved, now saving on cloud
 		 StringBuilder contentBuilder = new StringBuilder();					 
 		 try (Stream<String> stream = Files.lines( Paths.get(
-				 ActivitiDiagramEditor.get().getCurrentDiagramFullPath()), 
+				 ActivitiDiagramEditor.get().getDiagramFullPath(true)), 
 			     StandardCharsets.UTF_8)) {
 		         stream.forEach(s -> contentBuilder.append(s).append("\n")); 					 
 		 } catch (IOException e) {

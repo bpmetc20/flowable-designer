@@ -26,7 +26,7 @@ public class SaveAsProcessHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);		
-		String currentDiagramName = DiagramHandler.getCurrentDiagramName();
+		String currentDiagramName = DiagramHandler.getDiagramName(true);
 		
 		if (currentDiagramName.isEmpty()) {
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK );

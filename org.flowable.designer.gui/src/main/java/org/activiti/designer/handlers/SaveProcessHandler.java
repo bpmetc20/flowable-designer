@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.MessageBox;
 public class SaveProcessHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		String diagramName = DiagramHandler.getCurrentDiagramName();
+		String diagramName = DiagramHandler.getDiagramName(true);
 		if (diagramName.isEmpty()) {
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK );
 	    	  messageBox.setText("Info");
