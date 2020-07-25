@@ -28,13 +28,16 @@ public class LoadProcessHandler extends AbstractHandler {
 		if (tasksArray != null && tasksArray.length > 0) {
 			String modelName = selectProcess(window, tasksArray);		
 		
-			final Map<String, String> model = DiagramHandler.getDiagramByName(modelName);			
-			if (!model.isEmpty()) {	
-				DiagramHandler.openDiagram(model, window.getShell());
-				return window;
-			}
-			ErrorDialog.openError(window.getShell(), DiagramHandler.errorMessage, modelName, 
+			if (!modelName.isEmpty()) {
+				final Map<String, String> model = DiagramHandler.getDiagramByName(modelName);			
+				
+				if (!model.isEmpty()) {	
+					DiagramHandler.openDiagram(model, window.getShell());
+					return window;
+				}
+				ErrorDialog.openError(window.getShell(), DiagramHandler.errorMessage, modelName, 
 					new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", new PartInitException("Can't find diagram")));
+			}
 		}
 		return window;		
 	}
