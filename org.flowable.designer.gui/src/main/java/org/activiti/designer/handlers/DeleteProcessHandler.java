@@ -14,7 +14,7 @@ public class DeleteProcessHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		String diagramName = DiagramHandler.getDiagramName(true);
+		String diagramName = DiagramHandler.getDiagramName();
 		
 		if (diagramName.isEmpty()) {
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK );

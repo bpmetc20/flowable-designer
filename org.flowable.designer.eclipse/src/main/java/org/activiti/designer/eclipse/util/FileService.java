@@ -13,12 +13,17 @@
  */
 package org.activiti.designer.eclipse.util;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,6 +63,55 @@ import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class FileService {
+	
+	public static void deleteFile(String fullFileName) throws IOException {
+		java.nio.file.Path newFilePath = Paths.get(fullFileName);
+		Files.delete(newFilePath);		 
+	}	
+	
+	public static void createNewFile(String fullFileName) throws IOException {		
+		File file = new File(fullFileName);
+		file.createNewFile();			 
+	}
+	
+	public static long getLastModifiedTime(String fullFileName) throws IOException {
+		java.nio.file.Path path = Paths.get(fullFileName);
+		FileTime fileTime = Files.getLastModifiedTime(path);
+		return fileTime.toMillis(); 
+	}
+	
+	public static IFile fromFullName2IFIle(String fullFileName) {
+		 File file  = new File(fullFileName);
+		 IPath location= Path.fromOSString(file.getAbsolutePath()); 
+		 return ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
+	}
+	 
+	public static String ifile2FullName(IFile dataFile) {
+		 return dataFile.getLocationURI().getPath();
+	}
+	 
+	public static String getPathFromFullPath(String diagramFileString) {
+		 String diagramPath = "";
+	     	
+		 	try {
+		 		java.nio.file.Path p = Paths.get(diagramFileString);
+		 		diagramPath = p.getParent().toString();
+		 	} catch (Exception e) {
+		 	}
+		 	return diagramPath;	
+	 }
+	 
+	 public static String getNameFromFullPath(String diagramFileString) {
+	 	String diagramName = "";
+     	
+	 	try {
+	 		java.nio.file.Path p = Paths.get(diagramFileString);
+	 		diagramName = p.getFileName().toString().substring(0, diagramName.lastIndexOf('.'));
+	 	} catch (Exception e) {
+	 	}
+	 	return diagramName;	
+     } 
+   	
 
    /**
    * Returns a temporary file used as diagram file. Conceptually, this is a placeholder used by

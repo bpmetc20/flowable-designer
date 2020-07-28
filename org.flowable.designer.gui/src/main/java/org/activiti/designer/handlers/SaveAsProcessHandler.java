@@ -26,7 +26,7 @@ public class SaveAsProcessHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);		
-		String currentDiagramName = DiagramHandler.getDiagramName(true);
+		String currentDiagramName = DiagramHandler.getDiagramName();
 		
 		if (currentDiagramName.isEmpty()) {
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK );
@@ -39,7 +39,7 @@ public class SaveAsProcessHandler extends AbstractHandler {
 		MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), currentDiagramName);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
-			DiagramHandler.saveDiagramAS(currentDiagramName, dialog.getDiagramName(), window.getShell());		    
+			DiagramHandler.saveDiagramAS(dialog.getDiagramName(), window.getShell());		    
 		}	
 		return window;
 	}	

@@ -128,30 +128,17 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 
   private TransactionalEditingDomain transactionalEditingDomain;
   
-  private static IFile currentDataFile;
-  private static IFile previousDataFile;
+  private IEditorInput editorInput = null;
    
   public static ActivitiDiagramEditor get() {
 	  if (INSTANCE == null)
 		  INSTANCE = new ActivitiDiagramEditor();
 	  return INSTANCE; 
+  }
+  
+  public IEditorInput getEdiotrInput() {
+	  return editorInput;
   }  
-  
-  public String getDiagramName(boolean current) {
-	  String diagramName = "";
-	  
-	  try {
-		  Path p = Paths.get(getDiagramFullPath(current));
-	      diagramName = p.getFileName().toString();	      
-	  } catch (Exception e) {
-	      
-	  }  
-	  return diagramName.isEmpty() ? "" : diagramName.substring(0, diagramName.lastIndexOf('.'));
-  }
-  
-  public String getDiagramFullPath(boolean current) {	  
-	  return current ? currentDataFile.getLocationURI().getPath() : previousDataFile.getLocationURI().getPath();	      
-  }
   
   public void createNewDiagram(IFile dataFile) throws CoreException {
 	  
@@ -193,8 +180,10 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     try {
       if (input instanceof ActivitiDiagramEditorInput) {
         finalInput = input;
+        editorInput = finalInput;
       } else {
         finalInput = createNewDiagramEditorInput(input);
+        editorInput = finalInput;
       }
     } catch (CoreException exception) {
       exception.printStackTrace();
@@ -260,13 +249,15 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  boolean saved = false;
 	  
 	  try {
-		  final IFile dataFile = currentDataFile;
-	      final String diagramFileString = dataFile.getLocationURI().getPath();
-	      	      
+		  IFile dataFile = ((ActivitiDiagramEditorInput) editorInput).getDataFile();
+		  String diagramFileString = FileService.ifile2FullName(dataFile);
+		  	      	      
 	      if (showDialog) {
+	    	  String diagramName = FileService.getNameFromFullPath(diagramFileString);
+		      		      
 	    	  MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.NO | SWT.YES );
 	    	  messageBox.setText("Info");
-	    	  messageBox.setMessage("Would you like to save " + getDiagramName(true));
+	    	  messageBox.setMessage("Would you like to save " + diagramName);
 	    	  int result = messageBox.open();
 	    	  switch(result) {
 	    	  	case SWT.NO:	    	  			
@@ -486,10 +477,8 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     super.setInput(input);
 
     final ActivitiDiagramEditorInput adei = (ActivitiDiagramEditorInput) input;
-    previousDataFile = currentDataFile;
     final IFile dataFile = adei.getDataFile();
-    currentDataFile = dataFile;
-
+    
     final BpmnMemoryModel model = new BpmnMemoryModel(getDiagramTypeProvider().getFeatureProvider(), dataFile);
     ModelHandler.addModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()), model);
 

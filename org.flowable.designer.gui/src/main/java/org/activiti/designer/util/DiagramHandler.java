@@ -1,15 +1,12 @@
 package org.activiti.designer.util;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.FileTime;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +34,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -45,11 +43,21 @@ import org.activiti.designer.eclipse.util.FileService;
 
 public class DiagramHandler {
 	public static final String newModelName = "NewDiagram";
-	public static final String fullDiagramPath = System.getProperty("user.home") + 
-				"/Desktop/FTDDevelopment/runtime-EclipseApplication/FlowableProject/";
 	public static final String errorMessage = "Error Opening Activiti Diagram";
 	public static final String errorSaveMessage = "Error Saving Activiti Diagram";
+	public static String diagramFolderPath = "";  
+	
+	public static String getDaiagramFolderPath() {
+		if (!diagramFolderPath.isEmpty())
+			return diagramFolderPath;
 		
+		String fullPath = getDiagramFullPath();
+		
+		if (!fullPath.isEmpty()) 
+			return FileService.getPathFromFullPath(fullPath);
+		return ""; 
+	}
+	
 	public static void openDiagram(Map<String, String> model, Shell shell) {
 		String modelId = model.get("id");;
 		String modelName = model.get("name");
@@ -72,15 +80,15 @@ public class DiagramHandler {
 		}
 		
 		boolean reloadModelFromCloud = false;
-		String fullFileName = fullDiagramPath +  modelName +  ".bpmn";
+		String fullPath = getDaiagramFolderPath();
+				
+		String fullFileName = fullPath + "/" + modelName +  ".bpmn";
 		
 		if(!isDiagramExist(fullFileName)) 
 			reloadModelFromCloud = true;
-		else {
-			java.nio.file.Path path = Paths.get(fullFileName);
-			try {
-				FileTime fileTime = Files.getLastModifiedTime(path);
-				if (fileTime.toMillis() < updateTime)
+		else {			
+			try {				
+				if (FileService.getLastModifiedTime(fullFileName) < updateTime)
 					reloadModelFromCloud = true;
 			} catch (IOException e) {
 				reloadModelFromCloud = true;
@@ -96,20 +104,19 @@ public class DiagramHandler {
 				return;	
 			}
 		}
-		IStatus status = openDiagramForBpmnFile(modelName);	
+		IStatus status = openDiagramForBpmnFile(fullFileName);	
 		if (!status.isOK()) {
 			ErrorDialog.openError(shell, "Error Opening Activiti Diagram", modelName, status);
 		}		
 	 }
 	
 	 public static void createNewDiagram(Shell shell) {
-		 String fullFileName = fullDiagramPath +  newModelName +  ".bpmn";
-		 
+		 String fullPath = getDaiagramFolderPath();
+		 String fullFileName = fullPath+ "/" + newModelName +  ".bpmn";
+				 
 		 try {
-			 File file = new File(fullFileName);
-			 file.createNewFile();
-			 IPath location= Path.fromOSString(file.getAbsolutePath()); 
-			 IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);			 
+			 FileService.createNewFile(fullFileName);			 
+			 IFile ifile = FileService.fromFullName2IFIle(fullFileName);			 
 			 ActivitiDiagramEditor.get().createNewDiagram(ifile);
 		 } catch(Exception e) {
 			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, newModelName, 
@@ -149,8 +156,16 @@ public class DiagramHandler {
 		 return values.toArray(new String[0]);
 	 }
 	 
-	 public static String getDiagramName(boolean current) {
-		 return ActivitiDiagramEditor.get().getDiagramName(current);
+	 public static String getDiagramName() {
+		 return FileService.getNameFromFullPath(getDiagramFullPath());
+	 }
+	 
+	 public static String getDiagramFullPath() {
+		 IEditorInput input = ActivitiDiagramEditor.get().getEdiotrInput();
+		 if (input instanceof ActivitiDiagramEditorInput) {
+			 return  FileService.ifile2FullName(((ActivitiDiagramEditorInput) input).getDataFile());
+		 }
+		 return "";
 	 }
 	 
 	 public static boolean deleteDiagram(String diagramName, Shell shell) {
@@ -191,39 +206,32 @@ public class DiagramHandler {
 		 }
 		 
 		 //delete file
-		 String fullFileName = fullDiagramPath +  diagramName +  ".bpmn";
+		 
 		 try {
-			 File file = new File(fullFileName);
-			 file.delete();			 
+			 FileService.deleteFile(getDiagramFullPath());			 
 		 } catch(Exception e) {			 
 		 }	
 		 //switch to previous one
-		 fullFileName = ActivitiDiagramEditor.get().getDiagramFullPath(false);
-		 File file  = new File(fullFileName);
-		 IPath location= Path.fromOSString(file.getAbsolutePath()); 
-		 IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
+		 IFile ifile = FileService.fromFullName2IFIle(getDiagramFullPath());
 		 return openDiagramForBpmnFile(ifile).isOK();		 
 	 }
 	 
-	 public static boolean saveDiagramAS(String currentDiagramName, String newDiagramName, Shell shell) {
-		 String currentFileName = fullDiagramPath +  currentDiagramName +  ".bpmn";
-		 String newFileName = fullDiagramPath +  newDiagramName +  ".bpmn";		 
+	 public static boolean saveDiagramAS(String newDiagramName, Shell shell) {
+		 java.nio.file.Path currentFilePath = Paths.get(getDiagramFullPath());
+		 String newFullFileName = currentFilePath.getParent() +  newDiagramName +  ".bpmn";		 
+		 java.nio.file.Path newFilePath = Paths.get(newFullFileName);
 		 
 		 try {
-			 Files.copy(Paths.get(currentFileName.toString()), Paths.get(newFileName.toString()), 
-					 StandardCopyOption.REPLACE_EXISTING);
+			 Files.copy(currentFilePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
 			 //saved, now saving on cloud
 			 StringBuilder contentBuilder = new StringBuilder();					 
-			 try (Stream<String> stream = Files.lines(Paths.get(newFileName.toString()), 
-				StandardCharsets.UTF_8)) {
+			 try (Stream<String> stream = Files.lines(newFilePath, StandardCharsets.UTF_8)) {
 				stream.forEach(s -> contentBuilder.append(s).append("\n")); 
 			    if (RestClient.saveNewModel(newDiagramName, contentBuilder.toString()) != null) {
-			    	File file  = new File(newFileName);
-					IPath location= Path.fromOSString(file.getAbsolutePath()); 
-					IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
+			    	IFile ifile = FileService.fromFullName2IFIle(newFullFileName);
 					openDiagramForBpmnFile(ifile).isOK();					
 			    }
-			    Files.delete(Paths.get(newFileName.toString()));
+			    Files.delete(newFilePath);
 			 } catch (IOException e) {				 
 			 }	
 		 } catch(Exception e) {			 
@@ -251,7 +259,7 @@ public class DiagramHandler {
 		 //saved, now saving on cloud
 		 StringBuilder contentBuilder = new StringBuilder();					 
 		 try (Stream<String> stream = Files.lines( Paths.get(
-				 ActivitiDiagramEditor.get().getDiagramFullPath(true)), 
+				 getDiagramFullPath()), 
 			     StandardCharsets.UTF_8)) {
 		         stream.forEach(s -> contentBuilder.append(s).append("\n")); 					 
 		 } catch (IOException e) {
@@ -298,20 +306,17 @@ public class DiagramHandler {
 	 
 	 public static String getDiagramId(Map<String, String> model) {
 		 return model.get("id");
-	 }
+	 }	 
 	 
-	 private static IStatus openDiagramForBpmnFile(String diagramName) {
-		 String fullFileName = fullDiagramPath +  diagramName +  ".bpmn";
-		 File file  = new File(fullFileName);
-		 IPath location= Path.fromOSString(file.getAbsolutePath()); 
-		 IFile ifile = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
+	 private static IStatus openDiagramForBpmnFile(String fullFileName) {
+		 IFile ifile = FileService.fromFullName2IFIle(fullFileName);
 		 return openDiagramForBpmnFile(ifile);
 	 }
 		
-		private static boolean isDiagramExist(String fullFileName) {
-			File file  = new File(fullFileName);
-			return file.exists() && !file.isDirectory();  
-		}
+	 private static boolean isDiagramExist(String fullFileName) {
+		File file  = new File(fullFileName);
+		return file.exists() && !file.isDirectory();  
+	 }
 		
 		private static boolean writeDiagramToFile(String fullFileName, String xmlString) {
 			try {
