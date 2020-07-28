@@ -1,33 +1,20 @@
 package org.activiti.designer.util;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Stream;
 
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditorInput;
-import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
@@ -84,7 +71,7 @@ public class DiagramHandler {
 				
 		String fullFileName = fullPath + "/" + modelName +  ".bpmn";
 		
-		if(!isDiagramExist(fullFileName)) 
+		if(!FileService.isDiagramExist(fullFileName)) 
 			reloadModelFromCloud = true;
 		else {			
 			try {				
@@ -97,7 +84,9 @@ public class DiagramHandler {
 			
 		if (true /*reloadModelFromCloud*/) {
 			String diagram = RestClient.getModelSource(modelId);				
-			if (diagram.isEmpty() || !DiagramHandler.writeDiagramToFile(fullFileName, diagram)) {						
+			try {
+				FileService.writeDiagramToFile(fullFileName, diagram);
+			} catch (IOException e) {	
 				ErrorDialog.openError(shell, DiagramHandler.errorMessage, modelName, 
 						new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
 								new PartInitException("Can't write diagram")));
@@ -217,23 +206,18 @@ public class DiagramHandler {
 	 }
 	 
 	 public static boolean saveDiagramAS(String newDiagramName, Shell shell) {
-		 java.nio.file.Path currentFilePath = Paths.get(getDiagramFullPath());
-		 String newFullFileName = currentFilePath.getParent() +  newDiagramName +  ".bpmn";		 
-		 java.nio.file.Path newFilePath = Paths.get(newFullFileName);
-		 
+		 String newFullFileName = getDaiagramFolderPath() +  newDiagramName +  ".bpmn";		 
+		 	 
 		 try {
-			 Files.copy(currentFilePath, newFilePath, StandardCopyOption.REPLACE_EXISTING);
+			 FileService.copy(getDiagramFullPath(), newFullFileName);
 			 //saved, now saving on cloud
-			 StringBuilder contentBuilder = new StringBuilder();					 
-			 try (Stream<String> stream = Files.lines(newFilePath, StandardCharsets.UTF_8)) {
-				stream.forEach(s -> contentBuilder.append(s).append("\n")); 
-			    if (RestClient.saveNewModel(newDiagramName, contentBuilder.toString()) != null) {
-			    	IFile ifile = FileService.fromFullName2IFIle(newFullFileName);
-					openDiagramForBpmnFile(ifile).isOK();					
-			    }
-			    Files.delete(newFilePath);
-			 } catch (IOException e) {				 
-			 }	
+			 String xmlString = FileService.getFileContent(newFullFileName);
+			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString) != null) {
+				 IFile ifile = FileService.fromFullName2IFIle(newFullFileName);
+				 return openDiagramForBpmnFile(ifile).isOK();				 
+			 }
+			 FileService.deleteFile(newFullFileName);
+			 
 		 } catch(Exception e) {			 
 		 }		 
 		 ErrorDialog.openError(shell, DiagramHandler.errorMessage, newModelName, 
@@ -257,29 +241,24 @@ public class DiagramHandler {
 		 } 
 			 
 		 //saved, now saving on cloud
-		 StringBuilder contentBuilder = new StringBuilder();					 
-		 try (Stream<String> stream = Files.lines( Paths.get(
-				 getDiagramFullPath()), 
-			     StandardCharsets.UTF_8)) {
-		         stream.forEach(s -> contentBuilder.append(s).append("\n")); 					 
-		 } catch (IOException e) {
-			 e.printStackTrace();
-		 	 showSaveMessageBoxError(diagramName);			 
-			 return false;
-		 }	
-		 
+		 String xmlString = FileService.getFileContent(getDiagramFullPath());
+		 if (xmlString.isEmpty()) {
+			 showSaveMessageBoxError(diagramName);
+			 return false; 
+		 }
+		 		 
 		 if (existInCloud) {
 			 String id = getDiagramId(model);
 			 if (id.isEmpty()) {
 				 showSaveMessageBoxError(diagramName);
 				 return false;
 			 } 
-			 if (!RestClient.updateModelSource(id, contentBuilder.toString())) {
+			 if (!RestClient.updateModelSource(id, xmlString)) {
 				 showSaveMessageBoxError(diagramName);			 
 				 return false;
 			 }
 		 } else {
-			 if (RestClient.saveNewModel(diagramName, contentBuilder.toString()) == null) {
+			 if (RestClient.saveNewModel(diagramName, xmlString) == null) {
 				 showSaveMessageBoxError(diagramName);			 
 				 return false;
 			 }
@@ -313,20 +292,9 @@ public class DiagramHandler {
 		 return openDiagramForBpmnFile(ifile);
 	 }
 		
-	 private static boolean isDiagramExist(String fullFileName) {
-		File file  = new File(fullFileName);
-		return file.exists() && !file.isDirectory();  
-	 }
+	 
 		
-		private static boolean writeDiagramToFile(String fullFileName, String xmlString) {
-			try {
-				Files.write(Paths.get(fullFileName), xmlString.getBytes(), StandardOpenOption.CREATE);
-				return true;
-			} catch (IOException e) {
-				System.out.print(e.getMessage());
-			}
-			return false;
-		}
+		
 			
 		/**
 		 * Opens the given diagram specified by the given data file in a new editor. In case an error

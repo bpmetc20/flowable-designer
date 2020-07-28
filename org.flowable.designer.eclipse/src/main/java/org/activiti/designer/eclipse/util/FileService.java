@@ -20,8 +20,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 
 import java.util.Collections;
@@ -29,6 +32,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Stream;
 import java.util.Set;
 
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
@@ -63,6 +67,34 @@ import org.eclipse.ui.IURIEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class FileService {
+	
+	public static String getFileContent(String fullFileName) {
+		java.nio.file.Path fullFileNamePath = Paths.get(fullFileName);
+		StringBuilder contentBuilder = new StringBuilder();					 
+		
+		try (Stream<String> stream = Files.lines(fullFileNamePath, StandardCharsets.UTF_8)) {
+			stream.forEach(s -> contentBuilder.append(s).append("\n")); 			
+		} catch (IOException e) {	
+			 
+		}	
+		return contentBuilder.toString();
+	}
+	
+	public static void copy(String sourceFile, String dstFile) throws IOException {
+		java.nio.file.Path sourceFilePath = Paths.get(sourceFile);
+		java.nio.file.Path dstFilePath = Paths.get(dstFile);
+		 
+		Files.copy(sourceFilePath, dstFilePath, StandardCopyOption.REPLACE_EXISTING);
+	}
+	
+	public static void writeDiagramToFile(String fullFileName, String xmlString) throws IOException {
+		Files.write(Paths.get(fullFileName), xmlString.getBytes(), StandardOpenOption.CREATE);
+	}
+	
+	public static boolean isDiagramExist(String fullFileName) {
+		File file  = new File(fullFileName);
+		return file.exists() && !file.isDirectory();  
+	}
 	
 	public static void deleteFile(String fullFileName) throws IOException {
 		java.nio.file.Path newFilePath = Paths.get(fullFileName);
