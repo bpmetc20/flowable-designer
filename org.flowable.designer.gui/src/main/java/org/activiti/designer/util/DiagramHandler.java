@@ -206,18 +206,18 @@ public class DiagramHandler {
 	 }
 	 
 	 public static boolean saveDiagramAS(String newDiagramName, Shell shell) {
-		 String newFullFileName = getDaiagramFolderPath() +  newDiagramName +  ".bpmn";		 
+		 String currentFullFileName = getDiagramFullPath();
+		 String newFullFileName = FileService.getPathFromFullPath(currentFullFileName) + "/" +  newDiagramName +  ".bpmn";		 
 		 	 
-		 try {
-			 FileService.copy(getDiagramFullPath(), newFullFileName);
-			 //saved, now saving on cloud
-			 String xmlString = FileService.getFileContent(newFullFileName);
+		 try {			 
+			 //saving in cloud first
+			 String xmlString = FileService.getFileContent(currentFullFileName);
 			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString) != null) {
 				 IFile ifile = FileService.fromFullName2IFIle(newFullFileName);
 				 return openDiagramForBpmnFile(ifile).isOK();				 
 			 }
-			 FileService.deleteFile(newFullFileName);
-			 
+			 //copy locally 
+			 FileService.copy(currentFullFileName, newFullFileName);		 
 		 } catch(Exception e) {			 
 		 }		 
 		 ErrorDialog.openError(shell, DiagramHandler.errorMessage, newModelName, 

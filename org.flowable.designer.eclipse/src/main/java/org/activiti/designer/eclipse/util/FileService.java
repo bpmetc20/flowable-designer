@@ -138,7 +138,8 @@ public class FileService {
      	
 	 	try {
 	 		java.nio.file.Path p = Paths.get(diagramFileString);
-	 		diagramName = p.getFileName().toString().substring(0, diagramName.lastIndexOf('.'));
+	 		diagramName = p.getFileName().toString();
+	 		return diagramName.substring(0, diagramName.lastIndexOf('.'));
 	 	} catch (Exception e) {
 	 	}
 	 	return diagramName;	
