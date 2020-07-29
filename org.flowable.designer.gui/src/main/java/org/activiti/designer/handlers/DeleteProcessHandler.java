@@ -1,5 +1,7 @@
 package org.activiti.designer.handlers;
 
+import java.io.IOException;
+
 import org.activiti.designer.util.DiagramHandler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -14,15 +16,16 @@ public class DeleteProcessHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		String diagramName = DiagramHandler.getDiagramName();
 		
-		if (diagramName.isEmpty()) {
+		try {
+			String diagramName = DiagramHandler.getDiagramName();
+			return Boolean.toString(DiagramHandler.deleteDiagram(diagramName, window.getShell()));
+		} catch(IOException e) {
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK );
 	    	  messageBox.setText("Info");
 	    	  messageBox.setMessage("Can't find digram. Please open diagram and try again ...");
-	    	  messageBox.open();
-	    	  return diagramName;
+	    	  messageBox.open();	    	  
 		}		
-		return Boolean.toString(DiagramHandler.deleteDiagram(diagramName, window.getShell()));
+		return "";
 	}	
 }

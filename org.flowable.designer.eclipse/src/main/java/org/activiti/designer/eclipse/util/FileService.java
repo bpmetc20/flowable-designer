@@ -13,7 +13,6 @@
  */
 package org.activiti.designer.eclipse.util;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -92,8 +91,8 @@ public class FileService {
 	}
 	
 	public static boolean isDiagramExist(String fullFileName) {
-		File file  = new File(fullFileName);
-		return file.exists() && !file.isDirectory();  
+		java.nio.file.Path newFilePath = Paths.get(fullFileName);
+		return Files.exists(newFilePath) && !Files.isDirectory(newFilePath);  
 	}
 	
 	public static void deleteFile(String fullFileName) throws IOException {
@@ -101,9 +100,9 @@ public class FileService {
 		Files.delete(newFilePath);		 
 	}	
 	
-	public static void createNewFile(String fullFileName) throws IOException {		
-		File file = new File(fullFileName);
-		file.createNewFile();			 
+	public static void createNewFile(String fullFileName) throws IOException {
+		java.nio.file.Path path = Paths.get(fullFileName);
+		Files.createFile(path);					 
 	}
 	
 	public static long getLastModifiedTime(String fullFileName) throws IOException {
@@ -113,8 +112,7 @@ public class FileService {
 	}
 	
 	public static IFile fromFullName2IFIle(String fullFileName) {
-		 File file  = new File(fullFileName);
-		 IPath location= Path.fromOSString(file.getAbsolutePath()); 
+		 IPath location= Path.fromOSString(fullFileName); 
 		 return ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
 	}
 	 
@@ -122,27 +120,16 @@ public class FileService {
 		 return dataFile.getLocationURI().getPath();
 	}
 	 
-	public static String getPathFromFullPath(String diagramFileString) {
-		 String diagramPath = "";
-	     	
-		 	try {
-		 		java.nio.file.Path p = Paths.get(diagramFileString);
-		 		diagramPath = p.getParent().toString();
-		 	} catch (Exception e) {
-		 	}
-		 	return diagramPath;	
-	 }
+	public static String getPathFromFullPath(String diagramFileString) throws IOException {
+		java.nio.file.Path p = Paths.get(diagramFileString);
+		 
+	    return p.getParent().toString();
+	}
 	 
-	 public static String getNameFromFullPath(String diagramFileString) {
-	 	String diagramName = "";
-     	
-	 	try {
-	 		java.nio.file.Path p = Paths.get(diagramFileString);
-	 		diagramName = p.getFileName().toString();
-	 		return diagramName.substring(0, diagramName.lastIndexOf('.'));
-	 	} catch (Exception e) {
-	 	}
-	 	return diagramName;	
+	 public static String getNameFromFullPath(String diagramFileString)  throws IOException {
+	 	 java.nio.file.Path p = Paths.get(diagramFileString);
+	 	 String diagramName = p.getFileName().toString();
+	 	 return diagramName.substring(0, diagramName.lastIndexOf('.'));	 	
      } 
    	
 

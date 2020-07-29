@@ -1,5 +1,7 @@
 package org.activiti.designer.handlers;
 
+import java.io.IOException;
+
 import org.activiti.designer.util.DiagramHandler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -26,20 +28,20 @@ public class SaveAsProcessHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);		
-		String currentDiagramName = DiagramHandler.getDiagramName();
 		
-		if (currentDiagramName.isEmpty()) {
+		try {
+			String currentDiagramName = DiagramHandler.getDiagramName();
+			MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), currentDiagramName);
+			dialog.create();
+			if (dialog.open() == Window.OK) {
+				DiagramHandler.saveDiagramAS(dialog.getDiagramName(), window.getShell());		    
+			}	
+		} catch (IOException e) {
 			MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_INFORMATION | SWT.OK );
-	    	  messageBox.setText("Info");
-	    	  messageBox.setMessage("Can't find digram. Please open diagram and try again ...");
-	    	  messageBox.open();
-	    	  return window;
-		}	
-		
-		MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), currentDiagramName);
-		dialog.create();
-		if (dialog.open() == Window.OK) {
-			DiagramHandler.saveDiagramAS(dialog.getDiagramName(), window.getShell());		    
+	    	messageBox.setText("Info");
+	    	messageBox.setMessage("Can't find digram. Please open diagram and try again ...");
+	    	messageBox.open();
+	    	return window;
 		}	
 		return window;
 	}	

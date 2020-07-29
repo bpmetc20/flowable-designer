@@ -40,8 +40,12 @@ public class DiagramHandler {
 		
 		String fullPath = getDiagramFullPath();
 		
-		if (!fullPath.isEmpty()) 
-			return FileService.getPathFromFullPath(fullPath);
+		if (!fullPath.isEmpty()) { 
+			try {
+				return FileService.getPathFromFullPath(fullPath);
+			} catch (IOException e) {				
+			}
+		}
 		return ""; 
 	}
 	
@@ -55,7 +59,7 @@ public class DiagramHandler {
 					new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", new PartInitException("Can't find diagram")));
 			return;
 		}	
-		
+		 
 		//"lastUpdateTime": "2020-07-10T20:08:23.625-07:00"
 		String lastUpdateTime = model.get("lastUpdateTime");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'");
@@ -145,7 +149,7 @@ public class DiagramHandler {
 		 return values.toArray(new String[0]);
 	 }
 	 
-	 public static String getDiagramName() {
+	 public static String getDiagramName() throws IOException {
 		 return FileService.getNameFromFullPath(getDiagramFullPath());
 	 }
 	 
@@ -207,9 +211,9 @@ public class DiagramHandler {
 	 
 	 public static boolean saveDiagramAS(String newDiagramName, Shell shell) {
 		 String currentFullFileName = getDiagramFullPath();
-		 String newFullFileName = FileService.getPathFromFullPath(currentFullFileName) + "/" +  newDiagramName +  ".bpmn";		 
 		 	 
-		 try {			 
+		 try {	
+			 String newFullFileName = FileService.getPathFromFullPath(currentFullFileName) + "/" +  newDiagramName +  ".bpmn";		 
 			 //saving in cloud first
 			 String xmlString = FileService.getFileContent(currentFullFileName);
 			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString) != null) {
