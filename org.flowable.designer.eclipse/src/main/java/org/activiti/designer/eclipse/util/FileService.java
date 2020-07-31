@@ -13,17 +13,18 @@
  */
 package org.activiti.designer.eclipse.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
 
 import java.util.Collections;
@@ -37,9 +38,12 @@ import java.util.Set;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditorInput;
 import org.activiti.designer.util.ActivitiConstants;
+import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -63,9 +67,96 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IURIEditorInput;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class FileService {
+public class FileService {	
+	public static final String defaultProjectName = "FtdSolution";
+		
+	public static IFile getDiagramFile(String diagramName, Boolean created) throws CoreException {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IWorkspaceRoot root = workspace.getRoot();
+		IProject project  = getProject();
+		if (project == null)
+			project = root.getProject(defaultProjectName);
+		if (!project.exists()) 
+			project.create(null);
+		if (!project.isOpen()) 
+			project.open(null);
+		IFolder folder = project.getFolder(ActivitiConstants.DIAGRAM_FOLDER);
+		if (!folder.exists()) 
+			folder.create(IResource.NONE, true, null);
+		IFile file = folder.getFile(diagramName + ".bpmn");
+		created = false;
+		if (!file.exists()) {
+			try { 				
+				writeDiagramToIFile(file, "");
+				created = true;
+			}
+			catch (Exception e) {
+				
+			}
+		}
+		return file;
+	}
+		
+	public static IProject getProject() {
+		Set<IProject> projects = ActivitiWorkspaceUtil.getOpenProjects();
+		if (!projects.isEmpty()) {
+			return projects.iterator().next();
+		}
+		return null;
+	}	
+	
+	/**
+	 * Opens the given diagram specified by the given data file in a new editor. In case an error
+	 *
+	 * @param dataFile the data file to use for the new editor to open
+	 *
+	 * TODO: this is a copy from PropertyCallActivitySection. Figure out how to make sure we do not double this
+	*/  
+	public static void openDiagramForBpmnFile(IFile dataFile) throws PartInitException {
+		 final IWorkbenchPage activePage= PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();	        
+	     IDE.openEditor(activePage, dataFile, ActivitiConstants.DIAGRAM_EDITOR_ID, true);
+	}
+	
+	
+	public static IFile getCurrentDiagramFile() {
+		 IEditorInput input = ActivitiDiagramEditor.get().getEdiotrInput();
+		 if (input instanceof ActivitiDiagramEditorInput) {
+			 return ((ActivitiDiagramEditorInput) input).getDataFile();			 
+		 }
+		 return null;
+	}	 
+	
+	public static void writeDiagramToIFile(IFile file, String xmlString) throws IOException, CoreException {
+		ByteArrayInputStream bais = new ByteArrayInputStream(xmlString.getBytes("UTF-8"));
+		if ( file.exists() ) {
+			file.setContents(bais, IFile.FORCE, null);
+		} else {
+			file.create(bais, IResource.NONE, null);
+		}
+		bais.close();
+	}
+	
+		
+	public static void createNewFile(IFile file, String newContent, IProgressMonitor monitor) throws CoreException, UnsupportedEncodingException {
+		file.create(new ByteArrayInputStream(newContent.getBytes("UTF-8")), false, monitor); //$NON-NLS-1$
+	}	
+	
+	public static String getDiagramName(IFile file) {		
+		String fileName = file.getName();
+		int dot = fileName.lastIndexOf('.');
+		return fileName.substring(0, dot);
+	}	
+	
+	public static void deleteFile(IFile file) throws CoreException {
+		if (file.exists()) 
+			file.delete(true, null);		     
+	}
 	
 	public static String getFileContent(String fullFileName) {
 		java.nio.file.Path fullFileNamePath = Paths.get(fullFileName);
@@ -86,20 +177,6 @@ public class FileService {
 		Files.copy(sourceFilePath, dstFilePath, StandardCopyOption.REPLACE_EXISTING);
 	}
 	
-	public static void writeDiagramToFile(String fullFileName, String xmlString) throws IOException {
-		Files.write(Paths.get(fullFileName), xmlString.getBytes(), StandardOpenOption.CREATE);
-	}
-	
-	public static boolean isDiagramExist(String fullFileName) {
-		java.nio.file.Path newFilePath = Paths.get(fullFileName);
-		return Files.exists(newFilePath) && !Files.isDirectory(newFilePath);  
-	}
-	
-	public static void deleteFile(String fullFileName) throws IOException {
-		java.nio.file.Path newFilePath = Paths.get(fullFileName);
-		Files.delete(newFilePath);		 
-	}	
-	
 	public static void createNewFile(String fullFileName) throws IOException {
 		java.nio.file.Path path = Paths.get(fullFileName);
 		Files.createFile(path);					 
@@ -112,7 +189,7 @@ public class FileService {
 	}
 	
 	public static IFile fromFullName2IFIle(String fullFileName) {
-		 IPath location= Path.fromOSString(fullFileName); 
+		 IPath location = Path.fromOSString(fullFileName); 
 		 return ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
 	}
 	 
@@ -122,8 +199,7 @@ public class FileService {
 	 
 	public static String getPathFromFullPath(String diagramFileString) throws IOException {
 		java.nio.file.Path p = Paths.get(diagramFileString);
-		 
-	    return p.getParent().toString();
+		return p.getParent().toString();
 	}
 	 
 	 public static String getNameFromFullPath(String diagramFileString)  throws IOException {
