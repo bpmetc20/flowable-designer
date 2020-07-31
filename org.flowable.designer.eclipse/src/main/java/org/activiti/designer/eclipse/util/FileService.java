@@ -13,12 +13,15 @@
  */
 package org.activiti.designer.eclipse.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -92,12 +95,12 @@ public class FileService {
 		IFile file = folder.getFile(diagramName + ".bpmn");
 		created = false;
 		if (!file.exists()) {
-			try { 				
-				writeDiagramToIFile(file, "");
+			try {
 				created = true;
+				writeDiagramToIFile(file, "");				
 			}
 			catch (Exception e) {
-				
+				created = false;
 			}
 		}
 		return file;
@@ -158,16 +161,18 @@ public class FileService {
 			file.delete(true, null);		     
 	}
 	
-	public static String getFileContent(String fullFileName) {
-		java.nio.file.Path fullFileNamePath = Paths.get(fullFileName);
-		StringBuilder contentBuilder = new StringBuilder();					 
+	public static String getFileContent(IFile file) throws IOException, CoreException, UnsupportedEncodingException {
+		Reader reader = new InputStreamReader(file.getContents(), file.getCharset());
 		
-		try (Stream<String> stream = Files.lines(fullFileNamePath, StandardCharsets.UTF_8)) {
-			stream.forEach(s -> contentBuilder.append(s).append("\n")); 			
-		} catch (IOException e) {	
-			 
-		}	
-		return contentBuilder.toString();
+		BufferedReader bufferedReader = new BufferedReader(reader);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuilder.append(line);
+        }
+
+        return stringBuilder.toString();
 	}
 	
 	public static void copy(String sourceFile, String dstFile) throws IOException {

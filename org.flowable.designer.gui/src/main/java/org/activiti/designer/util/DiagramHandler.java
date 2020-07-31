@@ -81,7 +81,7 @@ public class DiagramHandler {
 			} catch (Exception e) {	
 				ErrorDialog.openError(shell, DiagramHandler.errorMessage, modelName, 
 						new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
-								new PartInitException("Can't write diagram")));
+								new PartInitException(e.getMessage())));
 				return;	
 			}
 		}
@@ -139,7 +139,7 @@ public class DiagramHandler {
 	 public static boolean deleteDiagram(Shell shell) {
 		 IFile dataFile = FileService.getCurrentDiagramFile();
 		 String diagramName = FileService.getDiagramName(dataFile);
-		 MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), 
+		 MessageBox messageBox = new MessageBox(shell, 
 				 SWT.ICON_QUESTION | SWT.NO | SWT.YES );
    	  	 messageBox.setText("Info");
    	  	 messageBox.setMessage("Would you like to delete " + diagramName);
@@ -190,7 +190,7 @@ public class DiagramHandler {
 		 try {	
 			 String newFullFileName = FileService.getPathFromFullPath(newDiagramName) + "/" +  newDiagramName +  ".bpmn";		 
 			 //saving in cloud first
-			 String xmlString = FileService.getFileContent(newDiagramName);
+			 String xmlString = "";//FileService.getFileContent(newDiagramName);
 			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString) != null) {
 				 IFile ifile = FileService.fromFullName2IFIle(newFullFileName);
 				 return openDiagramForBpmnFile(ifile).isOK();				 
@@ -222,25 +222,32 @@ public class DiagramHandler {
 		 } 
 			 
 		 //saved, now saving on cloud
-		 String xmlString = FileService.getFileContent(diagramName);
+		 
+		 String xmlString;
+		 try {
+			 xmlString = FileService.getFileContent(dataFile);
+		 } catch (Exception e) {
+			 showSaveMessageBoxError(diagramName, shell);
+			 return false; 
+		 }
 		 if (xmlString.isEmpty()) {
-			 showSaveMessageBoxError(diagramName);
+			 showSaveMessageBoxError(diagramName, shell);
 			 return false; 
 		 }
 		 		 
 		 if (existInCloud) {
 			 String id = getDiagramId(model);
 			 if (id.isEmpty()) {
-				 showSaveMessageBoxError(diagramName);
+				 showSaveMessageBoxError(diagramName, shell);
 				 return false;
 			 } 
 			 if (!RestClient.updateModelSource(id, xmlString)) {
-				 showSaveMessageBoxError(diagramName);			 
+				 showSaveMessageBoxError(diagramName, shell);			 
 				 return false;
 			 }
 		 } else {
 			 if (RestClient.saveNewModel(diagramName, xmlString) == null) {
-				 showSaveMessageBoxError(diagramName);			 
+				 showSaveMessageBoxError(diagramName, shell);			 
 				 return false;
 			 }
 		 }
@@ -283,8 +290,8 @@ public class DiagramHandler {
 		 return status;
 	 }	
 			
-	 private static void showSaveMessageBoxError(String diagramName) {
-		 MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK);
+	 private static void showSaveMessageBoxError(String diagramName, Shell shell) {
+		 MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
 		 messageBox.setText("Warning");
 		 messageBox.setMessage("Error while saving the model " + diagramName);
 		 messageBox.open();	
