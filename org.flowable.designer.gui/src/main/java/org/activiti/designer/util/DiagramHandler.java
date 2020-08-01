@@ -185,23 +185,26 @@ public class DiagramHandler {
 		 return openDiagramForBpmnFile(dataFile).isOK();		 
 	 }
 	 
-	 public static boolean saveDiagramAS(String newDiagramName, Shell shell) {
-		 		 	 
-		 try {	
-			 String newFullFileName = FileService.getPathFromFullPath(newDiagramName) + "/" +  newDiagramName +  ".bpmn";		 
-			 //saving in cloud first
-			 String xmlString = "";//FileService.getFileContent(newDiagramName);
+	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName, Shell shell) {		 		 	 
+		 try {
+			 String xmlString;
+			 try {
+				 xmlString = FileService.getFileContent(currentDiagram);
+			 } catch (Exception e) {
+				 showSaveMessageBoxError(newDiagramName, shell);
+				 return false; 
+			 }		 
+			 
 			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString) != null) {
-				 IFile ifile = FileService.fromFullName2IFIle(newFullFileName);
+				 IFile ifile = FileService.getDiagramFile(newDiagramName, false);
+				 FileService.writeDiagramToIFile(ifile, xmlString);				 
 				 return openDiagramForBpmnFile(ifile).isOK();				 
-			 }
-			 //copy locally 
-			 FileService.copy(newDiagramName, newFullFileName);		 
+			 }			 	 
 		 } catch(Exception e) {			 
 		 }		 
 		 ErrorDialog.openError(shell, DiagramHandler.errorMessage, "", 
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
-						 new PartInitException("Can't save diagram" + newDiagramName)));
+						 new PartInitException("Can't save diagram " + newDiagramName)));
 		 return false;
 	 }
 	 

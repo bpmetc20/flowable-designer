@@ -1,9 +1,11 @@
 package org.activiti.designer.handlers;
 
+import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.util.DiagramHandler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -24,12 +26,12 @@ public class SaveAsProcessHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);		
 		
-		//try {
-		String currentDiagramName = "";
-		MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), currentDiagramName);
+		IFile dataFile = FileService.getCurrentDiagramFile();
+		String diagramName = FileService.getDiagramName(dataFile);
+		MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), diagramName);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
-			DiagramHandler.saveDiagramAS(dialog.getDiagramName(), window.getShell());		    
+			DiagramHandler.saveDiagramAS(dataFile, dialog.getDiagramName(), window.getShell());		    
 		}		
 		return window;
 	}	
