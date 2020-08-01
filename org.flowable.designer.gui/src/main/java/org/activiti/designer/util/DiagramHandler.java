@@ -13,6 +13,7 @@ import java.util.Set;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFileState;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -52,38 +53,27 @@ public class DiagramHandler {
 		
 		boolean reloadModelFromCloud = false;
 		
-		IFile dataFile = null;
-		Boolean created = false;
+		IFile dataFile = null;		
 		try {
 			dataFile = FileService.getDiagramFile(modelName);
-		} catch (CoreException ex) {
-			ErrorDialog.openError(shell, DiagramHandler.errorMessage, "", 
-					 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
-							 new PartInitException(ex.getMessage())));
-		}
-		
-		
-		if (created) 
-			reloadModelFromCloud = true;
-		else {			
-			//try {				
-			//	if (FileService.getLastModifiedTime(fullFileName) < updateTime)
-		//			reloadModelFromCloud = true;
-		//	} catch (IOException e) {
-		//		reloadModelFromCloud = true;
-		//	}
-		}
+			if (FileService.getFileContent(dataFile).isEmpty())
+				reloadModelFromCloud = true;
+			else {			
+				IFileState[] history = dataFile.getHistory(null);
+				if (history.length > 0 && history[0].getModificationTime() < updateTime)
+					reloadModelFromCloud = true;
 			
-		if (true /*reloadModelFromCloud*/) {
-			String diagram = RestClient.getModelSource(modelId);				
-			try {
+			}			
+			if (true /*reloadModelFromCloud*/) {
+				String diagram = RestClient.getModelSource(modelId);		
 				FileService.writeDiagramToIFile(dataFile, diagram);
-			} catch (Exception e) {	
-				ErrorDialog.openError(shell, DiagramHandler.errorMessage, modelName, 
-						new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
-								new PartInitException(e.getMessage())));
-				return;	
+			
 			}
+		} catch (Exception e) {	
+			ErrorDialog.openError(shell, DiagramHandler.errorMessage, modelName, 
+					new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
+							new PartInitException(e.getMessage())));
+			return;	
 		}
 		
 		IStatus status = openDiagramForBpmnFile(dataFile);	
