@@ -79,7 +79,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class FileService {	
 	public static final String defaultProjectName = "FtdSolution";
 		
-	public static IFile getDiagramFile(String diagramName, Boolean created) throws CoreException {
+	public static IFile getDiagramFile(String diagramName) throws CoreException {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IWorkspaceRoot root = workspace.getRoot();
 		IProject project  = getProject();
@@ -93,14 +93,11 @@ public class FileService {
 		if (!folder.exists()) 
 			folder.create(IResource.NONE, true, null);
 		IFile file = folder.getFile(diagramName + ".bpmn");
-		created = false;
 		if (!file.exists()) {
-			try {
-				created = true;
+			try {				
 				writeDiagramToIFile(file, "");				
 			}
-			catch (Exception e) {
-				created = false;
+			catch (Exception e) {				
 			}
 		}
 		return file;

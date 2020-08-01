@@ -55,7 +55,7 @@ public class DiagramHandler {
 		IFile dataFile = null;
 		Boolean created = false;
 		try {
-			dataFile = FileService.getDiagramFile(modelName, created);
+			dataFile = FileService.getDiagramFile(modelName);
 		} catch (CoreException ex) {
 			ErrorDialog.openError(shell, DiagramHandler.errorMessage, "", 
 					 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
@@ -93,11 +93,9 @@ public class DiagramHandler {
 	 }
 	
 	 public static void createNewDiagram(Shell shell) {
-		try {
-			 Boolean created = false;	
-			 IFile newDiagram = FileService.getDiagramFile(newModelName, created);	
-			 if (!created)
-				 ActivitiDiagramEditor.get().createNewDiagram(newDiagram);
+		try {			 	
+			 IFile newDiagram = FileService.getDiagramFile(newModelName);	
+			 ActivitiDiagramEditor.get().createNewDiagram(newDiagram);
 		 } catch(Exception e) {
 			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, "", 
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
@@ -196,7 +194,7 @@ public class DiagramHandler {
 			 }		 
 			 
 			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString) != null) {
-				 IFile ifile = FileService.getDiagramFile(newDiagramName, false);
+				 IFile ifile = FileService.getDiagramFile(newDiagramName);
 				 FileService.writeDiagramToIFile(ifile, xmlString);				 
 				 return openDiagramForBpmnFile(ifile).isOK();				 
 			 }			 	 
