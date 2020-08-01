@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.activiti.designer.eclipse.util.FileService;
+import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 
 public class DiagramHandler {
 	public static final String newModelName = "NewDiagram";
@@ -139,7 +140,7 @@ public class DiagramHandler {
 	    	break;
    	  	 } 	  
 		 
-		 final Map<String, String> model = getDiagramByName(diagramName);
+		 final Map<String, String> model = getDiagramByName(diagramName, loadModels());
 		 if (model.isEmpty()) {
 			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, diagramName, 
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while deleting diagram.", 
@@ -196,14 +197,27 @@ public class DiagramHandler {
 		 return false;
 	 }
 	 
-	 public static boolean saveDiagram(Shell shell) {
+	 public static void saveAllDiagrams(Shell shell) {	
+		 List<Map<String, String>> listModels = loadModels();
+		 Set<IFile> diagrams = ActivitiWorkspaceUtil.getAllDiagramDataFiles();
+		 for (IFile dataFile : diagrams) {
+			 saveDiagram(dataFile, shell, listModels); 
+		 }
+	 }
+	 
+	 public static void saveDiagram(Shell shell) {
+		 IFile dataFile = FileService.getCurrentDiagramFile();
+		 saveDiagram(dataFile, shell, loadModels());
+	 }
+	 
+	 public static boolean saveDiagram(IFile dataFile, Shell shell, List<Map<String, String>> listModels) {
 		 //final Set<IFile> result = new HashSet<IFile>();
 		 //final Set<IFile> projectResources = ActivitiWorkspaceUtil.getAllDiagramDataFiles();
 		 //find diagram id first
-		 IFile dataFile = FileService.getCurrentDiagramFile();
+		 
 		 String diagramName = FileService.getDiagramName(dataFile);
 		 
-		 final Map<String, String> model = getDiagramByName(diagramName);			
+		 final Map<String, String> model = getDiagramByName(diagramName, listModels);			
 		 boolean existInCloud = model.isEmpty() ? false : true;    
 			 	
 		 //saving file first
@@ -245,11 +259,9 @@ public class DiagramHandler {
 		 return true;	 
      }
 	 
-	 public static Map<String, String> getDiagramByName(String diagramName) {
-		 if (!diagramName.isEmpty()) {
-			 List<Map<String, String>> loadedModels = loadModels();
-		 
-		 	for(Map<String, String> model : loadedModels) {
+	 public static Map<String, String> getDiagramByName(String diagramName, List<Map<String, String>> listModels) {
+		 if (!diagramName.isEmpty()) {		 
+		 	for(Map<String, String> model : listModels) {
 		 		String modelName = getDiagramName(model);
 		 		if (modelName.equals(diagramName)) 
 		 			return model;			

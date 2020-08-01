@@ -22,14 +22,14 @@ public class LoadProcessHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		
-		List<Map<String, String>> loadedModels = DiagramHandler.loadModels();
-		final String[] tasksArray = DiagramHandler.buildListFromList(loadedModels, "name");
+		List<Map<String, String>> listModels = DiagramHandler.loadModels();
+		final String[] tasksArray = DiagramHandler.buildListFromList(listModels, "name");
 				
 		if (tasksArray != null && tasksArray.length > 0) {
 			String modelName = selectProcess(window, tasksArray);		
 		
 			if (!modelName.isEmpty()) {
-				final Map<String, String> model = DiagramHandler.getDiagramByName(modelName);			
+				final Map<String, String> model = DiagramHandler.getDiagramByName(modelName, listModels);			
 				
 				if (!model.isEmpty()) {	
 					DiagramHandler.openDiagram(model, window.getShell());

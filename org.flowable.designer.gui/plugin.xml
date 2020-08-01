@@ -466,6 +466,11 @@
             name="SaveAsDiagramAs">
       </command> 
       <command
+            defaultHandler="org.activiti.designer.handlers.SaveAllProcessHandler"
+            id="org.activiti.designer.commands.SaveAllProcessHandler"
+            name="Save All">
+      </command> 
+      <command
             defaultHandler="org.activiti.designer.handlers.DeleteProcessHandler"
             id="org.activiti.designer.commands.DeleteProcessHandler"
             name="Delete Diagram">
@@ -522,6 +527,17 @@
                   	label="Save As..."
                   	style="push"
                   	tooltip="Save As process and diagrams">
+            	</command>             	                   	          
+         </menu>
+         <menu
+            id="processMenu"
+            label="Processes">
+          		<command
+                  	icon="icons/type.user.png"
+                  	commandId="org.activiti.designer.commands.SaveAllProcessHandler"
+                  	label="Save All"
+                  	style="push"
+                  	tooltip="Save all diagrams">
             	</command>             	                   	          
          </menu>
          <menu         	 
