@@ -217,11 +217,6 @@ public class DiagramHandler {
 		 }
 	 }
 	 
-	 public static void saveDiagram(Shell shell) {
-		 IFile dataFile = FileService.getCurrentDiagramFile();
-		 saveDiagram(dataFile, shell, loadModels());
-	 }
-	 
 	 public static boolean saveDiagram(IFile dataFile, Shell shell, List<Map<String, String>> listModels) {
 		 //final Set<IFile> result = new HashSet<IFile>();
 		 //final Set<IFile> projectResources = ActivitiWorkspaceUtil.getAllDiagramDataFiles();

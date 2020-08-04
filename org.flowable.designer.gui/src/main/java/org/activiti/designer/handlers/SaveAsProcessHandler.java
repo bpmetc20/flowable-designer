@@ -9,6 +9,8 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.window.*;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
 
 
 public class SaveAsProcessHandler extends AbstractHandler {
@@ -17,12 +19,19 @@ public class SaveAsProcessHandler extends AbstractHandler {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);		
 		
 		IFile dataFile = FileService.getCurrentDiagramFile();
-		String diagramName = FileService.getDiagramName(dataFile);
-		MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), diagramName);
-		dialog.create();
-		if (dialog.open() == Window.OK) {
-			DiagramHandler.saveDiagramAS(dataFile, dialog.getDiagramName(), window.getShell());		    
-		}		
+		if (dataFile == null) {
+			MessageBox messageBox = new MessageBox(window.getShell(), SWT.ICON_WARNING | SWT.OK);
+			messageBox.setText("Warning");
+			messageBox.setMessage("Please load diagram first!");
+			messageBox.open();
+		} else {		
+			String diagramName = FileService.getDiagramName(dataFile);
+		 	MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), diagramName);
+			dialog.create();
+			if (dialog.open() == Window.OK) {
+				DiagramHandler.saveDiagramAS(dataFile, dialog.getDiagramName(), window.getShell());		    
+			}
+		}
 		return window;
 	}	
 }

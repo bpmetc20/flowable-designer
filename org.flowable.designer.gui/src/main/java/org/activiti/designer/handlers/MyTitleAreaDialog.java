@@ -34,7 +34,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         	setTitle("Your new Diagram  will be Created");
         	setMessage("Please type new diagram name to be created", IMessageProvider.INFORMATION);
         } else { 
-        	setTitle("Your current Diagram " + currentDiagramName + " will be Saved As...");
+        	setTitle("Your current Diagram will be Saved As...");
         	setMessage("Please type new diagram name to be saved", IMessageProvider.INFORMATION);
         }
     }
@@ -62,6 +62,10 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
 
         diagramNameText = new Text(container, SWT.BORDER);
         diagramNameText.setLayoutData(dataFirstName);
+        if (currentDiagramName.isEmpty()) 
+        	currentDiagramName = "NewDiagram";
+        currentDiagramName +="X";         	
+        diagramNameText.setText(currentDiagramName);
     }
 
     @Override
