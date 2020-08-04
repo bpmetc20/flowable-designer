@@ -14,12 +14,10 @@ import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFileState;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
@@ -27,10 +25,24 @@ import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 
 public class DiagramHandler {
-	public static final String newModelName = "NewDiagram";
 	public static final String errorMessage = "Error Opening Activiti Diagram";
 	public static final String errorSaveMessage = "Error Saving Activiti Diagram";
 		
+	public static int isDiagramExist(String diagramName) {
+		//check cloud first
+		final Map<String, String> model = getDiagramByName(diagramName, loadModels());
+		if (!model.isEmpty())
+			return 1;
+		//check local
+		Set<IFile> diagrams = ActivitiWorkspaceUtil.getAllDiagramDataFiles();
+		for (IFile dataFile : diagrams) {
+			if (FileService.getDiagramName(dataFile).equalsIgnoreCase(diagramName))
+				return -1;
+		}
+		return 0;
+	}
+	
+	
 	public static void openDiagram(Map<String, String> model, Shell shell) {
 		String modelId = model.get("id");;
 		String modelName = model.get("name");
@@ -83,9 +95,9 @@ public class DiagramHandler {
 		}		
 	 }
 	
-	 public static void createNewDiagram(Shell shell) {
+	 public static void createNewDiagram(String newDiagramName, Shell shell) {
 		try {			 	
-			 IFile newDiagram = FileService.getDiagramFile(newModelName);	
+			 IFile newDiagram = FileService.getDiagramFile(newDiagramName);	
 			 ActivitiDiagramEditor.get().createNewDiagram(newDiagram);
 		 } catch(Exception e) {
 			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, "", 

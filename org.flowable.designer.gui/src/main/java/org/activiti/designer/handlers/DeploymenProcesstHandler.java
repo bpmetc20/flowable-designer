@@ -1,7 +1,6 @@
 package org.activiti.designer.handlers;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.File;import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.text.CharacterIterator;

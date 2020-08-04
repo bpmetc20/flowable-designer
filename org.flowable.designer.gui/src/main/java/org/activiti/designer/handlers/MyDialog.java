@@ -1,7 +1,6 @@
 package org.activiti.designer.handlers;
 
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
