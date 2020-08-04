@@ -172,6 +172,11 @@ public class FileService {
         return stringBuilder.toString();
 	}
 	
+	public static String ifile2FullName(IFile dataFile) {
+		 return dataFile.getLocationURI().getPath();
+	}
+	
+	/*
 	public static void copy(String sourceFile, String dstFile) throws IOException {
 		java.nio.file.Path sourceFilePath = Paths.get(sourceFile);
 		java.nio.file.Path dstFilePath = Paths.get(dstFile);
@@ -195,9 +200,7 @@ public class FileService {
 		 return ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(location);
 	}
 	 
-	public static String ifile2FullName(IFile dataFile) {
-		 return dataFile.getLocationURI().getPath();
-	}
+	
 	 
 	public static String getPathFromFullPath(String diagramFileString) throws IOException {
 		java.nio.file.Path p = Paths.get(diagramFileString);
@@ -209,6 +212,7 @@ public class FileService {
 	 	 String diagramName = p.getFileName().toString();
 	 	 return diagramName.substring(0, diagramName.lastIndexOf('.'));	 	
      } 
+     */
    	
 
    /**

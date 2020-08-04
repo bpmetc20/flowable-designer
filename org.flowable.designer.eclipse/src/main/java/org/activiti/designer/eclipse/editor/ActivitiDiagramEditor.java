@@ -222,7 +222,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     save(false);
   }
 
-  protected void doSaveToBpmn(final BpmnMemoryModel model, final String diagramFileString) throws Exception {
+  protected void doSaveToBpmn(final BpmnMemoryModel model, IFile dataFile) throws Exception {
 
     // add sequence flow bend-points to the model
     final IFeatureProvider featureProvider = getDiagramTypeProvider().getFeatureProvider();
@@ -231,11 +231,8 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     BpmnXMLConverter converter = new BpmnXMLConverter();
     byte[] xmlBytes = converter.convertToXML(model.getBpmnModel());
 
-    File objectsFile = new File(diagramFileString);
     try {
-      FileOutputStream fos = new FileOutputStream(objectsFile);
-      fos.write(xmlBytes);
-      fos.close();
+    	FileService.writeDiagramToIFile(dataFile, new String(xmlBytes));	
     } catch (Exception e) {
       MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK);
       messageBox.setText("Warning");
@@ -250,10 +247,9 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  
 	  try {
 		  IFile dataFile = ((ActivitiDiagramEditorInput) editorInput).getDataFile();
-		  String diagramFileString = FileService.ifile2FullName(dataFile);
-		  	      	      
+		  		  	      	      
 	      if (showDialog) {
-	    	  String diagramName = FileService.getNameFromFullPath(diagramFileString);
+	    	  String diagramName = FileService.getDiagramName(dataFile);
 		      		      
 	    	  MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.NO | SWT.YES );
 	    	  messageBox.setText("Info");
@@ -270,10 +266,10 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	      BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
 
 	      // Save the bpmn diagram file
-	      doSaveToBpmn(model, diagramFileString);
+	      doSaveToBpmn(model, dataFile);
 
 	      // Save an image of the diagram
-	      doSaveImage(diagramFileString, model);
+	      doSaveImage(FileService.ifile2FullName(dataFile), model);
 
 	      // Refresh the resources in the workspace before invoking export
 	      // marshallers, as they may need access to resources
