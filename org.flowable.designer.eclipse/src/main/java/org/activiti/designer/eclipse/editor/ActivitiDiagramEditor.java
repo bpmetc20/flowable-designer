@@ -211,15 +211,15 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     return creator.createBpmnDiagram(dataFile, diagramFile, this, false);
   }
   
-  public boolean doSave() {
-	  return save(true);	  
+  public boolean doSave(IFile dataFile) {
+	  return save(dataFile);	  
   }
 
   @Override
   public void doSave(IProgressMonitor monitor) {
     super.doSave(monitor);
 
-    save(false);
+    save(((ActivitiDiagramEditorInput) editorInput).getDataFile());
   }
 
   protected void doSaveToBpmn(final BpmnMemoryModel model, IFile dataFile) throws Exception {
@@ -242,26 +242,10 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 
   }
   
-  private boolean save(boolean showDialog) {
+  private boolean save(IFile dataFile) {
 	  boolean saved = false;
 	  
-	  try {
-		  IFile dataFile = ((ActivitiDiagramEditorInput) editorInput).getDataFile();
-		  		  	      	      
-	      if (showDialog) {
-	    	  String diagramName = FileService.getDiagramName(dataFile);
-		      		      
-	    	  MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.NO | SWT.YES );
-	    	  messageBox.setText("Info");
-	    	  messageBox.setMessage("Would you like to save " + diagramName);
-	    	  int result = messageBox.open();
-	    	  switch(result) {
-	    	  	case SWT.NO:	    	  			
-	    	  	return false;
-	    	  	case SWT.YES:
-		    	break;
-	    	  }
-	  	  }
+	  try {		  
 	      
 	      BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
 

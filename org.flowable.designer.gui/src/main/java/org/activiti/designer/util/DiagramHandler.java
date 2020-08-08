@@ -12,12 +12,14 @@ import java.util.Set;
 
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
+import org.activiti.designer.eclipse.editor.ActivitiDiagramEditorInput;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFileState;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PartInitException;
 import org.activiti.designer.eclipse.util.FileService;
@@ -215,14 +217,18 @@ public class DiagramHandler {
 		 }
 	 }
 	 
-	 public static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
+	 public static boolean saveDiagram(IFile dataFile) {
+		 return saveDiagram(dataFile, loadModels());
+	 }
+	 
+	 private static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
 		 String diagramName = FileService.getDiagramName(dataFile);
 		 
 		 final Map<String, String> model = getDiagramByName(diagramName, listModels);			
-		 boolean existInCloud = model.isEmpty() ? false : true;    
-			 	
-		 //saving file first
-		 if (!ActivitiDiagramEditor.get().doSave()) {
+		 boolean existInCloud = model.isEmpty() ? false : true; 	 
+		 
+		 //saving file first if diagram is open		 
+		 if (FileService.isDiagramOpen(dataFile) && !ActivitiDiagramEditor.get().doSave(dataFile)) {
 			 //no message box needed
 			 return false;
 		 } 

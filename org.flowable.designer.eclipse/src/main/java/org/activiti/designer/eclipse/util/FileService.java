@@ -77,6 +77,10 @@ public class FileService {
 	static ArrayList<IFile> openDiagrams = new ArrayList<>();
 	static IFile activeDiagram = null;
 	
+	public static boolean isDiagramOpen(IFile dataFile) {
+		return openDiagrams.contains(dataFile);
+	}
+	
 	public static void diagramOpened(IFile dataFile) {
 		if (!openDiagrams.contains(dataFile)) 
 			openDiagrams.add(dataFile);
