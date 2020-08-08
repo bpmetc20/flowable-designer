@@ -22,8 +22,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -129,7 +127,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   private TransactionalEditingDomain transactionalEditingDomain;
   
   private IEditorInput editorInput = null;
-   
+  
   public static ActivitiDiagramEditor get() {
 	  if (INSTANCE == null)
 		  INSTANCE = new ActivitiDiagramEditor();
@@ -154,7 +152,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  // Create new temporary diagram file
 	  Bpmn2DiagramCreator creator = new Bpmn2DiagramCreator();
 
-	  creator.createBpmnDiagram(dataFile, diagramFile, this, true);
+	  creator.createBpmnDiagram(dataFile, diagramFile, this, true);	
   }
 
   public ActivitiDiagramEditor() {	  
@@ -206,9 +204,13 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     final IFile diagramFile = FileService.getTemporaryDiagramFile(dataFilePath, tempFolder);
 
     // Create new temporary diagram file
-    Bpmn2DiagramCreator creator = new Bpmn2DiagramCreator();
+    Bpmn2DiagramCreator creator = new Bpmn2DiagramCreator();    
 
     return creator.createBpmnDiagram(dataFile, diagramFile, this, false);
+  }
+  
+  public void setDirty() {
+	  firePropertyChange(PROP_DIRTY);
   }
   
   public boolean doSave(IFile dataFile) {
@@ -450,7 +452,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
       return ((BasicCommandStack) editingDomain.getCommandStack()).isSaveNeeded();
     }
     return false;
-  }
+  }  
 
   @Override
   protected void setInput(IEditorInput input) {

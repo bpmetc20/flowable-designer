@@ -227,8 +227,9 @@ public class DiagramHandler {
 		 final Map<String, String> model = getDiagramByName(diagramName, listModels);			
 		 boolean existInCloud = model.isEmpty() ? false : true; 	 
 		 
-		 //saving file first if diagram is open		 
-		 if (FileService.isDiagramOpen(dataFile) && !ActivitiDiagramEditor.get().doSave(dataFile)) {
+		 //saving file first if diagram is open	
+		 ActivitiDiagramEditor editor = ActivitiDiagramEditor.get();		 
+		 if (FileService.isDiagramOpen(dataFile) && editor.isDirty() && !ActivitiDiagramEditor.get().doSave(dataFile)) {
 			 //no message box needed
 			 return false;
 		 } 
