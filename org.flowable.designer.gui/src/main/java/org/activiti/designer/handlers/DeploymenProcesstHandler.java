@@ -46,8 +46,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 
-
-
 public class DeploymenProcesstHandler extends AbstractHandler {
 	ISelection fSelection;
 	List<IFile> memberList;

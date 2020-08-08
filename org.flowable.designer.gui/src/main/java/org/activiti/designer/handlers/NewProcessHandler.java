@@ -17,7 +17,7 @@ public class NewProcessHandler extends AbstractHandler {
 		MyTitleAreaDialog dialog = new MyTitleAreaDialog(window.getShell(), "");
 		dialog.create();
 		if (dialog.open() == Window.OK) {
-			DiagramHandler.createNewDiagram(dialog.getDiagramName(), window.getShell());	    
+			DiagramHandler.createNewDiagram(dialog.getDiagramName());	    
 		}		
 		return window;
 	}	

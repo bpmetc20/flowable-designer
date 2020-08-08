@@ -32,7 +32,7 @@ public class LoadProcessHandler extends AbstractHandler {
 				final Map<String, String> model = DiagramHandler.getDiagramByName(modelName, listModels);			
 				
 				if (!model.isEmpty()) {	
-					DiagramHandler.openDiagram(model, window.getShell());
+					DiagramHandler.openDiagram(model);
 					return window;
 				}
 				ErrorDialog.openError(window.getShell(), DiagramHandler.errorMessage, modelName, 

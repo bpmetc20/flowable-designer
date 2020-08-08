@@ -15,13 +15,20 @@ package org.activiti.designer.eclipse.common;
 
 import java.net.URL;
 
+import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
+import org.activiti.designer.eclipse.editor.ActivitiDiagramEditorInput;
+import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.eclipse.util.PaletteExtensionUtil;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -78,8 +85,10 @@ public class ActivitiPlugin extends AbstractUIPlugin {
 
     // Initialize the image cache
     imageCache = new ImageCache();
-
+        
     PaletteExtensionUtil.pushPaletteExtensions();
+    
+    startTabtListener();
   }
 
   @Override
@@ -198,5 +207,59 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   public static ImageDescriptor getImageDescriptor(PluginImage pluginImage) {
     return getImageDescriptor(pluginImage.getImagePath());
   }
+  
+  public static void startTabtListener() {
+		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+	    workbenchWindow.getPartService().addPartListener(new IPartListener() {                
+	            
+			@Override
+			public void partActivated(IWorkbenchPart part) {
+				// TODO Auto-generated method stub
+					
+			}
 
+			@Override
+			public void partBroughtToTop(IWorkbenchPart part) {
+				// TODO Auto-generated method stub
+				// TODO Auto-generated method stub
+				if (part instanceof ActivitiDiagramEditor) {
+					ActivitiDiagramEditor editor = (ActivitiDiagramEditor) part;
+					IEditorInput input = editor.getEdiotrInput();
+					if (input instanceof ActivitiDiagramEditorInput) {
+						 FileService.setActiveDiagram(((ActivitiDiagramEditorInput) input).getDataFile());
+					}					
+				}	
+			}
+
+			@Override
+			public void partClosed(IWorkbenchPart part) {
+				// TODO Auto-generated method stub
+				if (part instanceof ActivitiDiagramEditor) {
+					ActivitiDiagramEditor editor = (ActivitiDiagramEditor) part;
+					IEditorInput input = editor.getEdiotrInput();
+					if (input instanceof ActivitiDiagramEditorInput) {
+						 FileService.diagramClosed(((ActivitiDiagramEditorInput) input).getDataFile());
+					}					
+				}	
+			}
+
+			@Override
+			public void partDeactivated(IWorkbenchPart part) {
+				// TODO Auto-generated method stub
+					
+			}
+
+			@Override
+			public void partOpened(IWorkbenchPart part) {
+				// TODO Auto-generated method stub
+				if (part instanceof ActivitiDiagramEditor) {
+					ActivitiDiagramEditor editor = (ActivitiDiagramEditor) part;
+					IEditorInput input = editor.getEdiotrInput();
+					if (input instanceof ActivitiDiagramEditorInput) {
+						 FileService.diagramOpened(((ActivitiDiagramEditorInput) input).getDataFile());
+					}					
+				}	
+			}
+	    });		
+	}
 }

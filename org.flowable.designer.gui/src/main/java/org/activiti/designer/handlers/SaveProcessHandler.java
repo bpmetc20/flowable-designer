@@ -16,15 +16,15 @@ public class SaveProcessHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-		
-		IFile dataFile = FileService.getCurrentDiagramFile();
+				
+		IFile dataFile = FileService.getActiveDiagramFile();
 		if (dataFile == null) {
 			MessageBox messageBox = new MessageBox(window.getShell(), SWT.ICON_WARNING | SWT.OK);
 			messageBox.setText("Warning");
 			messageBox.setMessage("Please load diagram first!");
 			messageBox.open();
 		} else {	
-			DiagramHandler.saveDiagram(dataFile, window.getShell(), DiagramHandler.loadModels());
+			DiagramHandler.saveDiagram(dataFile, DiagramHandler.loadModels());
 		}		
 		return window;
 	}	

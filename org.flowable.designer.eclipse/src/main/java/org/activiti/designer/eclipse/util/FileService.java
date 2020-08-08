@@ -13,6 +13,7 @@
  */
 package org.activiti.designer.eclipse.util;
 
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
@@ -24,18 +25,12 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileTime;
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Stream;
 import java.util.Set;
 
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
@@ -78,6 +73,36 @@ import org.eclipse.ui.part.FileEditorInput;
 
 public class FileService {	
 	public static final String defaultProjectName = "FtdSolution";
+	
+	static ArrayList<IFile> openDiagrams = new ArrayList<>();
+	static IFile activeDiagram = null;
+	
+	public static void diagramOpened(IFile dataFile) {
+		if (!openDiagrams.contains(dataFile)) 
+			openDiagrams.add(dataFile);
+	}
+	
+	public static void diagramClosed(IFile dataFile) {
+		openDiagrams.remove(dataFile);
+	}
+	
+	public static void setActiveDiagram(IFile dataFile) {
+		activeDiagram = dataFile;
+	}
+	
+	public static IFile getActiveDiagramFile() {
+		if (openDiagrams.isEmpty())
+			return null;
+		return activeDiagram == null ? openDiagrams.get(openDiagrams.size() - 1) : activeDiagram;
+	}
+		
+	public static final ArrayList<IFile> getAllOpenDiagrams() {
+		return openDiagrams;
+	}
+	
+	public static final Set<IFile> getAllDiagramDataFiles() {
+		return ActivitiWorkspaceUtil.getAllDiagramDataFiles();
+	}
 		
 	public static IFile getDiagramFile(String diagramName) throws CoreException {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -121,16 +146,7 @@ public class FileService {
 	public static void openDiagramForBpmnFile(IFile dataFile) throws PartInitException {
 		 final IWorkbenchPage activePage= PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();	        
 	     IDE.openEditor(activePage, dataFile, ActivitiConstants.DIAGRAM_EDITOR_ID, true);
-	}
-	
-	
-	public static IFile getCurrentDiagramFile() {
-		 IEditorInput input = ActivitiDiagramEditor.get().getEdiotrInput();
-		 if (input instanceof ActivitiDiagramEditorInput) {
-			 return ((ActivitiDiagramEditorInput) input).getDataFile();			 
-		 }
-		 return null;
-	}	 
+	}		 
 	
 	public static void writeDiagramToIFile(IFile file, String xmlString) throws IOException, CoreException {
 		ByteArrayInputStream bais = new ByteArrayInputStream(xmlString.getBytes("UTF-8"));

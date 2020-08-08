@@ -63,8 +63,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         diagramNameText = new Text(container, SWT.BORDER);
         diagramNameText.setLayoutData(dataFirstName);
         if (currentDiagramName.isEmpty()) 
-        	currentDiagramName = "NewDiagram";
-        currentDiagramName +="X";         	
+        	currentDiagramName = "NewDiagram";                 	
         diagramNameText.setText(currentDiagramName);
     }
 

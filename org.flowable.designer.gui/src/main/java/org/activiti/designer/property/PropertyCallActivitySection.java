@@ -250,7 +250,7 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
     	for(Map<String, String> model : loadModels) {
     		String diagramName = DiagramHandler.getDiagramName(model);
 	 		if (modelName.equals(diagramName)) { 
-				DiagramHandler.openDiagram(model, Display.getCurrent().getActiveShell());
+				DiagramHandler.openDiagram(model);
 				return;
 			}
 		}										

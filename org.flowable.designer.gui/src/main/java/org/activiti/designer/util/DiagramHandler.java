@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PartInitException;
 import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
@@ -43,13 +42,13 @@ public class DiagramHandler {
 	}
 	
 	
-	public static void openDiagram(Map<String, String> model, Shell shell) {
+	public static void openDiagram(Map<String, String> model) {
 		String modelId = model.get("id");;
 		String modelName = model.get("name");
 		long updateTime = 0; 
 		
 		if (modelId.isEmpty()) {						
-			ErrorDialog.openError(shell, DiagramHandler.errorMessage, modelName, 
+			ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, modelName, 
 					new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", new PartInitException("Can't find diagram")));
 			return;
 		}	
@@ -83,7 +82,7 @@ public class DiagramHandler {
 			
 			}
 		} catch (Exception e) {	
-			ErrorDialog.openError(shell, DiagramHandler.errorMessage, modelName, 
+			ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, modelName, 
 					new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
 							new PartInitException(e.getMessage())));
 			return;	
@@ -91,16 +90,16 @@ public class DiagramHandler {
 		
 		IStatus status = openDiagramForBpmnFile(dataFile);	
 		if (!status.isOK()) {
-			ErrorDialog.openError(shell, "Error Opening Activiti Diagram", modelName, status);
+			ErrorDialog.openError(ActivitiPlugin.getShell(), "Error Opening Activiti Diagram", modelName, status);
 		}		
 	 }
 	
-	 public static void createNewDiagram(String newDiagramName, Shell shell) {
+	 public static void createNewDiagram(String newDiagramName) {
 		try {			 	
 			 IFile newDiagram = FileService.getDiagramFile(newDiagramName);	
 			 ActivitiDiagramEditor.get().createNewDiagram(newDiagram);
 		 } catch(Exception e) {
-			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, "", 
+			 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, "", 
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
 						 new PartInitException("Can't create diagram")));
 		 }		 
@@ -137,10 +136,9 @@ public class DiagramHandler {
 		 return values.toArray(new String[0]);
 	 }	 
 	 
-	 public static boolean deleteDiagram(Shell shell) {
-		 IFile dataFile = FileService.getCurrentDiagramFile();
+	 public static boolean deleteDiagram(IFile dataFile) {
 		 String diagramName = FileService.getDiagramName(dataFile);
-		 MessageBox messageBox = new MessageBox(shell, 
+		 MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), 
 				 SWT.ICON_QUESTION | SWT.NO | SWT.YES );
    	  	 messageBox.setText("Info");
    	  	 messageBox.setMessage("Would you like to delete " + diagramName);
@@ -154,7 +152,7 @@ public class DiagramHandler {
 		 
 		 final Map<String, String> model = getDiagramByName(diagramName, loadModels());
 		 if (model.isEmpty()) {
-			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, diagramName, 
+			 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, diagramName, 
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while deleting diagram.", 
 					 new PartInitException("Can't find diagram" + diagramName)));
 	    	  return false; 
@@ -162,7 +160,7 @@ public class DiagramHandler {
 		 
 		 String id = getDiagramId(model);
 		 if (id.isEmpty()) {
-			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, diagramName, 
+			 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, diagramName, 
 					 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while deleting diagram.", 
 						 new PartInitException("Can't find diagram" + diagramName)));
 			 return false;
@@ -170,7 +168,7 @@ public class DiagramHandler {
 		 
 		 //delete from cloud first
 		 if (!RestClient.deleteModel(id)) {
-			 ErrorDialog.openError(shell, DiagramHandler.errorMessage, diagramName, 
+			 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, diagramName, 
 					 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while deleting diagram.", 
 						 new PartInitException("Can't delete diagram" + diagramName)));		 
 			 return false;
@@ -186,13 +184,13 @@ public class DiagramHandler {
 		 return openDiagramForBpmnFile(dataFile).isOK();		 
 	 }
 	 
-	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName, Shell shell) {		 		 	 
+	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {		 		 	 
 		 try {
 			 String xmlString;
 			 try {
 				 xmlString = FileService.getFileContent(currentDiagram);
 			 } catch (Exception e) {
-				 showSaveMessageBoxError(newDiagramName, shell);
+				 showSaveMessageBoxError(newDiagramName);
 				 return false; 
 			 }		 
 			 
@@ -203,25 +201,21 @@ public class DiagramHandler {
 			 }			 	 
 		 } catch(Exception e) {			 
 		 }		 
-		 ErrorDialog.openError(shell, DiagramHandler.errorMessage, "", 
+		 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, "", 
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
 						 new PartInitException("Can't save diagram " + newDiagramName)));
 		 return false;
 	 }
 	 
-	 public static void saveAllDiagrams(Shell shell) {	
+	 public static void saveAllDiagrams() {	
 		 List<Map<String, String>> listModels = loadModels();
-		 Set<IFile> diagrams = ActivitiWorkspaceUtil.getAllDiagramDataFiles();
+		 Set<IFile> diagrams = FileService.getAllDiagramDataFiles();
 		 for (IFile dataFile : diagrams) {
-			 saveDiagram(dataFile, shell, listModels); 
+			 saveDiagram(dataFile, listModels); 
 		 }
 	 }
 	 
-	 public static boolean saveDiagram(IFile dataFile, Shell shell, List<Map<String, String>> listModels) {
-		 //final Set<IFile> result = new HashSet<IFile>();
-		 //final Set<IFile> projectResources = ActivitiWorkspaceUtil.getAllDiagramDataFiles();
-		 //find diagram id first
-		 
+	 public static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
 		 String diagramName = FileService.getDiagramName(dataFile);
 		 
 		 final Map<String, String> model = getDiagramByName(diagramName, listModels);			
@@ -239,27 +233,27 @@ public class DiagramHandler {
 		 try {
 			 xmlString = FileService.getFileContent(dataFile);
 		 } catch (Exception e) {
-			 showSaveMessageBoxError(diagramName, shell);
+			 showSaveMessageBoxError(diagramName);
 			 return false; 
 		 }
 		 if (xmlString.isEmpty()) {
-			 showSaveMessageBoxError(diagramName, shell);
+			 showSaveMessageBoxError(diagramName);
 			 return false; 
 		 }
 		 		 
 		 if (existInCloud) {
 			 String id = getDiagramId(model);
 			 if (id.isEmpty()) {
-				 showSaveMessageBoxError(diagramName, shell);
+				 showSaveMessageBoxError(diagramName);
 				 return false;
 			 } 
 			 if (!RestClient.updateModelSource(id, xmlString)) {
-				 showSaveMessageBoxError(diagramName, shell);			 
+				 showSaveMessageBoxError(diagramName);			 
 				 return false;
 			 }
 		 } else {
 			 if (RestClient.saveNewModel(diagramName, xmlString) == null) {
-				 showSaveMessageBoxError(diagramName, shell);			 
+				 showSaveMessageBoxError(diagramName);			 
 				 return false;
 			 }
 		 }
@@ -300,8 +294,8 @@ public class DiagramHandler {
 		 return status;
 	 }	
 			
-	 private static void showSaveMessageBoxError(String diagramName, Shell shell) {
-		 MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+	 private static void showSaveMessageBoxError(String diagramName) {
+		 MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), SWT.ICON_WARNING | SWT.OK);
 		 messageBox.setText("Warning");
 		 messageBox.setMessage("Error while saving the model " + diagramName);
 		 messageBox.open();	

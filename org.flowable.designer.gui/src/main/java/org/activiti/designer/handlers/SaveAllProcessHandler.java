@@ -12,7 +12,7 @@ public class SaveAllProcessHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		
-		DiagramHandler.saveAllDiagrams(window.getShell());
+		DiagramHandler.saveAllDiagrams();
 			
 		return window;
 	}	
