@@ -69,11 +69,11 @@ public class RestClient {
 	}
 
 	public static Map<String, String> getUsers() {
-		return getCollection(ftdProxyRsPrefix + "users");
+		return getCollection(ftdProxyRsPrefix + "users/data.designer");
 	}
 	
 	public static Map<String, String> getGroups() {
-		return getCollection(ftdProxyRsPrefix + "groups");
+		return getCollection(ftdProxyRsPrefix + "groups/data.designer");
 	}
 	
 	// returns a hash map with pairs where key is modelId and value is modelName
