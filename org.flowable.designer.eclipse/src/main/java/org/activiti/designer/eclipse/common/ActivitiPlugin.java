@@ -21,7 +21,6 @@ import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.eclipse.util.PaletteExtensionUtil;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
@@ -238,7 +237,7 @@ public class ActivitiPlugin extends AbstractUIPlugin {
 					ActivitiDiagramEditor editor = (ActivitiDiagramEditor) part;
 					IEditorInput input = editor.getEdiotrInput();
 					if (input instanceof ActivitiDiagramEditorInput) {
-						 FileService.diagramClosed(((ActivitiDiagramEditorInput) input).getDataFile());
+						FileService.diagramClosed(((ActivitiDiagramEditorInput) input).getDataFile());						 
 					}					
 				}	
 			}

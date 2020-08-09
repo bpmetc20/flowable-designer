@@ -64,8 +64,11 @@ import org.eclipse.emf.transaction.util.TransactionUtil;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IURIEditorInput;
+import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
@@ -77,11 +80,35 @@ public class FileService {
 	static ArrayList<IFile> openDiagrams = new ArrayList<>();
 	static IFile activeDiagram = null;
 	
+	
+	static ArrayList<IFile> getModifiedDiagrams() {
+		ArrayList<IFile> modifiedDiagrams = new ArrayList<>();
+		
+		IWorkbench workbench = PlatformUI.getWorkbench();
+
+		IWorkbenchWindow[] windows = workbench.getWorkbenchWindows();
+
+		for (IWorkbenchWindow window : windows) {
+		    IWorkbenchPage[] pages = window.getPages();
+		    for (IWorkbenchPage page : pages) {
+		    	IEditorPart[] editors = page.getDirtyEditors();
+		        for (IEditorPart editor : editors) {
+		        	IEditorInput input = editor.getEditorInput();
+		        	if (input instanceof FileEditorInput) {
+		        		IFile file = ((FileEditorInput)input).getFile();
+		                modifiedDiagrams.add(file);
+		              }
+		           }
+		     }
+		}
+		return modifiedDiagrams;
+	}
+	
 	public static boolean isDiagramOpen(IFile dataFile) {
 		return openDiagrams.contains(dataFile);
 	}
 	
-	public static void diagramOpened(IFile dataFile) {
+	public static void diagramOpened(IFile dataFile) {		
 		if (!openDiagrams.contains(dataFile)) 
 			openDiagrams.add(dataFile);
 	}
