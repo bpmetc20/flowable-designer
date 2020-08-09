@@ -136,7 +136,11 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   
   public IEditorInput getEdiotrInput() {
 	  return editorInput;
-  }  
+  } 
+  
+  public BpmnMemoryModel getModel() {
+	  return ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
+  } 
   
   public void createNewDiagram(IFile dataFile) throws CoreException {
 	  

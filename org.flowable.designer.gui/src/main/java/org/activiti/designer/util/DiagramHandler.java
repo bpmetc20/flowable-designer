@@ -23,12 +23,20 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PartInitException;
 import org.activiti.designer.eclipse.util.FileService;
+import org.activiti.designer.util.editor.BpmnMemoryModel;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
+import org.activiti.bpmn.model.Process;
 
 public class DiagramHandler {
+	public static final String newDiagramName = "New Diagram";
 	public static final String errorMessage = "Error Opening Activiti Diagram";
 	public static final String errorSaveMessage = "Error Saving Activiti Diagram";
-		
+	
+	public static List<Process> getProcesses() {
+		BpmnMemoryModel bpmnMemoryModel = ActivitiDiagramEditor.get().getModel();
+		return bpmnMemoryModel.getBpmnModel().getProcesses();		
+	}	
+	
 	public static int isDiagramExist(String diagramName) {
 		//check cloud first
 		final Map<String, String> model = getDiagramByName(diagramName, loadModels());
