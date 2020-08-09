@@ -58,11 +58,11 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         		setTitle("Your new Diagram will be Created");
         		setMessage("Please type new diagram name and process attributed to be created", IMessageProvider.INFORMATION);
         	} else { 
-        		setTitle("Your current Diagram " + diagramName + " will be Saved As...");
+        		setTitle("Your current Diagram will be Saved As...");
         		setMessage("Please type new diagram name and process attributed to be saved", IMessageProvider.INFORMATION);
         	}
         } else {
-        	setTitle("Your current Diagram " + diagramName + " will be Saved");
+        	setTitle("Your current Diagram will be Saved");
     		setMessage("Please type process attributed to be saved", IMessageProvider.INFORMATION);
         }        
     }
@@ -74,12 +74,9 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         GridLayout layout = new GridLayout(2, false);
         container.setLayout(layout);        
-        
-        if (changeName)
-        	createDiagramName(container);
-        
+               
+        createDiagramName(container);
         createProcessName(container);
-        
         createProcessId(container);
         
         return area;
@@ -98,6 +95,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         if (diagramName.isEmpty()) 
         	diagramName = "NewDiagram";                 	
         diagramNameText.setText(diagramName);
+        diagramNameText.setEnabled(changeName);
     }
     
     private void createProcessName(Composite container) {    	
