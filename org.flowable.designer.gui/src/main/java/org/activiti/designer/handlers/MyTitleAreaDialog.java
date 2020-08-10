@@ -63,7 +63,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         	}
         } else {
         	setTitle("Your current Diagram will be Saved");
-    		setMessage("Please type process attributed to be saved", IMessageProvider.INFORMATION);
+    		setMessage("Would you like your diagram to be saved", IMessageProvider.INFORMATION);
         }        
     }
 
@@ -76,8 +76,11 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         container.setLayout(layout);        
                
         createDiagramName(container);
-        createProcessName(container);
-        createProcessId(container);
+        
+        if (changeName) {
+        	createProcessName(container);
+        	createProcessId(container);
+        }
         
         return area;
     }
@@ -133,26 +136,50 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
     // as soon as the Dialog closes
     private boolean saveInput() {
     	diagramName = diagramNameText.getText();
-    	processName = processNameText.getText();
-    	processId = processIdText.getText();
+    	if (diagramName.isEmpty()) {
+    		showMesaage("Diagram name should not be empty!");
+    		return false;
+    	}
     	
-    	int result = DiagramHandler.isDiagramExist(diagramName);
-    	if (result == 0)
+    	if (!changeName) 
     		return true;
-    	MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), SWT.ICON_WARNING | SWT.OK);
-		messageBox.setText("Warning");
-		messageBox.setMessage("Already exist " + diagramName);
-		messageBox.open();	
-    	return false;
+    	    	
+    	if (DiagramHandler.isDiagramExist(diagramName) == 0) {
+    		processName = processNameText.getText();
+        	processId = processIdText.getText();
+        	if (processName.isEmpty() || processId.isEmpty()) {
+        		showMesaage("Process attributes should not be empty!");
+        		return false;
+        	}
+        	
+    		return true;
+    	}	
+    	showMesaage("Already exist " + diagramName);
+    	return false;    	
     }
 
     @Override
     protected void okPressed() {
         if (saveInput())
-        	super.okPressed();       
+        	super.okPressed();        
     }
 
     public String getDiagramName() {
         return diagramName;
-    }	    
+    }
+    
+    public String getProcessName() {
+        return processName;
+    }
+    
+    public String getProcessId() {
+        return processId;
+    }
+    
+    private void showMesaage(String message) {
+    	MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), SWT.ICON_WARNING | SWT.OK);
+    	messageBox.setText("Warning");
+    	messageBox.setMessage(message);
+    	messageBox.open();	
+    }
 }

@@ -28,7 +28,7 @@ public class SaveAsProcessHandler extends AbstractHandler {
 		 	MyTitleAreaDialog dialog = new MyTitleAreaDialog(FileService.getDiagramName(dataFile), true);
 			dialog.create();
 			if (dialog.open() == Window.OK) {
-				DiagramHandler.saveDiagramAS(dataFile, dialog.getDiagramName());		    
+				DiagramHandler.saveDiagramAS(dataFile, dialog.getDiagramName(), dialog.getProcessName(), dialog.getProcessId());		    
 			}
 		}
 		return window;

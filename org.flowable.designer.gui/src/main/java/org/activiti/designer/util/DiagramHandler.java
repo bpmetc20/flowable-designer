@@ -104,7 +104,7 @@ public class DiagramHandler {
 		}		
 	 }
 	
-	 public static void createNewDiagram(String newDiagramName) {
+	 public static void createNewDiagram(String newDiagramNam, String processName, String processId) {
 		try {			 	
 			 IFile newDiagram = FileService.getDiagramFile(newDiagramName);	
 			 ActivitiDiagramEditor.get().createNewDiagram(newDiagram);
@@ -194,7 +194,7 @@ public class DiagramHandler {
 		 return openDiagramForBpmnFile(dataFile).isOK();		 
 	 }
 	 
-	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {		 		 	 
+	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName, String processName, String processId) {		 		 	 
 		 try {
 			 String xmlString;
 			 try {
