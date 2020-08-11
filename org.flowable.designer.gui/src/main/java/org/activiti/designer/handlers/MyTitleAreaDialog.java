@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.activiti.bpmn.model.Process;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
-import org.activiti.designer.util.DiagramHandler;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;

@@ -1,6 +1,6 @@
 package org.activiti.designer.handlers;
 
-import org.activiti.designer.util.DiagramHandler;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

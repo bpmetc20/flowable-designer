@@ -22,7 +22,7 @@ import java.util.Set;
 import org.activiti.bpmn.model.CallActivity;
 import org.activiti.designer.command.BpmnProcessModelUpdater;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
-import org.activiti.designer.util.DiagramHandler;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.IFile;

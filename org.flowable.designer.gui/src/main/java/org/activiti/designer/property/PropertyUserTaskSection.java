@@ -25,8 +25,8 @@ import java.util.Map;
 
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.designer.integration.usertask.CustomUserTask;
-import org.activiti.designer.util.DiagramHandler;
-import org.activiti.designer.util.RestClient;
+import org.activiti.designer.eclipse.util.DiagramHandler;
+import org.activiti.designer.eclipse.util.RestClient;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.activiti.designer.util.extension.ExtensionUtil;
 import org.eclipse.swt.SWT;

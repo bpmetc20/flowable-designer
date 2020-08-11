@@ -3,7 +3,7 @@ package org.activiti.designer.handlers;
 import java.util.List;
 import java.util.Map;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
-import org.activiti.designer.util.DiagramHandler;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;

@@ -1,4 +1,4 @@
-package org.activiti.designer.util;
+package org.activiti.designer.eclipse.util;
 
 import java.util.List;
 import java.util.Map;
