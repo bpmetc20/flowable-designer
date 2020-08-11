@@ -56,6 +56,7 @@ import org.activiti.bpmn.model.UserTask;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.extension.export.ExportMarshaller;
 import org.activiti.designer.eclipse.ui.ExportMarshallerRunnable;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.eclipse.util.ExtensionPointUtil;
 import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.integration.annotation.Property;
@@ -222,10 +223,16 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   }
 
   @Override
-  public void doSave(IProgressMonitor monitor) {
+  public void doSave(IProgressMonitor monitor) {	  
     super.doSave(monitor);
-
-    save(((ActivitiDiagramEditorInput) editorInput).getDataFile());
+    
+    //calling while closing tab and save  
+    IFile dataFile = ((ActivitiDiagramEditorInput) editorInput).getDataFile();
+    
+    if (save(dataFile)) {
+    	List<Map<String, String>> listModels = DiagramHandler.loadModels();
+        DiagramHandler.saveDiagramInCloud(dataFile, listModels);
+    }
   }
 
   protected void doSaveToBpmn(final BpmnMemoryModel model, IFile dataFile) throws Exception {

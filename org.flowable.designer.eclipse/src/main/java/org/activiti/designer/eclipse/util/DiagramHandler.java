@@ -12,17 +12,14 @@ import java.util.Set;
 
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
-import org.activiti.designer.eclipse.editor.ActivitiDiagramEditorInput;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFileState;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PartInitException;
-import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 import org.activiti.bpmn.model.Process;
@@ -230,11 +227,6 @@ public class DiagramHandler {
 	 }
 	 
 	 private static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
-		 String diagramName = FileService.getDiagramName(dataFile);
-		 
-		 final Map<String, String> model = getDiagramByName(diagramName, listModels);			
-		 boolean existInCloud = model.isEmpty() ? false : true; 	 
-		 
 		 //saving file first if diagram is open	
 		 ActivitiDiagramEditor editor = ActivitiDiagramEditor.get();		 
 		 if (FileService.isDiagramOpen(dataFile) && editor.isDirty() && !ActivitiDiagramEditor.get().doSave(dataFile)) {
@@ -243,7 +235,12 @@ public class DiagramHandler {
 		 } 
 			 
 		 //saved, now saving on cloud
-		 
+		 saveDiagramInCloud(dataFile, listModels);		 
+		 return true;	 
+     }
+	 
+	 public static boolean saveDiagramInCloud(IFile dataFile, List<Map<String, String>> listModels) {
+		 String diagramName = FileService.getDiagramName(dataFile);	
 		 String xmlString;
 		 try {
 			 xmlString = FileService.getFileContent(dataFile);
@@ -251,11 +248,15 @@ public class DiagramHandler {
 			 showSaveMessageBoxError(diagramName);
 			 return false; 
 		 }
+	 	
 		 if (xmlString.isEmpty()) {
 			 showSaveMessageBoxError(diagramName);
 			 return false; 
-		 }
-		 		 
+		 }		 
+		  
+		 final Map<String, String> model = getDiagramByName(diagramName, listModels);			
+		 boolean existInCloud = model.isEmpty() ? false : true; 	 
+	 		 
 		 if (existInCloud) {
 			 String id = getDiagramId(model);
 			 if (id.isEmpty()) {
@@ -272,8 +273,8 @@ public class DiagramHandler {
 				 return false;
 			 }
 		 }
-		 return true;	 
-     }
+		 return true;
+	 }
 	 
 	 public static Map<String, String> getDiagramByName(String diagramName, List<Map<String, String>> listModels) {
 		 if (!diagramName.isEmpty()) {		 
