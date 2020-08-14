@@ -46,6 +46,7 @@ public class RestClient {
 	private static String modelsUrl = ftdProxyRsPrefix + "models";
 	private static String modelUrl = modelsUrl + "/%s";
 	private static String modelXmlSourceUrl = modelsUrl + "/%s/source.xml";
+	private static String modelDeploymentUrl = ftdProxyRsPrefix + "deployments/models/%s";
 	private static String user = "rest";
 	private static String password = "test";
 	
@@ -131,6 +132,11 @@ public class RestClient {
 	// deletes model by modelId
 	public static boolean deleteModel(String modelId) {
 		return delete(String.format(modelUrl, modelId));
+	}
+
+	// deploys model with deployment name
+	public static void deployModel(String modelId, String deploymentName) throws Exception {
+		post(String.format(modelDeploymentUrl, modelId), Map.of("name", deploymentName));
 	}
 	
 	private static Map<String, String> getCollection(String url) {
@@ -224,6 +230,35 @@ public class RestClient {
 		}
 		
 		return result;
+	}
+	
+	private static void post(String url, Object data) throws Exception {
+		HttpPost request = new HttpPost(url);
+		request.addHeader("Content-Type", "application/json");
+		
+		try {
+			request.setEntity(
+					new StringEntity(
+							new ObjectMapper().writeValueAsString(data)));
+		} catch (UnsupportedEncodingException | JsonProcessingException e) {
+			e.printStackTrace();
+			throw new Exception("couldn't json serialize object");
+		}
+		
+		try (CloseableHttpClient httpClient = HttpClients.custom()
+				.setSSLSocketFactory(sslsf)
+				.setHostnameVerifier(createHostnameVerifier())
+				.setDefaultCredentialsProvider(provider)
+				.build();
+				CloseableHttpResponse response = httpClient.execute(request)) {
+			
+			if (response.getStatusLine().getStatusCode() != 200) {
+				throw new Exception("error status code returned " + response.getStatusLine().getStatusCode());
+			}
+			
+		} catch (Exception ex) {
+			throw new Exception("couldn't invoke url ");
+		}
 	}
 	
 	private static <T> T get(String url, Class<T> cls) {
