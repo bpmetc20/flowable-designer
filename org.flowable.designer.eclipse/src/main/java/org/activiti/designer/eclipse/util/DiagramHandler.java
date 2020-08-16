@@ -228,18 +228,28 @@ public class DiagramHandler {
 	 
 	 private static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
 		 //saving file first if diagram is open	
+		 String diagramName = FileService.getDiagramName(dataFile);
+		 final Map<String, String> model = getDiagramByName(diagramName, listModels);
+		 		 	
 		 ActivitiDiagramEditor editor = ActivitiDiagramEditor.get();		 
-		 if (FileService.isDiagramOpen(dataFile) && editor.isDirty() && !ActivitiDiagramEditor.get().doSave(dataFile)) {
+		 if (FileService.isDiagramOpen(dataFile) && editor.isDirty() && !ActivitiDiagramEditor.get().doSave(dataFile, getSavedModelId(model))) {
 			 //no message box needed
 			 return false;
 		 } 
 			 
 		 //saved, now saving on cloud
-		 saveDiagramInCloud(dataFile, listModels);		 
+		 saveDiagramInCloud(dataFile, model);		 
 		 return true;	 
      }
 	 
-	 public static boolean saveDiagramInCloud(IFile dataFile, List<Map<String, String>> listModels) {
+	 public static boolean saveDiagramInCloud(IFile dataFile) {
+		 List<Map<String, String>> listModels = loadModels();
+		 String diagramName = FileService.getDiagramName(dataFile);
+		 final Map<String, String> model = getDiagramByName(diagramName, listModels);
+		 return saveDiagramInCloud(dataFile, model);
+	 }
+	 
+	 public static boolean saveDiagramInCloud(IFile dataFile, Map<String, String> model) {
 		 String diagramName = FileService.getDiagramName(dataFile);	
 		 String xmlString;
 		 try {
@@ -252,9 +262,8 @@ public class DiagramHandler {
 		 if (xmlString.isEmpty()) {
 			 showSaveMessageBoxError(diagramName);
 			 return false; 
-		 }		 
-		  
-		 final Map<String, String> model = getDiagramByName(diagramName, listModels);			
+		 }		  
+		 			
 		 boolean existInCloud = model.isEmpty() ? false : true; 	 
 	 		 
 		 if (existInCloud) {
@@ -293,7 +302,11 @@ public class DiagramHandler {
 	 
 	 public static String getDiagramId(Map<String, String> model) {
 		 return model.get("id");
-	 }	 
+	 }	
+	 
+	 private static String getSavedModelId(final Map<String, String> model) {
+		 return "id-" + getDiagramId(model);
+	 }
 	 
 	 private static IStatus openDiagramForBpmnFile(IFile dataFile) {
 		 if (!dataFile.exists()) {

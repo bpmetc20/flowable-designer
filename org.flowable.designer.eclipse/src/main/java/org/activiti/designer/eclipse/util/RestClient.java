@@ -136,7 +136,9 @@ public class RestClient {
 
 	// deploys model with deployment name
 	public static void deployModel(String modelId, String deploymentName) throws Exception {
-		post(String.format(modelDeploymentUrl, modelId), Map.of("name", deploymentName));
+		HashMap<String, String> map = new HashMap();
+		map.put("name", deploymentName);
+		post(String.format(modelDeploymentUrl, modelId), map);
 	}
 	
 	private static Map<String, String> getCollection(String url) {

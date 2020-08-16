@@ -79,8 +79,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.SWTGraphics;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -218,8 +216,8 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  firePropertyChange(PROP_DIRTY);
   }
   
-  public boolean doSave(IFile dataFile) {
-	  return save(dataFile);	  
+  public boolean doSave(IFile dataFile, String id) {
+	  return save(dataFile, id);	  
   }
 
   @Override
@@ -229,9 +227,8 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     //calling while closing tab and save  
     IFile dataFile = ((ActivitiDiagramEditorInput) editorInput).getDataFile();
     
-    if (save(dataFile)) {
-    	List<Map<String, String>> listModels = DiagramHandler.loadModels();
-        DiagramHandler.saveDiagramInCloud(dataFile, listModels);
+    if (save(dataFile, "")) {    	
+        DiagramHandler.saveDiagramInCloud(dataFile);
     }
   }
 
@@ -255,12 +252,17 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 
   }
   
-  private boolean save(IFile dataFile) {
+  private boolean save(IFile dataFile, String id) {
 	  boolean saved = false;
 	  
-	  try {		  
-	      
+	  try {		      
 	      BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
+	      List<Process> processes =  model.getBpmnModel().getProcesses();
+	      if (processes.isEmpty()) {
+	    	  processes.get(0).setName(FileService.getDiagramName(dataFile));
+	    	  if (!id.isEmpty())
+	    		  processes.get(0).setId(id);
+	      }
 
 	      // Save the bpmn diagram file
 	      doSaveToBpmn(model, dataFile);
