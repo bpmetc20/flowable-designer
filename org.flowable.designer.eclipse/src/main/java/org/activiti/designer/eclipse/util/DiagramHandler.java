@@ -101,7 +101,7 @@ public class DiagramHandler {
 		}		
 	 }
 	
-	 public static void createNewDiagram(String newDiagramNam, String processName, String processId) {
+	 public static void createNewDiagram(String newDiagramNam) {
 		try {			 	
 			 IFile newDiagram = FileService.getDiagramFile(newDiagramName);	
 			 ActivitiDiagramEditor.get().createNewDiagram(newDiagram);
@@ -145,17 +145,8 @@ public class DiagramHandler {
 	 
 	 public static boolean deleteDiagram(IFile dataFile) {
 		 String diagramName = FileService.getDiagramName(dataFile);
-		 MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), 
-				 SWT.ICON_QUESTION | SWT.NO | SWT.YES );
-   	  	 messageBox.setText("Info");
-   	  	 messageBox.setMessage("Would you like to delete " + diagramName);
-   	  	 int result = messageBox.open();
-   	  	 switch(result) {
-   	  	 	case SWT.NO:	    	  			
-   	  	 	return false;
-   	  	 	case SWT.YES:
-	    	break;
-   	  	 } 	  
+		 if (!showYesNoMessageBox("Would you like to delete " + diagramName))
+			 return false;		 
 		 
 		 final Map<String, String> model = getDiagramByName(diagramName, loadModels());
 		 if (model.isEmpty()) {
@@ -191,13 +182,14 @@ public class DiagramHandler {
 		 return openDiagramForBpmnFile(dataFile).isOK();		 
 	 }
 	 
-	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName, String processName, String processId) {		 		 	 
+	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {		 		 	 
 		 try {
+			 String errorMessge = "Error while saving the model " + newDiagramName;
 			 String xmlString;
 			 try {
 				 xmlString = FileService.getFileContent(currentDiagram);
 			 } catch (Exception e) {
-				 showSaveMessageBoxError(newDiagramName);
+				 showMessageBoxError(errorMessge);
 				 return false; 
 			 }		 
 			 
@@ -223,24 +215,11 @@ public class DiagramHandler {
 	 }
 	 
 	 public static boolean saveDiagram(IFile dataFile) {
-		 return saveDiagram(dataFile, loadModels());
-	 }
-	 
-	 private static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
-		 //saving file first if diagram is open	
 		 String diagramName = FileService.getDiagramName(dataFile);
-		 final Map<String, String> model = getDiagramByName(diagramName, listModels);
-		 		 	
-		 ActivitiDiagramEditor editor = ActivitiDiagramEditor.get();		 
-		 if (FileService.isDiagramOpen(dataFile) && editor.isDirty() && !ActivitiDiagramEditor.get().doSave(dataFile, getSavedModelId(model))) {
-			 //no message box needed
-			 return false;
-		 } 
-			 
-		 //saved, now saving on cloud
-		 saveDiagramInCloud(dataFile, model);		 
-		 return true;	 
-     }
+		 if (!showYesNoMessageBox("Would you like to save " + diagramName))
+			 return false;		 
+		 return saveDiagram(dataFile, loadModels());
+	 }	 
 	 
 	 public static boolean saveDiagramInCloud(IFile dataFile) {
 		 List<Map<String, String>> listModels = loadModels();
@@ -252,15 +231,16 @@ public class DiagramHandler {
 	 public static boolean saveDiagramInCloud(IFile dataFile, Map<String, String> model) {
 		 String diagramName = FileService.getDiagramName(dataFile);	
 		 String xmlString;
+		 String errorMessge = "Error while saving the model " + diagramName;
 		 try {
 			 xmlString = FileService.getFileContent(dataFile);
 		 } catch (Exception e) {
-			 showSaveMessageBoxError(diagramName);
+			 showMessageBoxError(errorMessge);
 			 return false; 
 		 }
 	 	
 		 if (xmlString.isEmpty()) {
-			 showSaveMessageBoxError(diagramName);
+			 showMessageBoxError(errorMessge);
 			 return false; 
 		 }		  
 		 			
@@ -269,16 +249,16 @@ public class DiagramHandler {
 		 if (existInCloud) {
 			 String id = getDiagramId(model);
 			 if (id.isEmpty()) {
-				 showSaveMessageBoxError(diagramName);
+				 showMessageBoxError(errorMessge);
 				 return false;
 			 } 
 			 if (!RestClient.updateModelSource(id, xmlString)) {
-				 showSaveMessageBoxError(diagramName);			 
+				 showMessageBoxError(errorMessge);		 
 				 return false;
 			 }
 		 } else {
 			 if (RestClient.saveNewModel(diagramName, xmlString) == null) {
-				 showSaveMessageBoxError(diagramName);			 
+				 showMessageBoxError(errorMessge);			 
 				 return false;
 			 }
 		 }
@@ -302,7 +282,32 @@ public class DiagramHandler {
 	 
 	 public static String getDiagramId(Map<String, String> model) {
 		 return model.get("id");
-	 }	
+	 }
+	 
+	 public static void showMessageBoxError(String nessage) {
+		 MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), SWT.ICON_ERROR | SWT.OK);
+		 messageBox.setText("Warning");
+		 messageBox.setMessage(nessage);
+		 messageBox.open();	
+	 }
+	 
+	 //////////////////////////////////////
+	 
+	 private static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
+		 //saving file first if diagram is open	
+		 String diagramName = FileService.getDiagramName(dataFile);
+		 final Map<String, String> model = getDiagramByName(diagramName, listModels);
+		 		 	
+		 ActivitiDiagramEditor editor = ActivitiDiagramEditor.get();		 
+		 if (FileService.isDiagramOpen(dataFile) && editor.isDirty() && !ActivitiDiagramEditor.get().doSave(dataFile, getSavedModelId(model))) {
+			 //no message box needed
+			 return false;
+		 } 
+			 
+		 //saved, now saving on cloud
+		 saveDiagramInCloud(dataFile, model);		 
+		 return true;	 
+     }	 	
 	 
 	 private static String getSavedModelId(final Map<String, String> model) {
 		 return "id-" + getDiagramId(model);
@@ -321,12 +326,16 @@ public class DiagramHandler {
 			 status =  new Status(IStatus.ERROR, ActivitiPlugin.getID(), errorMessage, exception); 
 	     }
 		 return status;
-	 }	
-			
-	 private static void showSaveMessageBoxError(String diagramName) {
-		 MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), SWT.ICON_WARNING | SWT.OK);
-		 messageBox.setText("Warning");
-		 messageBox.setMessage("Error while saving the model " + diagramName);
-		 messageBox.open();	
+	 }	 
+	 
+	 private static boolean showYesNoMessageBox(String message) {
+		 MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), 
+				 SWT.ICON_QUESTION | SWT.NO | SWT.YES );
+   	  	 messageBox.setText("Info");
+   	  	 messageBox.setMessage(message);
+   	  	 int result = messageBox.open();
+   	  	 if (result == SWT.YES)
+   	  		 return true;   	  	   
+   	  	 return false;
 	 }
 }

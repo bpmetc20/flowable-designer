@@ -3,9 +3,6 @@ package org.activiti.designer.handlers;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 
-import java.util.List;
-
-import org.activiti.bpmn.model.Process;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -20,51 +17,26 @@ import org.eclipse.swt.widgets.Text;
 public class MyTitleAreaDialog extends TitleAreaDialog {
 
     private Text diagramNameText;
-    private Text processNameText;
-    private Text processIdText;
-    
-    private String diagramName = "";
-    private String processName = "";
-    private String processId = "";
+    private String diagramName = "";    
     private boolean changeName = false;
         
-    public MyTitleAreaDialog(String diagramName, boolean changeName) {
+    public MyTitleAreaDialog(String diagramName) {
     	super(ActivitiPlugin.getShell());
         
-    	this.diagramName = diagramName;
-        this.changeName = changeName;        
-        
-		if (!diagramName.isEmpty()) {
-			try {
-				List<Process> processes = DiagramHandler.getProcesses();
-				if (!processes.isEmpty()) {
-					processName = processes.get(0).getName();
-					processId = processes.get(0).getId();
-				}
-			} catch (Exception ex) {
-				
-			}
-		} else {
-			this.diagramName = DiagramHandler.newDiagramName;			
-		}
+    	this.diagramName = diagramName.isEmpty() ? DiagramHandler.newDiagramName : diagramName;
     }
 
     @Override
     public void create() {
         super.create();
         
-        if (changeName) {
-        	if (diagramName.equalsIgnoreCase(DiagramHandler.newDiagramName)) {
-        		setTitle("Your new Diagram will be Created");
-        		setMessage("Please type new diagram name and process attributed to be created", IMessageProvider.INFORMATION);
-        	} else { 
-        		setTitle("Your current Diagram will be Saved As...");
-        		setMessage("Please type new diagram name and process attributed to be saved", IMessageProvider.INFORMATION);
-        	}
-        } else {
-        	setTitle("Your current Diagram will be Saved");
-    		setMessage("Would you like your diagram to be saved", IMessageProvider.INFORMATION);
-        }        
+        if (diagramName.equalsIgnoreCase(DiagramHandler.newDiagramName)) {
+        	setTitle("Your new Diagram will be Created");
+        	setMessage("Please type new diagram name and process attributed to be created", IMessageProvider.INFORMATION);
+        } else { 
+        	setTitle("Your current Diagram will be Saved As...");
+        	setMessage("Please type new diagram name and process attributed to be saved", IMessageProvider.INFORMATION);
+        }               
     }
 
     @Override
@@ -76,12 +48,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         container.setLayout(layout);        
                
         createDiagramName(container);
-        
-        if (changeName) {
-        	createProcessName(container);
-        	createProcessId(container);
-        }
-        
+               
         return area;
     }
 
@@ -99,33 +66,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         	diagramName = "NewDiagram";                 	
         diagramNameText.setText(diagramName);
         diagramNameText.setEnabled(changeName);
-    }
-    
-    private void createProcessName(Composite container) {    	
-        Label lbtProcessName = new Label(container, SWT.NONE);
-        lbtProcessName.setText("Process Name");
-
-        GridData dataProcessName = new GridData();
-        dataProcessName.grabExcessHorizontalSpace = true;
-        dataProcessName.horizontalAlignment = GridData.FILL;
-        
-        processNameText = new Text(container, SWT.BORDER);
-        processNameText.setLayoutData(dataProcessName);
-        processNameText.setText(processName);
-    }
-    
-    private void createProcessId(Composite container) {
-        Label lbtProcessID = new Label(container, SWT.NONE);
-        lbtProcessID.setText("Process ID");
-
-        GridData dataProcessID  = new GridData();
-        dataProcessID.grabExcessHorizontalSpace = true;
-        dataProcessID.horizontalAlignment = GridData.FILL;
-        
-        processIdText = new Text(container, SWT.BORDER);
-        processIdText.setLayoutData(dataProcessID);
-        processIdText.setText(processId);
-    }
+    }    
 
     @Override
     protected boolean isResizable() {
@@ -139,23 +80,13 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
     	if (diagramName.isEmpty()) {
     		showMesaage("Diagram name should not be empty!");
     		return false;
-    	}
-    	
-    	if (!changeName) 
-    		return true;
+    	}    	
     	    	
-    	if (DiagramHandler.isDiagramExist(diagramName) == 0) {
-    		processName = processNameText.getText();
-        	processId = processIdText.getText();
-        	if (processName.isEmpty() || processId.isEmpty()) {
-        		showMesaage("Process attributes should not be empty!");
-        		return false;
-        	}
-        	
-    		return true;
+    	if (DiagramHandler.isDiagramExist(diagramName) != 0) {
+    		showMesaage("Already exist " + diagramName);
+        	return false;    		
     	}	
-    	showMesaage("Already exist " + diagramName);
-    	return false;    	
+    	return true;
     }
 
     @Override
@@ -166,15 +97,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
 
     public String getDiagramName() {
         return diagramName;
-    }
-    
-    public String getProcessName() {
-        return processName;
-    }
-    
-    public String getProcessId() {
-        return processId;
-    }
+    }    
     
     private void showMesaage(String message) {
     	MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), SWT.ICON_WARNING | SWT.OK);

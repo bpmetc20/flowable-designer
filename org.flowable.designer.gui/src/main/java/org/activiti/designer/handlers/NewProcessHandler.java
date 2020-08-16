@@ -14,10 +14,10 @@ public class NewProcessHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		
-		MyTitleAreaDialog dialog = new MyTitleAreaDialog("", true);
+		MyTitleAreaDialog dialog = new MyTitleAreaDialog("");
 		dialog.create();
 		if (dialog.open() == Window.OK) {
-			DiagramHandler.createNewDiagram(dialog.getDiagramName(), dialog.getProcessName(), dialog.getProcessId());	    
+			DiagramHandler.createNewDiagram(dialog.getDiagramName());	    
 		}		
 		return window;
 	}	
