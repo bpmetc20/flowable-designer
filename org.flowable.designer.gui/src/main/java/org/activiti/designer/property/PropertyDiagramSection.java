@@ -110,9 +110,11 @@ public class PropertyDiagramSection extends ActivitiPropertySection implements I
     }
     
     if (control == idText) {
+    	control.setEnabled(false);
       return currentProcess.getId();
       
     } else if (control == nameText) {
+    	control.setEnabled(false);
       return currentProcess.getName();
     
     } else if (control == namespaceText) {
