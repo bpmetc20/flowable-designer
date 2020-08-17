@@ -1,6 +1,8 @@
 package org.activiti.designer.eclipse.util;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -191,10 +193,13 @@ public class RestClient {
 				CloseableHttpResponse response = httpClient.execute(request)) {
 			
 			if (response.getStatusLine().getStatusCode() != 200) {
+				System.out.println("error occured: " 
+								+ IOUtils.toString(response.getEntity().getContent(), "UTF-8");
 				throw new Exception("couldn't invoke url ");
 			}
 			result = true;
 		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 		return result;
