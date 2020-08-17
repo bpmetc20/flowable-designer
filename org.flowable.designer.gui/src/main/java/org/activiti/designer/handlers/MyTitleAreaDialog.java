@@ -18,8 +18,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
 
     private Text diagramNameText;
     private String diagramName = "";    
-    private boolean changeName = false;
-        
+            
     public MyTitleAreaDialog(String diagramName) {
     	super(ActivitiPlugin.getShell());
         
@@ -64,8 +63,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
         diagramNameText.setLayoutData(dataDiagramName);
         if (diagramName.isEmpty()) 
         	diagramName = "NewDiagram";                 	
-        diagramNameText.setText(diagramName);
-        diagramNameText.setEnabled(changeName);
+        diagramNameText.setText(diagramName);        
     }    
 
     @Override
