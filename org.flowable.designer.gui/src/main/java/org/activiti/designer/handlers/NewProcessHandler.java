@@ -14,7 +14,8 @@ public class NewProcessHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		
-		MyTitleAreaDialog dialog = new MyTitleAreaDialog("");
+		MyTitleAreaDialog dialog = new MyTitleAreaDialog("", "Your new Diagram will be Created", 
+				"Please type new diagram name to be created", false);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			DiagramHandler.createNewDiagram(dialog.getDiagramName());	    

@@ -8,7 +8,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+
+import javax.swing.text.Document;
 
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
@@ -16,6 +19,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFileState;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.draw2d.graph.NodeList;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -267,6 +271,25 @@ public class DiagramHandler {
 		 return true;
 	 }
 	 
+	 public static boolean deployModel(IFile dataFile, String name) {
+		 List<Map<String, String>> listModels = loadModels();
+		 String diagramName = FileService.getDiagramName(dataFile);
+		 final Map<String, String> model = getDiagramByName(diagramName, listModels);
+		 String id = getDiagramId(model);
+		 String errorMessge = "Error while deployung the model " + diagramName;
+		 if (id.isEmpty()) {
+			 showMessageBoxError(errorMessge);
+			 return false;
+		 } 
+		 try {
+			 RestClient.deployModel(id, name);
+			 return true;
+		 } catch (Exception e) {
+			 showMessageBoxError(errorMessge);			 
+		 }
+		 return false;		 
+	 }
+	 
 	 public static Map<String, String> getDiagramByName(String diagramName, List<Map<String, String>> listModels) {
 		 if (!diagramName.isEmpty()) {		 
 		 	for(Map<String, String> model : listModels) {
@@ -339,5 +362,5 @@ public class DiagramHandler {
    	  	 if (result == SWT.YES)
    	  		 return true;   	  	   
    	  	 return false;
-	 }
+	 }	 
 }

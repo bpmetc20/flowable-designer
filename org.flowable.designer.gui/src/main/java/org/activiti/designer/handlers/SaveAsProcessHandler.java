@@ -19,7 +19,8 @@ public class SaveAsProcessHandler extends AbstractHandler {
 		if (dataFile == null) {
 			DiagramHandler.showMessageBoxError("Please load diagram first!");
 		} else {				
-		 	MyTitleAreaDialog dialog = new MyTitleAreaDialog(FileService.getDiagramName(dataFile));
+		 	MyTitleAreaDialog dialog = new MyTitleAreaDialog(FileService.getDiagramName(dataFile), "Your current Diagram will be Saved As...",
+		 			"Please type new diagram name to be saved", false);
 			dialog.create();
 			if (dialog.open() == Window.OK) {
 				DiagramHandler.saveDiagramAS(dataFile, dialog.getDiagramName());		    

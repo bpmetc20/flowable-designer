@@ -17,25 +17,26 @@ import org.eclipse.swt.widgets.Text;
 public class MyTitleAreaDialog extends TitleAreaDialog {
 
     private Text diagramNameText;
-    private String diagramName = "";    
+    private String diagramName = ""; 
+    private String title = "";  
+    private String message = ""; 
+    private boolean deploy = false; 
             
-    public MyTitleAreaDialog(String diagramName) {
+    public MyTitleAreaDialog(String diagramName, String title, String message, boolean deploy) {
     	super(ActivitiPlugin.getShell());
         
     	this.diagramName = diagramName.isEmpty() ? DiagramHandler.newDiagramName : diagramName;
+    	this.title = title;
+    	this.message = message;
+    	this.deploy = deploy;
     }
 
     @Override
     public void create() {
         super.create();
         
-        if (diagramName.equalsIgnoreCase(DiagramHandler.newDiagramName)) {
-        	setTitle("Your new Diagram will be Created");
-        	setMessage("Please type new diagram name and process attributed to be created", IMessageProvider.INFORMATION);
-        } else { 
-        	setTitle("Your current Diagram will be Saved As...");
-        	setMessage("Please type new diagram name and process attributed to be saved", IMessageProvider.INFORMATION);
-        }               
+        setTitle(title);
+        setMessage(message, IMessageProvider.INFORMATION);                       
     }
 
     @Override
@@ -80,7 +81,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
     		return false;
     	}    	
     	    	
-    	if (DiagramHandler.isDiagramExist(diagramName) != 0) {
+    	if (!deploy && DiagramHandler.isDiagramExist(diagramName) != 0) {
     		showMesaage("Already exist " + diagramName);
         	return false;    		
     	}	
