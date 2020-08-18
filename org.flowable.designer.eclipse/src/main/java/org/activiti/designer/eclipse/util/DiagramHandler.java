@@ -191,9 +191,10 @@ public class DiagramHandler {
 			 } catch (Exception e) {
 				 showMessageBoxError(errorMessge);
 				 return false; 
-			 }		 
+			 }	
 			 
-			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString) != null) {
+			 String modelId = RestClient.createNewModel(newDiagramName);			 
+			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString, modelId) != null) {
 				 IFile ifile = FileService.getDiagramFile(newDiagramName);
 				 FileService.writeDiagramToIFile(ifile, xmlString);				 
 				 return openDiagramForBpmnFile(ifile).isOK();				 
@@ -257,7 +258,8 @@ public class DiagramHandler {
 				 return false;
 			 }
 		 } else {
-			 if (RestClient.saveNewModel(diagramName, xmlString) == null) {
+			 String modelId = RestClient.createNewModel(diagramName);
+			 if (RestClient.saveNewModel(diagramName, xmlString, modelId) == null) {
 				 showMessageBoxError(errorMessge);			 
 				 return false;
 			 }
