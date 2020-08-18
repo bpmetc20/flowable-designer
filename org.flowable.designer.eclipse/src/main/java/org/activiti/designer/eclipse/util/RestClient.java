@@ -45,10 +45,12 @@ public class RestClient {
 	private static CredentialsProvider provider;
 	private static SSLConnectionSocketFactory sslsf;
 	private static String ftdProxyRsPrefix = "https://165.227.16.142.nip.io:8443/ftdproxyrs/";
-	private static String modelsUrl = ftdProxyRsPrefix + "models";
-	private static String modelUrl = modelsUrl + "/%s";
-	private static String modelXmlSourceUrl = modelsUrl + "/%s/source.xml";
+	private static String modelsUrl = ftdProxyRsPrefix + "models/data.designer";
+	private static String modelUrl = ftdProxyRsPrefix + "models/%s";
+	private static String modelXmlSourceUrl = ftdProxyRsPrefix + "models/%s/source.xml";
 	private static String modelDeploymentUrl = ftdProxyRsPrefix + "deployments/models/%s";
+	private static String usersUrl = ftdProxyRsPrefix + "users/data.designer";
+	private static String groupsUrl = ftdProxyRsPrefix + "groups/data.designer";
 	private static String user = "rest";
 	private static String password = "test";
 	
@@ -72,11 +74,11 @@ public class RestClient {
 	}
 
 	public static Map<String, String> getUsers() {
-		return getCollection(ftdProxyRsPrefix + "users/data.designer");
+		return getCollection(usersUrl);
 	}
 	
 	public static Map<String, String> getGroups() {
-		return getCollection(ftdProxyRsPrefix + "groups/data.designer");
+		return getCollection(groupsUrl);
 	}
 	
 	// returns a hash map with pairs where key is modelId and value is modelName
@@ -194,7 +196,7 @@ public class RestClient {
 			
 			if (response.getStatusLine().getStatusCode() != 200) {
 				System.out.println("error occured: " 
-								+ IOUtils.toString(response.getEntity().getContent(), "UTF-8");
+								+ IOUtils.toString(response.getEntity().getContent(), "UTF-8"));
 				throw new Exception("couldn't invoke url ");
 			}
 			result = true;
