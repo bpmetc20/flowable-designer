@@ -112,8 +112,7 @@ public class RestClient {
 
 	// stores a new model with given name and model source
 	// returns modelId of a newly stored model
-	public static String saveNewModel(String name, String modelXmlSource) {
-		String modelId = createNewModel(name);
+	public static String saveNewModel(String name, String modelXmlSource, String modelId) {
 		return updateModelSource(modelId, modelXmlSource)? modelId : null;
 	}
 	
@@ -123,7 +122,7 @@ public class RestClient {
 	}
 	
 	// creates a model with given name (this is an internal method) 
-	private static String createNewModel(String name) {
+	public static String createNewModel(String name) {
 		MapData mapData = new MapData();
 		Map<String, String> map = new HashMap<>();
 		mapData.setMap(map);
