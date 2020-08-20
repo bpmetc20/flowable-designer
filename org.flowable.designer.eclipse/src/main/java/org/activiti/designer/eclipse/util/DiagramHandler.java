@@ -1,5 +1,8 @@
 package org.activiti.designer.eclipse.util;
 
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +15,8 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.swing.text.Document;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
 
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
@@ -26,6 +31,8 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PartInitException;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
+import org.activiti.bpmn.converter.BpmnXMLConverter;
+import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.Process;
 
 public class DiagramHandler {
@@ -186,18 +193,33 @@ public class DiagramHandler {
 		 return openDiagramForBpmnFile(dataFile).isOK();		 
 	 }
 	 
-	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {		 		 	 
+	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {	
+		 String modelId = RestClient.createNewModel(newDiagramName);	
 		 try {
 			 String errorMessge = "Error while saving the model " + newDiagramName;
 			 String xmlString;
+			 BpmnModel model = null;
 			 try {
 				 xmlString = FileService.getFileContent(currentDiagram);
+				 Reader reader = new StringReader(xmlString);
+				 XMLInputFactory xif = XMLInputFactory.newInstance();
+			     XMLStreamReader xtr = xif.createXMLStreamReader(reader);				 
+				 BpmnXMLConverter bpmnConverter = new BpmnXMLConverter();			     
+				 model = bpmnConverter.convertToBpmnModel(xtr);	
+			     List<Process> processes =  model.getProcesses();
+			     if (!processes.isEmpty()) {
+			    	 processes.get(0).setName(newDiagramName);
+			    	 if (!modelId.isEmpty())
+			    		  processes.get(0).setId("id-" + modelId);
+			     }			     
+			     byte[] xmlBytes = bpmnConverter.convertToXML(model);
+			     xmlString = new String(xmlBytes, "UTF-8");			     
 			 } catch (Exception e) {
 				 showMessageBoxError(errorMessge);
 				 return false; 
 			 }	
 			 
-			 String modelId = RestClient.createNewModel(newDiagramName);			 
+			 		 
 			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString, modelId) != null) {
 				 IFile ifile = FileService.getDiagramFile(newDiagramName);
 				 FileService.writeDiagramToIFile(ifile, xmlString);				 

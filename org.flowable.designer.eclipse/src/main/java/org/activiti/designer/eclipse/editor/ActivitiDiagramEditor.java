@@ -258,7 +258,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  try {		      
 	      BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
 	      List<Process> processes =  model.getBpmnModel().getProcesses();
-	      if (processes.isEmpty()) {
+	      if (!processes.isEmpty()) {
 	    	  processes.get(0).setName(FileService.getDiagramName(dataFile));
 	    	  if (!id.isEmpty())
 	    		  processes.get(0).setId(id);
