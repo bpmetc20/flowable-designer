@@ -36,7 +36,6 @@ import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.Process;
 
 public class DiagramHandler {
-	public static final String newDiagramName = "New Diagram";
 	public static final String errorMessage = "Error Opening Activiti Diagram";
 	public static final String errorSaveMessage = "Error Saving Activiti Diagram";
 	
@@ -114,7 +113,7 @@ public class DiagramHandler {
 	
 	 public static void createNewDiagram(String newDiagramNam) {
 		try {			 	
-			 IFile newDiagram = FileService.getDiagramFile(newDiagramName);	
+			 IFile newDiagram = FileService.getDiagramFile(newDiagramNam);	
 			 ActivitiDiagramEditor.get().createNewDiagram(newDiagram);
 		 } catch(Exception e) {
 			 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, "", 
@@ -194,32 +193,19 @@ public class DiagramHandler {
 	 }
 	 
 	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {	
-		 String modelId = RestClient.createNewModel(newDiagramName);	
+		 String modelId = RestClient.createNewModel(newDiagramName);
+		 String errorMessge = "Error while saving the model " + newDiagramName;
+		 String xmlString;
+		 
 		 try {
-			 String errorMessge = "Error while saving the model " + newDiagramName;
-			 String xmlString;
-			 BpmnModel model = null;
-			 try {
-				 xmlString = FileService.getFileContent(currentDiagram);
-				 Reader reader = new StringReader(xmlString);
-				 XMLInputFactory xif = XMLInputFactory.newInstance();
-			     XMLStreamReader xtr = xif.createXMLStreamReader(reader);				 
-				 BpmnXMLConverter bpmnConverter = new BpmnXMLConverter();			     
-				 model = bpmnConverter.convertToBpmnModel(xtr);	
-			     List<Process> processes =  model.getProcesses();
-			     if (!processes.isEmpty()) {
-			    	 processes.get(0).setName(newDiagramName);
-			    	 if (!modelId.isEmpty())
-			    		  processes.get(0).setId("id-" + modelId);
-			     }			     
-			     byte[] xmlBytes = bpmnConverter.convertToXML(model);
-			     xmlString = new String(xmlBytes, "UTF-8");			     
-			 } catch (Exception e) {
-				 showMessageBoxError(errorMessge);
-				 return false; 
-			 }	
-			 
-			 		 
+			 xmlString = FileService.getFileContent(currentDiagram);
+			 xmlString = updateProcessAttributes(xmlString, modelId, newDiagramName); 	     
+		 } catch (Exception e) {
+			 showMessageBoxError(errorMessge);
+			 return false; 
+		 }		 
+		 
+		 try {			 		 
 			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString, modelId) != null) {
 				 IFile ifile = FileService.getDiagramFile(newDiagramName);
 				 FileService.writeDiagramToIFile(ifile, xmlString);				 
@@ -271,25 +257,22 @@ public class DiagramHandler {
 			 return false; 
 		 }		  
 		 			
-		 boolean existInCloud = model.isEmpty() ? false : true; 	 
-	 		 
-		 if (existInCloud) {
-			 String id = getDiagramId(model);
-			 if (id.isEmpty()) {
-				 showMessageBoxError(errorMessge);
-				 return false;
-			 } 
-			 if (!RestClient.updateModelSource(id, xmlString)) {
-				 showMessageBoxError(errorMessge);		 
-				 return false;
-			 }
-		 } else {
-			 String modelId = RestClient.createNewModel(diagramName);
-			 if (RestClient.saveNewModel(diagramName, xmlString, modelId) == null) {
-				 showMessageBoxError(errorMessge);			 
-				 return false;
-			 }
+		 if (model.isEmpty()) {
+			 //new diagram
+			 saveDiagramAS(dataFile, diagramName); 
+			 return true;
 		 }
+	 		 
+		 String id = getDiagramId(model);
+		 if (id.isEmpty()) {
+			 showMessageBoxError(errorMessge);
+			 return false;
+		 } 
+			 
+		 if (!RestClient.updateModelSource(id, xmlString)) {
+			 showMessageBoxError(errorMessge);		 
+			 return false;
+		 }		 
 		 return true;
 	 }
 	 
@@ -384,5 +367,22 @@ public class DiagramHandler {
    	  	 if (result == SWT.YES)
    	  		 return true;   	  	   
    	  	 return false;
-	 }	 
+	 }	
+	 
+	 private static String updateProcessAttributes(String xmlString, String modelId, String diagramName) throws Exception {
+		 BpmnModel model = null;
+		 Reader reader = new StringReader(xmlString);
+		 XMLInputFactory xif = XMLInputFactory.newInstance();
+		 XMLStreamReader xtr = xif.createXMLStreamReader(reader);				 
+		 BpmnXMLConverter bpmnConverter = new BpmnXMLConverter();			     
+		 model = bpmnConverter.convertToBpmnModel(xtr);	
+		 List<Process> processes =  model.getProcesses();
+		 if (!processes.isEmpty()) {
+			 processes.get(0).setName(diagramName);
+		     if (!modelId.isEmpty())
+		    	 processes.get(0).setId("id-" + modelId);
+		 }			     
+		 byte[] xmlBytes = bpmnConverter.convertToXML(model);
+		 return new String(xmlBytes, "UTF-8");		
+	 }
 }

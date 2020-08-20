@@ -25,7 +25,7 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
     public MyTitleAreaDialog(String diagramName, String title, String message, boolean deploy) {
     	super(ActivitiPlugin.getShell());
         
-    	this.diagramName = diagramName.isEmpty() ? DiagramHandler.newDiagramName : diagramName;
+    	this.diagramName = diagramName.isEmpty() ? "New Diagram" : diagramName;
     	this.title = title;
     	this.message = message;
     	this.deploy = deploy;
@@ -62,8 +62,6 @@ public class MyTitleAreaDialog extends TitleAreaDialog {
 
         diagramNameText = new Text(container, SWT.BORDER);
         diagramNameText.setLayoutData(dataDiagramName);
-        if (diagramName.isEmpty()) 
-        	diagramName = "NewDiagram";                 	
         diagramNameText.setText(diagramName);        
     }    
 
