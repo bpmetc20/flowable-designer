@@ -295,6 +295,18 @@ public class DiagramHandler {
 		 return false;		 
 	 }
 	 
+	 public static String getDiagramIdByName(String diagramName) {
+		 if (diagramName.isEmpty()) 
+			 return "";
+			 
+		 for(Map<String, String> model : loadModels()) {
+			 String modelName = getDiagramName(model);
+		 	 if (modelName.equals(diagramName)) 
+		 		 return getDiagramId(model);			
+		 }
+		 return "";
+	 }
+	 
 	 public static Map<String, String> getDiagramByName(String diagramName, List<Map<String, String>> listModels) {
 		 if (!diagramName.isEmpty()) {		 
 		 	for(Map<String, String> model : listModels) {

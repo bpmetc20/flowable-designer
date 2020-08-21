@@ -149,8 +149,9 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
     CallActivity activity = (CallActivity) businessObject;
     
     if (control == calledElementCombo) {
-      //evaluateOpenCalledElementButtonEnabledStatus();
-      activity.setCalledElement(calledElementCombo.getText());
+    	//evaluateOpenCalledElementButtonEnabledStatus();
+      	String id = "id-" + DiagramHandler.getDiagramIdByName(calledElementCombo.getText());
+    	activity.setCalledElement(id);
     }
   }
 
