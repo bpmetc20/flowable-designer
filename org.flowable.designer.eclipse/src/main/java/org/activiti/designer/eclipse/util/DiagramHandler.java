@@ -194,7 +194,8 @@ public class DiagramHandler {
 	 
 	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {	
 		 //save current open diagram first
-		 saveDiagram(currentDiagram, loadModels());
+		 if (ActivitiDiagramEditor.get().isDirty())
+			 saveDiagram(currentDiagram, loadModels());
 		 
 		 String modelId = RestClient.createNewModel(newDiagramName);
 		 String errorMessge = "Error while saving the model " + newDiagramName;
