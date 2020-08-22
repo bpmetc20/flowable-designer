@@ -193,6 +193,9 @@ public class DiagramHandler {
 	 }
 	 
 	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {	
+		 //save current open diagram first
+		 saveDiagram(currentDiagram, loadModels());
+		 
 		 String modelId = RestClient.createNewModel(newDiagramName);
 		 String errorMessge = "Error while saving the model " + newDiagramName;
 		 String xmlString;
@@ -220,10 +223,9 @@ public class DiagramHandler {
 	 }
 	 
 	 public static void saveAllDiagrams() {	
-		 List<Map<String, String>> listModels = loadModels();
 		 Set<IFile> diagrams = FileService.getAllDiagramDataFiles();
 		 for (IFile dataFile : diagrams) {
-			 saveDiagram(dataFile, listModels); 
+			 saveDiagram(dataFile, loadModels()); 
 		 }
 	 }
 	 
@@ -250,12 +252,7 @@ public class DiagramHandler {
 		 } catch (Exception e) {
 			 showMessageBoxError(errorMessge);
 			 return false; 
-		 }
-	 	
-		 if (xmlString.isEmpty()) {
-			 showMessageBoxError(errorMessge);
-			 return false; 
-		 }		  
+		 }		 	  
 		 			
 		 if (model.isEmpty()) {
 			 //new diagram
