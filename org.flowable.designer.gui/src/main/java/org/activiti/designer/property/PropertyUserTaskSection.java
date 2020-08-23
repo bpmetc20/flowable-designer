@@ -60,9 +60,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	boolean userSelection = false;
 
 	
-	private Map<String, String> loadedUsers = new HashMap<String, String>();
-	private Map<String, String> loadedGroups = new HashMap<String, String>();
 	private Map<String, String> taskForms = new HashMap<String, String>();
+	private Map<String, String> loadedForms = new HashMap<String, String>();
 
 	protected Combo createComboboxMy(String[] values, int defaultSelectionIndex) {
 		Combo comboControl = new Combo(formComposite, SWT.READ_ONLY);
@@ -91,10 +90,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 
 	@Override
 	public void createFormControls(TabbedPropertySheetPage aTabbedPropertySheetPage) {
-				
-		
-		Map<String, String> loadedForms = DiagramHandler.loadForms();
-		
+		loadedForms = DiagramHandler.loadForms();		
 		String[] usersValues = DiagramHandler.buildListFromMap(DiagramHandler.loadUsers());
 		String[] groupsValues = DiagramHandler.buildListFromMap(DiagramHandler.loadGroups());
 		String[] formsValues = DiagramHandler.buildListFromMap(loadedForms);
@@ -248,21 +244,16 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		} else if (control == skipExpressionText) {
 			task.setSkipExpression(skipExpressionText.getText());
 		} else if (control == formTypeCombo) {
-			task.setFormKey(formTypeCombo.getText()); // TODO provide key (form id) instead of value (form name)
+			String id = "";
+			String formName = formTypeCombo.getText();
+			for (Map.Entry<String, String> entry : loadedForms.entrySet()) {
+				if (formName.equals(entry.getValue())) {
+					id = entry.getKey();
+					break;
+				}
+	        }			
+			task.setFormKey(id); 
 		}
-	}		
-
-	
-	
-
-	private void retrieveGroups() {
-		loadedGroups = RestClient.getGroups();
-	}
-
-	private String[] buildGroupsList() {
-		List<String> values = new ArrayList<String>(loadedGroups.values());
-		Collections.sort(values);
-		return values.toArray(new String[0]);
 	}
 	
 	private void selectTaskForm(UserTask task) {
@@ -296,7 +287,5 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	      }
 	    }
 	    return result;
-	  }
-
-
+	}
 }
