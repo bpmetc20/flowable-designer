@@ -192,17 +192,23 @@ public class DiagramHandler {
 		 return openDiagramForBpmnFile(dataFile).isOK();		 
 	 }
 	 
-	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {	
-		 //save current open diagram first
-		 if (ActivitiDiagramEditor.get().isDirty())
-			 saveDiagram(currentDiagram, loadModels());
-		 
+	 public static boolean saveDiagramAS(IFile currentDiagram, String newDiagramName) {			 
 		 String modelId = RestClient.createNewModel(newDiagramName);
-		 String errorMessge = "Error while saving the model " + newDiagramName;
-		 String xmlString;
-		 
-		 try {
-			 xmlString = FileService.getFileContent(currentDiagram);
+		 String xmlString;	
+		 String errorMessge = "Error while saving the model " + newDiagramName;	
+		 IFile ifile;
+		 try {			 
+			 if (ActivitiDiagramEditor.get().isDirty()) {
+				 ifile = FileService.getDiagramFile(newDiagramName);
+				 ActivitiDiagramEditor.get().doSave(ifile, "id-" + modelId);
+				 ActivitiDiagramEditor.get().setDirty();
+				 ActivitiDiagramEditor.get().updateDirtyState();
+				 xmlString = FileService.getFileContent(ifile);				 
+			 } else {
+				 xmlString = FileService.getFileContent(currentDiagram);
+				 ifile = FileService.getDiagramFile(newDiagramName);
+				 FileService.writeDiagramToIFile(ifile, xmlString);	
+			 }			 
 			 xmlString = updateProcessAttributes(xmlString, modelId, newDiagramName); 	     
 		 } catch (Exception e) {
 			 showMessageBoxError(errorMessge);
@@ -210,9 +216,7 @@ public class DiagramHandler {
 		 }		 
 		 
 		 try {			 		 
-			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString, modelId) != null) {
-				 IFile ifile = FileService.getDiagramFile(newDiagramName);
-				 FileService.writeDiagramToIFile(ifile, xmlString);				 
+			 if (!xmlString.isEmpty() && RestClient.saveNewModel(newDiagramName, xmlString, modelId) != null) {				 			 
 				 return openDiagramForBpmnFile(ifile).isOK();				 
 			 }			 	 
 		 } catch(Exception e) {			 
