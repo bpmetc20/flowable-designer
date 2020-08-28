@@ -64,7 +64,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	private Map<String, String> loadedForms = new HashMap<String, String>();
 
 	protected Combo createComboboxMy(String[] values, int defaultSelectionIndex) {
-		Combo comboControl = new Combo(formComposite, SWT.READ_ONLY);
+		Combo comboControl = new Combo(formComposite, SWT.DROP_DOWN);
 		FormData data = new FormData();
 		data.left = new FormAttachment(0, 200);
 		data.right = new FormAttachment(70, 0);
@@ -220,8 +220,13 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		} else if (control == skipExpressionText) {
 			return task.getSkipExpression();
 		} else if (control == formTypeCombo) {
+			String taskKey = task.getFormKey();
+			if (taskKey != null && !taskKey.isEmpty()) {
+				String formName = getFormNameFromId(taskKey);
+				formTypeCombo.setText(formName);				
+			}
 			selectTaskForm(task);
-			return task.getFormKey(); // TODO provide value (form name) instead of key (form id)
+			return taskKey; 
 		}
 		return null;
 	}
@@ -231,9 +236,11 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		UserTask task = (UserTask) businessObject;
 		if (control == userCombo) {
 			task.setAssignee(Boolean.toString(true));
+			task.getCandidateUsers().clear();
 			task.getCandidateUsers().add(userCombo.getText());			
 		} else if (control == groupCombo) {	
 			task.setAssignee(Boolean.toString(false));
+			task.getCandidateGroups().clear();
 			task.getCandidateGroups().add(groupCombo.getText());
 		} else if (control == dueDateText) {
 			task.setDueDate(dueDateText.getText());
@@ -243,15 +250,9 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.setCategory(categoryText.getText());
 		} else if (control == skipExpressionText) {
 			task.setSkipExpression(skipExpressionText.getText());
-		} else if (control == formTypeCombo) {
-			String id = "";
+		} else if (control == formTypeCombo) {			
 			String formName = formTypeCombo.getText();
-			for (Map.Entry<String, String> entry : loadedForms.entrySet()) {
-				if (formName.equals(entry.getValue())) {
-					id = entry.getKey();
-					break;
-				}
-	        }			
+			String id = getFormIdFromName(formName);
 			task.setFormKey(id); 
 		}
 	}
@@ -276,7 +277,6 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	    CustomUserTask result = null;
 
 	    if (userTask.isExtended()) {
-
 	      final List<CustomUserTask> customUserTasks = ExtensionUtil.getCustomUserTasks(ActivitiUiUtil.getProjectFromDiagram(getDiagram()));
 
 	      for (final CustomUserTask customUserTask : customUserTasks) {
@@ -287,5 +287,17 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	      }
 	    }
 	    return result;
+	}
+	
+	private String getFormIdFromName(String formName) {		
+		for (Map.Entry<String, String> entry : loadedForms.entrySet()) {
+			if (formName.equals(entry.getValue())) 
+				return entry.getKey();			
+        }
+		return "";
+	}
+	
+	private String getFormNameFromId(String formId) {	
+		return loadedForms.get(formId);		
 	}
 }
