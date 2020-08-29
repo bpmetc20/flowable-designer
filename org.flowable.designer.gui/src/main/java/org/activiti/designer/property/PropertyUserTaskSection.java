@@ -65,8 +65,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	private Map<String, String> loadedForms = new HashMap<String, String>();
 	private Map<String, String> formSelection = new HashMap<String, String>();
 
-	protected Combo createComboboxMy(String[] values, int defaultSelectionIndex) {
-		Combo comboControl = new Combo(formComposite, SWT.DROP_DOWN);
+	protected Combo createComboboxMy(String[] values, int defaultSelectionIndex, boolean change) {
+		Combo comboControl = new Combo(formComposite, change ? SWT.DROP_DOWN : SWT.READ_ONLY);
 		FormData data = new FormData();
 		data.left = new FormAttachment(0, 200);
 		data.right = new FormAttachment(70, 0);
@@ -96,7 +96,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		String[] usersValues = DiagramHandler.buildListFromMap(DiagramHandler.loadUsers());
 		String[] groupsValues = DiagramHandler.buildListFromMap(DiagramHandler.loadGroups());
 		String[] formsValues = DiagramHandler.buildListFromMap(loadedForms);
-		userCombo = createComboboxMy(usersValues, 0);
+		userCombo = createComboboxMy(usersValues, 0, false);
 		createLabel("Assignee", userCombo);
 	    
 		btnUser = getWidgetFactory().createButton(formComposite, "", SWT.RADIO);
@@ -106,7 +106,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	    data.top = new FormAttachment(userCombo, +2, SWT.TOP);
 	    btnUser.setLayoutData(data);	    
 	    
-	    groupCombo = createComboboxMy(groupsValues, 0);
+	    groupCombo = createComboboxMy(groupsValues, 0, false);
 	    createLabel("", groupCombo);
 	    
 		btnGroup = getWidgetFactory().createButton(formComposite, "", SWT.RADIO);
@@ -145,7 +145,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	    changeSelection();
 		
 		
-		formTypeCombo = createComboboxMy(formsValues, 0);
+		formTypeCombo = createComboboxMy(formsValues, 0, true);
 		createLabel("Form", formTypeCombo);
 		
 		formTypeCombo.addSelectionListener(new SelectionAdapter() {
