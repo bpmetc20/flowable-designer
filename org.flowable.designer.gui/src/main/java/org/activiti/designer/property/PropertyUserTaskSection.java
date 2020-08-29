@@ -57,11 +57,13 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	protected Button btnGroup;
 	private Combo userCombo;
 	private Combo groupCombo;
-	boolean userSelection = false;
-
+	private boolean userSelection = false;
+	private String lastFormId = "";  
+	
 	
 	private Map<String, String> taskForms = new HashMap<String, String>();
 	private Map<String, String> loadedForms = new HashMap<String, String>();
+	private Map<String, String> formSelection = new HashMap<String, String>();
 
 	protected Combo createComboboxMy(String[] values, int defaultSelectionIndex) {
 		Combo comboControl = new Combo(formComposite, SWT.DROP_DOWN);
@@ -220,12 +222,13 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		} else if (control == skipExpressionText) {
 			return task.getSkipExpression();
 		} else if (control == formTypeCombo) {
-			String taskKey = task.getFormKey();
-			if (taskKey != null && !taskKey.isEmpty()) {
-				String formName = getFormNameFromId(taskKey);
-				formTypeCombo.setText(formName);				
-			}
+			String taskKey = task.getFormKey();			
 			selectTaskForm(task);
+			if (taskKey != null && !taskKey.isEmpty()) {
+				if (lastFormId.isEmpty() || !lastFormId.equals(taskKey))
+					formTypeCombo.setText(getFormNameFromId(taskKey));
+				lastFormId = taskKey;
+			}			
 			return taskKey; 
 		}
 		return null;
@@ -250,10 +253,10 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.setCategory(categoryText.getText());
 		} else if (control == skipExpressionText) {
 			task.setSkipExpression(skipExpressionText.getText());
-		} else if (control == formTypeCombo) {			
+		} else if (control == formTypeCombo) {	
 			String formName = formTypeCombo.getText();
-			String id = getFormIdFromName(formName);
-			task.setFormKey(id); 
+			String formId = getFormIdFromName(formName);
+			task.setFormKey(formId);  
 		}
 	}
 	
