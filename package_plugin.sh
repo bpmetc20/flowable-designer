@@ -2,11 +2,11 @@
 
 SRC_ZIP=flowable-designer-5.22.0.zip
 SRC_PLUGIN_NAME=flowable_designer
-SRC_PLUGIN_DIR=/Users/osip.lisitsa/Desktop/FTDDevelopment
+SRC_PLUGIN_PATH=$(pwd)/../${SRC_PLUGIN_NAME}
 DST_ZIP=flowable-designer-5.22.1.zip
 CHANGE_DIR=changed
 SIZE_FILE=sizeChanges.log
-PACKAGE_DIR=$(pwd)/ftd-designer-plugin
+PACKAGE_DIR=$(pwd)/../ftd-designer-plugin
 
 
 NEW_VERSION=_5.22.0
@@ -99,7 +99,6 @@ finalStep() {
   #zip -r ${DST_ZIP} ${SRC_ZIP_DIR}/*
   #jar cMf ${DST_ZIP}  ./${SRC_ZIP_DIR}/*
   #rm -rf ${SRC_ZIP_DIR}
-  #rm -rf ${NEW_SRC_PLUGIN_PATH}
 }
 
 ############## SCRIPT STARTED HERE ##################
@@ -142,11 +141,9 @@ cp ${SRC_ZIP} ${PACKAGE_DIR}
 cd ${PACKAGE_DIR}
 
 SRC_ZIP_DIR="${SRC_ZIP%.*}"
-SRC_PLUGIN_PATH=${SRC_PLUGIN_DIR}/${SRC_PLUGIN_NAME}
-NEW_SRC_PLUGIN_PATH=$(pwd)/${SRC_PLUGIN_NAME}
 
 mkdir -p ${CHANGE_DIR}
-cp -a ${SRC_PLUGIN_PATH} .
+cp -a ${SRC_PLUGIN_PATH} ${PACKAGE_DIR}
 mkdir -p ${SRC_ZIP_DIR}
 cd ${SRC_ZIP_DIR}
 jar xfv ../${SRC_ZIP}
@@ -158,13 +155,15 @@ for filename in *; do
     DIR_NAME="${DIR_NAME_STRIPPED%_5.22.0}"
     findFolder
     if [ ! -z "$FOUND" ] ; then
-      cp -a ${NEW_SRC_PLUGIN_PATH}/${DIR_NAME} .
+      cp -a ${SRC_PLUGIN_PATH}/${DIR_NAME} .
       unpackOriginalBranch
       changeOriginalBranch
       packOriginalBranch
       #finalStep
     fi
 done
+
+rm -fr ${PACKAGE_DIR}/${SRC_PLUGIN_NAME}
 
 #finalStep
 
