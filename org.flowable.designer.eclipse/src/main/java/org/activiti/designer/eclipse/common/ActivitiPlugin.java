@@ -13,6 +13,8 @@
  */
 package org.activiti.designer.eclipse.common;
 
+import java.awt.Menu;
+import java.awt.MenuItem;
 import java.net.URL;
 
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
@@ -21,6 +23,8 @@ import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.eclipse.util.PaletteExtensionUtil;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
@@ -30,6 +34,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.WorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -261,4 +266,16 @@ public class ActivitiPlugin extends AbstractUIPlugin {
 			}
 	    });		
 	}
+  
+  public static void hideMenu() {
+	  IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+	  MenuManager menuManager = ((WorkbenchWindow) workbenchWindow).getMenuManager();
+	  org.eclipse.swt.widgets.Menu menu = menuManager.getMenu(); 
+	  
+	  org.eclipse.swt.widgets.MenuItem item = menu.getItem(0);
+	  
+	  item.dispose();	
+	  menuManager.update();
+	  
+  }  
 }

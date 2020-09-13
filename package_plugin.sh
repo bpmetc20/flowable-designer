@@ -6,6 +6,8 @@ SRC_PLUGIN_DIR=/Users/osip.lisitsa/Desktop/FTDDevelopment
 DST_ZIP=flowable-designer-5.22.1.zip
 CHANGE_DIR=changed
 SIZE_FILE=sizeChanges.log
+PACKAGE_DIR=$(pwd)/ftd-designer-plugin
+
 
 NEW_VERSION=_5.22.0
 FOUND=
@@ -134,13 +136,14 @@ fi
 echo "Source name :  ${SRC_ZIP}"
 echo "Destination name :  ${DST_ZIP}"
 
+rm -rf ${PACKAGE_DIR}
+mkdir -p ${PACKAGE_DIR}
+cp ${SRC_ZIP} ${PACKAGE_DIR}
+cd ${PACKAGE_DIR}
+
 SRC_ZIP_DIR="${SRC_ZIP%.*}"
 SRC_PLUGIN_PATH=${SRC_PLUGIN_DIR}/${SRC_PLUGIN_NAME}
 NEW_SRC_PLUGIN_PATH=$(pwd)/${SRC_PLUGIN_NAME}
-
-rm -rf ${SRC_ZIP_DIR}
-rm -rf ${SRC_PLUGIN_NAME}
-rm -rf ${CHANGE_DIR}
 
 mkdir -p ${CHANGE_DIR}
 cp -a ${SRC_PLUGIN_PATH} .
