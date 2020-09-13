@@ -1,0 +1,34 @@
+@echo building plugin...
+@echo off
+mkdir flowable-designer-5.22.0
+cd flowable-designer-5.22.0
+jar xfv ..\flowable-designer-5.22.0.zip >NUL
+cd plugins
+mkdir org.flowable.designer.gui_5.22.0
+cd org.flowable.designer.gui_5.22.0
+jar xfv ..\org.flowable.designer.gui_5.22.0.jar >NUL
+cd org
+rd /s /q activiti
+if exist activiti rd /s /q activiti
+Xcopy /I /E C:\Users\brukv\flowable-designer\eclipse-workspace\org.flowable.designer.gui\bin\org . >NUL
+cd ..
+jar cMf org.flowable.designer.gui_5.22.0.jar * >NUL
+del ..\org.flowable.designer.gui_5.22.0.jar
+Xcopy /I org.flowable.designer.gui_5.22.0.jar .. >NUL
+cd ..\
+rd /s /q org.flowable.designer.gui_5.22.0
+if exist org.flowable.designer.gui_5.22.0 rd /s /q org.flowable.designer.gui_5.22.0
+cd ..\
+jar xvf artifacts.jar >NUL
+del artifacts.jar
+FOR /F "usebackq" %%A IN ('C:\development\flowable-designer\flowable-designer-5.22.0\plugins\org.flowable.designer.gui_5.22.0.jar') DO set OLD_SIZE=%%~zA
+powershell -Command "(gc artifacts.xml) -replace '729792', '%OLD_SIZE%' | Out-File -encoding ASCII artifacts.xml"
+jar cMf artifacts.jar artifacts.xml >NUL
+del artifacts.xml
+powershell Compress-Archive * flowable-designer-5.22.1.zip
+move /y flowable-designer-5.22.1.zip .. >NUL
+cd ..
+rd /s /q flowable-designer-5.22.0
+if exist flowable-designer-5.22.0 rd /s /q flowable-designer-5.22.0
+@echo on
+@echo ... done
