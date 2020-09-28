@@ -159,13 +159,12 @@ for filename in *; do
       unpackOriginalBranch
       changeOriginalBranch
       packOriginalBranch
-      #finalStep
     fi
 done
 
 rm -fr ${PACKAGE_DIR}/${SRC_PLUGIN_NAME}
 
-#finalStep
+finalStep
 
 
 
