@@ -92,6 +92,7 @@ public class ActivitiPlugin extends AbstractUIPlugin {
         
     PaletteExtensionUtil.pushPaletteExtensions();
     
+    hideMenu();
     startTabtListener();
   }
 
@@ -269,13 +270,11 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   
   public static void hideMenu() {
 	  IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-	  MenuManager menuManager = ((WorkbenchWindow) workbenchWindow).getMenuManager();
-	  org.eclipse.swt.widgets.Menu menu = menuManager.getMenu(); 
-	  
-	  org.eclipse.swt.widgets.MenuItem item = menu.getItem(0);
-	  
-	  item.dispose();	
-	  menuManager.update();
-	  
+	  IContributionItem[] items = ((WorkbenchWindow)workbenchWindow).getMenuBarManager().getItems();
+      for (IContributionItem item : items) {
+    	  boolean visible = item.getId().equals("processMenu");
+    	  item.setVisible(visible);
+      }
+      ((WorkbenchWindow)workbenchWindow).getMenuBarManager().update();     
   }  
 }
