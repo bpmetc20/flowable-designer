@@ -38,10 +38,12 @@ public class PropertyDiagramSection extends ActivitiPropertySection implements I
 
   protected Text idText;
   protected Text nameText;
+  /*
   protected Text namespaceText;
-  protected Text documentationText;
   protected Text candidateStarterUsersText;
   protected Text candidateStarterGroupsText;
+  */
+  protected Text documentationText;
   protected List<String> languages;
   protected Map<Text, String> languageTextMap = new HashMap<Text, String>();
 	
@@ -63,12 +65,14 @@ public class PropertyDiagramSection extends ActivitiPropertySection implements I
       nameText = createTextControl(false);
       createLabel("Name", nameText);
     }
+    /*
     namespaceText = createTextControl(false);
     createLabel("Namespace", namespaceText);
     candidateStarterUsersText = createTextControl(false);
     createLabel("Candidate start users (comma separated)", candidateStarterUsersText);
     candidateStarterGroupsText = createTextControl(false);
     createLabel("Candidate start groups (comma separated)", candidateStarterGroupsText);
+    */
     documentationText = createTextControl(true);
     createLabel("Documentation", documentationText);
   }
@@ -117,19 +121,20 @@ public class PropertyDiagramSection extends ActivitiPropertySection implements I
     	control.setEnabled(false);
       return currentProcess.getName();
     
+    /*
     } else if (control == namespaceText) {
       if (StringUtils.isNotEmpty(model.getBpmnModel().getTargetNamespace())) {
         return model.getBpmnModel().getTargetNamespace();
       } else {
         return "http://www.activiti.org/test";
       }
-      
+         
     } else if (control == candidateStarterUsersText) {
       return getCommaSeperatedString(currentProcess.getCandidateStarterUsers());
     
     } else if (control == candidateStarterGroupsText) {
       return getCommaSeperatedString(currentProcess.getCandidateStarterGroups());
-      
+    */   
     } else if (control == documentationText) {
       return currentProcess.getDocumentation();
     }
@@ -162,6 +167,7 @@ public class PropertyDiagramSection extends ActivitiPropertySection implements I
         ((Process) businessObject).setName(currentProcess.getName());
       }
     
+    /*
     } else if (control == namespaceText) {
       model.getBpmnModel().setTargetNamespace(namespaceText.getText());
     
@@ -176,7 +182,7 @@ public class PropertyDiagramSection extends ActivitiPropertySection implements I
       if (businessObject instanceof Process) {
         ((Process) businessObject).setCandidateStarterGroups(currentProcess.getCandidateStarterGroups());
       }
-    
+    */
     } else if (control == documentationText) {
       currentProcess.setDocumentation(documentationText.getText());
       if (businessObject instanceof Process) {
@@ -194,10 +200,12 @@ public class PropertyDiagramSection extends ActivitiPropertySection implements I
     } else {
       nameText.setEnabled(enabled);
     }
-    namespaceText.setEnabled(enabled);
-    documentationText.setEnabled(enabled);
+    /*
+	namespaceText.setEnabled(enabled);
     candidateStarterUsersText.setEnabled(enabled);
     candidateStarterGroupsText.setEnabled(enabled);
+    */
+    documentationText.setEnabled(enabled);
 	}
 	
 	protected String getName(Object bo, String language) {
