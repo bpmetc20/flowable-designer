@@ -45,10 +45,10 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class PropertyUserTaskSection extends ActivitiPropertySection implements ITabbedPropertyConstants {
 
 	protected Text dueDateText;
-	protected Text priorityText;
-	protected Text categoryText;
-	protected Text skipExpressionText;
-	protected Text reccomendedFormText;
+	//protected Text priorityText;
+	//protected Text categoryText;
+	//protected Text skipExpressionText;
+	//protected Text reccomendedFormText;
 
 	private Combo formTypeCombo;
 	protected Button formSelectButton;
@@ -116,10 +116,10 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	    data.top = new FormAttachment(groupCombo, +2, SWT.TOP);
 	    btnGroup.setLayoutData(data); 	
 	    
-	    reccomendedFormText = createTextControl(false);
-	    createLabel("Reccomended form", reccomendedFormText);
-	    reccomendedFormText.setEnabled(false);
-	    reccomendedFormText.setVisible(false);
+	    //reccomendedFormText = createTextControl(false);
+	    //createLabel("Reccomended form", reccomendedFormText);
+	    //reccomendedFormText.setEnabled(false);
+	    //reccomendedFormText.setVisible(false);
 	    
 	    btnUser.addSelectionListener(new SelectionAdapter() {
 	        @Override
@@ -151,16 +151,17 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		formTypeCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent evt) {
-				if (formTypeCombo.getText().equalsIgnoreCase(reccomendedFormText.getText())) 
-					reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
-				else
-					reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+				//if (formTypeCombo.getText().equalsIgnoreCase(reccomendedFormText.getText())) 
+				//	reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+				//else
+				//	reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 				
 			}
 		});
 		
 		formSelectButton = getWidgetFactory().createButton(formComposite, "Launch form", SWT.PUSH);
-		formSelectButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+		formSelectButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_SELECTION));
+		//formSelectButton.setForeground(SWT.COLOR_WHITE);
 		data = new FormData();
 		data.left = new FormAttachment(formTypeCombo, 0);
 		data.right = new FormAttachment(90, 0);
@@ -186,12 +187,12 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 
 		dueDateText = createTextControl(false);
 		createLabel("Due date (variable)", dueDateText);
-		priorityText = createTextControl(false);
-		createLabel("Priority", priorityText);
-		categoryText = createTextControl(false);
-		createLabel("Category", categoryText);
-		skipExpressionText = createTextControl(false);
-		createLabel("Skip expression", skipExpressionText);		
+		//priorityText = createTextControl(false);
+		//createLabel("Priority", priorityText);
+		//categoryText = createTextControl(false);
+		//createLabel("Category", categoryText);
+		//skipExpressionText = createTextControl(false);
+		//createLabel("Skip expression", skipExpressionText);		
 		
 	}
 	
@@ -215,12 +216,12 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			return getCommaSeperatedString(task.getCandidateGroups());
 		} else if (control == dueDateText) {
 			return task.getDueDate();
-		} else if (control == priorityText) {
-			return task.getPriority();
-		} else if (control == categoryText) {
-			return task.getCategory();
-		} else if (control == skipExpressionText) {
-			return task.getSkipExpression();
+		//} else if (control == priorityText) {
+		//	return task.getPriority();
+		//} else if (control == categoryText) {
+		//	return task.getCategory();
+		//} else if (control == skipExpressionText) {
+		//	return task.getSkipExpression();
 		} else if (control == formTypeCombo) {
 			String taskKey = task.getFormKey();			
 			selectTaskForm(task);
@@ -247,12 +248,12 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.getCandidateGroups().add(groupCombo.getText());
 		} else if (control == dueDateText) {
 			task.setDueDate(dueDateText.getText());
-		} else if (control == priorityText) {
-			task.setPriority(priorityText.getText());
-		} else if (control == categoryText) {
-			task.setCategory(categoryText.getText());
-		} else if (control == skipExpressionText) {
-			task.setSkipExpression(skipExpressionText.getText());
+		//} else if (control == priorityText) {
+		//	task.setPriority(priorityText.getText());
+		//} else if (control == categoryText) {
+		//	task.setCategory(categoryText.getText());
+		//} else if (control == skipExpressionText) {
+		//	task.setSkipExpression(skipExpressionText.getText());
 		} else if (control == formTypeCombo) {	
 			String formName = formTypeCombo.getText();
 			String formId = getFormIdFromName(formName);
@@ -262,18 +263,18 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	
 	private void selectTaskForm(UserTask task) {
 		CustomUserTask customerTask = findCustomUserTask(task);
-		reccomendedFormText.setVisible(true);
-		if (customerTask == null) {
-			reccomendedFormText.setText("New Form");
-		} else {
-			String taskName = customerTask.getName();
-			String selectedForm = taskForms.getOrDefault(taskName, "");
-			reccomendedFormText.setText(selectedForm);			
-		}
-		if (formTypeCombo.getText().equalsIgnoreCase(reccomendedFormText.getText())) 
-			reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
-		else
-			reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		//reccomendedFormText.setVisible(true);
+		//if (customerTask == null) {
+		//	reccomendedFormText.setText("New Form");
+		//} else {
+		//	String taskName = customerTask.getName();
+		//	String selectedForm = taskForms.getOrDefault(taskName, "");
+		//	reccomendedFormText.setText(selectedForm);			
+		//}
+		//if (formTypeCombo.getText().equalsIgnoreCase(reccomendedFormText.getText())) 
+		//	reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+		//else
+		//	reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 	}	
 	
 	private CustomUserTask findCustomUserTask(UserTask userTask) {
