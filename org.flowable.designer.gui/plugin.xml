@@ -78,36 +78,36 @@
                id="org.activiti.designer.formTab"
                label="Form">
          </propertyTab>
-         <propertyTab
+         <!--propertyTab
                afterTab="org.activiti.designer.documentationTab"
                category="Activiti"
                id="org.activiti.designer.dataTab"
                label="Data Objects">
-         </propertyTab>
-         <propertyTab
+         </propertyTab> -->
+         <!-- <propertyTab
                afterTab="org.activiti.designer.documentationTab"
                category="Activiti"
                id="org.activiti.designer.listenerTab"
                label="Listeners">
-         </propertyTab>
+         </propertyTab> -->
          <propertyTab
                afterTab="org.activiti.designer.documentationTab"
                category="Activiti"
                id="org.activiti.designer.multiInstanceTab"
                label="Multi instance">
          </propertyTab>
-         <propertyTab
-               afterTab="org.activiti.designer.listenerTab"
-               category="Activiti"
-               id="org.activiti.designer.signalTab"
-               label="Signals">
-         </propertyTab>
-         <propertyTab
-               afterTab="org.activiti.designer.signalTab"
-               category="Activiti"
-               id="org.activiti.designer.messageTab" 
-               label="Messages">
-         </propertyTab>
+         <!-- <propertyTab
+              afterTab="org.activiti.designer.listenerTab"
+              category="Activiti"
+              id="org.activiti.designer.signalTab"
+              label="Signals">
+        </propertyTab> -->
+        <!-- <propertyTab
+              afterTab="org.activiti.designer.signalTab"
+              category="Activiti"
+              id="org.activiti.designer.messageTab"
+              label="Messages">
+         </propertyTab> -->
          <!-- <propertyTab
                afterTab="org.activiti.designer.listenerTab"
                category="Activiti"
