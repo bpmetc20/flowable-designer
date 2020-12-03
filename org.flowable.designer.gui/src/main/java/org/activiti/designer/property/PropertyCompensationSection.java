@@ -31,6 +31,7 @@ public class PropertyCompensationSection extends ActivitiPropertySection impleme
   @Override
   protected Object getModelValueForControl(Control control, Object businessObject) {
     Activity activity = (Activity) businessObject;
+    compensationButton.setVisible(false);
     if (control == compensationButton) {
       return activity.isForCompensation();
     } 

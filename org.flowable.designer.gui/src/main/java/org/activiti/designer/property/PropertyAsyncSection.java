@@ -41,10 +41,10 @@ public class PropertyAsyncSection extends ActivitiPropertySection implements ITa
   protected Object getModelValueForControl(Control control, Object businessObject) {
     if (businessObject instanceof FlowNode) {
       FlowNode flowNode = (FlowNode) businessObject;
-      exclusiveButton.setVisible(true);
+      exclusiveButton.setVisible(false);
+      asyncButton.setVisible(false);
       if (control == asyncButton) {
-        return flowNode.isAsynchronous();
-        
+        return flowNode.isAsynchronous();        
       } else if(control == exclusiveButton) {
         return !flowNode.isNotExclusive();
       }
