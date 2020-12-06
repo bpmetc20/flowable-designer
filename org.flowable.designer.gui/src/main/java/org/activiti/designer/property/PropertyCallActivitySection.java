@@ -125,7 +125,7 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
     createLabel("Called element", calledElementCombo);
     
     openCalledElementButton = getWidgetFactory().createButton(formComposite, "Show Diagram", SWT.PUSH);
-    openCalledElementButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
+    openCalledElementButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_SELECTION));
     FormData data = new FormData();
 	data.left = new FormAttachment(calledElementCombo, 0);
 	data.right = new FormAttachment(90, 0);
