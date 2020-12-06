@@ -45,8 +45,9 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class PropertyUserTaskSection extends ActivitiPropertySection implements ITabbedPropertyConstants {
 
 	protected Text dueDateText;
+	protected Text taskDurationText;
 	//protected Text priorityText;
-	//protected Text categoryText;
+	protected Combo categoryText;
 	//protected Text skipExpressionText;
 	//protected Text reccomendedFormText;
 
@@ -187,10 +188,13 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 
 		dueDateText = createTextControl(false);
 		createLabel("Due date (variable)", dueDateText);
+		taskDurationText = createTextControl(false);
+		createLabel("Task Duration", taskDurationText);
 		//priorityText = createTextControl(false);
 		//createLabel("Priority", priorityText);
-		//categoryText = createTextControl(false);
-		//createLabel("Category", categoryText);
+		String[] categoryValues = {"1", "2"};
+		categoryText = createComboboxMy(categoryValues, 0, false);
+		createLabel("Category", categoryText);
 		//skipExpressionText = createTextControl(false);
 		//createLabel("Skip expression", skipExpressionText);		
 		
@@ -216,10 +220,10 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			return getCommaSeperatedString(task.getCandidateGroups());
 		} else if (control == dueDateText) {
 			return task.getDueDate();
-		//} else if (control == priorityText) {
-		//	return task.getPriority();
-		//} else if (control == categoryText) {
-		//	return task.getCategory();
+		} else if (control == taskDurationText) {
+			return task.getPriority();
+		} else if (control == categoryText) {
+			return task.getCategory();
 		//} else if (control == skipExpressionText) {
 		//	return task.getSkipExpression();
 		} else if (control == formTypeCombo) {
@@ -248,10 +252,12 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.getCandidateGroups().add(groupCombo.getText());
 		} else if (control == dueDateText) {
 			task.setDueDate(dueDateText.getText());
+		} else if (control == taskDurationText) {
+			task.setPriority(taskDurationText.getText());
 		//} else if (control == priorityText) {
 		//	task.setPriority(priorityText.getText());
-		//} else if (control == categoryText) {
-		//	task.setCategory(categoryText.getText());
+		} else if (control == categoryText) {
+			task.setCategory(categoryText.getText());
 		//} else if (control == skipExpressionText) {
 		//	task.setSkipExpression(skipExpressionText.getText());
 		} else if (control == formTypeCombo) {	
