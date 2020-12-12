@@ -51,6 +51,7 @@ public class RestClient {
 	private static String modelDeploymentUrl = ftdProxyRsPrefix + "deployments/models/%s";
 	private static String usersUrl = ftdProxyRsPrefix + "users/data.designer";
 	private static String groupsUrl = ftdProxyRsPrefix + "groups/data.designer";
+	private static String taskCategoriesUrl = ftdProxyRsPrefix + "taskcategories/data.designer";
 	private static String user = "rest";
 	private static String password = "test";
 	
@@ -79,6 +80,10 @@ public class RestClient {
 	
 	public static Map<String, String> getGroups() {
 		return getCollection(groupsUrl);
+	}
+	
+	public static Map<String, String> getTaskCategories() {
+		return getCollection(taskCategoriesUrl);
 	}
 	
 	// returns a hash map with pairs where key is modelId and value is modelName
