@@ -65,7 +65,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	private Map<String, String> taskForms = new HashMap<String, String>();
 	private Map<String, String> loadedForms = new HashMap<String, String>();
 	private Map<String, String> formSelection = new HashMap<String, String>();
-
+	
 	protected Combo createComboboxMy(String[] values, int defaultSelectionIndex, boolean change) {
 		Combo comboControl = new Combo(formComposite, change ? SWT.DROP_DOWN : SWT.READ_ONLY);
 		FormData data = new FormData();
@@ -97,6 +97,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		String[] usersValues = DiagramHandler.buildListFromMap(DiagramHandler.loadUsers());
 		String[] groupsValues = DiagramHandler.buildListFromMap(DiagramHandler.loadGroups());
 		String[] formsValues = DiagramHandler.buildListFromMap(loadedForms);
+		String[] categoryValues = DiagramHandler.buildListFromMap(DiagramHandler.loadCategories());
 		userCombo = createComboboxMy(usersValues, 0, false);
 		createLabel("Assignee", userCombo);
 	    
@@ -192,7 +193,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		createLabel("Task Duration", taskDurationText);
 		//priorityText = createTextControl(false);
 		//createLabel("Priority", priorityText);
-		String[] categoryValues = {"1", "2"};
+		
 		categoryText = createComboboxMy(categoryValues, 0, false);
 		createLabel("Category", categoryText);
 		//skipExpressionText = createTextControl(false);
@@ -254,10 +255,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.setDueDate(dueDateText.getText());
 		} else if (control == taskDurationText) {
 			task.setPriority(taskDurationText.getText());
-		//} else if (control == priorityText) {
-		//	task.setPriority(priorityText.getText());
 		} else if (control == categoryText) {
-			task.setCategory(categoryText.getText());
+			task.setCategory(categoryText.getText()); 
 		//} else if (control == skipExpressionText) {
 		//	task.setSkipExpression(skipExpressionText.getText());
 		} else if (control == formTypeCombo) {	

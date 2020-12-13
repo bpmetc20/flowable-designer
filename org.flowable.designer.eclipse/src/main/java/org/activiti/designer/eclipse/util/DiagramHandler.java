@@ -137,6 +137,10 @@ public class DiagramHandler {
 	 public static Map<String, String> loadGroups() {
 		 return RestClient.getGroups();
 	 }
+	 
+	 public static Map<String, String> loadCategories() {
+		 return RestClient.getTaskCategories();
+	 }
 	
 	 public static String[] buildListFromMap(Map<String, String> mapString) {		
 		  List<String> values = new ArrayList<String>(mapString.values());
