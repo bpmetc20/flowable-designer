@@ -52,6 +52,7 @@ public class RestClient {
 	private static String usersUrl = ftdProxyRsPrefix + "users/data.designer";
 	private static String groupsUrl = ftdProxyRsPrefix + "groups/data.designer";
 	private static String taskCategoriesUrl = ftdProxyRsPrefix + "taskcategories/data.designer";
+	private static String taskPropertiesUrl = ftdProxyRsPrefix + "taskcategories/%s/taskproperties";
 	private static String user = "rest";
 	private static String password = "test";
 	
@@ -109,6 +110,10 @@ public class RestClient {
 		return getCollectionsList(modelsUrl);
 	}
 
+	public static UserTaskProperties getUserTaskProperties(String categoryId) {
+		return get(String.format(taskPropertiesUrl, categoryId), UserTaskProperties.class);
+	}
+	
 	// returns model source in form of xml string by modelId
 	public static String getModelSource(String modelId) {
 		byte[] modelSource = getBytes(String.format(modelXmlSourceUrl, modelId));
