@@ -21,6 +21,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.jar.Manifest;
 
@@ -80,6 +81,9 @@ public final class ExtensionUtil {
   public static List<CustomServiceTaskDescriptor> providedCustomServiceTaskDescriptors;
   
   public static List<CustomUserTaskDescriptor> providedCustomUserTaskDescriptors;
+  
+  private static Map<String, String> customTaskCategories = null;
+  private static UserTaskProperties userProperties;
   
   private ExtensionUtil() {
 
@@ -775,6 +779,18 @@ public final class ExtensionUtil {
     }
 
     return result;
+  }
+  
+  public static void loadCustomTasksCategories(Map<String, String> customTaskCategoriesParam) {
+	  customTaskCategories = customTaskCategoriesParam;
+  }
+  
+  public static void loadCustomTasksUserProperties(UserTaskProperties userPropertiesParam) {
+	  userProperties = userPropertiesParam;
+  }
+  
+  public static UserTaskProperties getCustomTasksUserProperties() {
+	  return userProperties;
   }
 
   private static void showExtensionExceptionMessage(final String detailMessage) {

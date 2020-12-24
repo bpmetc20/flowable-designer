@@ -1,4 +1,4 @@
-package org.activiti.designer.eclipse.util;
+package org.activiti.designer.util.extension;
 
 public class UserTaskProperties {
 	private Long categoryId;

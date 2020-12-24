@@ -13,16 +13,21 @@
  */
 package org.activiti.designer.eclipse.common;
 
+import java.awt.List;
 import java.awt.Menu;
 import java.awt.MenuItem;
 import java.net.URL;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditorInput;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.eclipse.util.PaletteExtensionUtil;
 import org.activiti.designer.eclipse.util.RestClient;
+import org.activiti.designer.util.extension.ExtensionUtil;
+import org.activiti.designer.util.extension.UserTaskProperties;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.action.IContributionItem;
@@ -97,6 +102,7 @@ public class ActivitiPlugin extends AbstractUIPlugin {
     
     hideMenu();
     startTabtListener();
+    loadCustomTasksCategories();
     loadCustomTasksUserProperties();
   }
 
@@ -291,7 +297,14 @@ public class ActivitiPlugin extends AbstractUIPlugin {
       ((WorkbenchWindow)workbenchWindow).getMenuBarManager().update();     
   }
   
-  private static void loadCustomTasksUserProperties() {
+  private static void loadCustomTasksCategories() {
 	  customTaskCategories = RestClient.getTaskCategories();
+	  ExtensionUtil.loadCustomTasksCategories(customTaskCategories);
+  }
+  
+  private static void loadCustomTasksUserProperties() {
+	  UserTaskProperties userProp = RestClient.getUserTaskProperties("1");
+	  ExtensionUtil.loadCustomTasksUserProperties(userProp);
   } 
+  
 }

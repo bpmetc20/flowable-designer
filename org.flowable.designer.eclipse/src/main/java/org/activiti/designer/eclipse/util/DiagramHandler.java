@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.swing.text.Document;
 import javax.xml.stream.XMLInputFactory;
@@ -30,6 +31,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PartInitException;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
+import org.activiti.designer.util.extension.UserTaskProperties;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -341,6 +343,14 @@ public class DiagramHandler {
 		 messageBox.open();	
 	 }
 	 
+	 public static UserTaskProperties getUserTaskProperties(String categoryName) {
+		  Stream<String> streamCategoryId = DiagramHandler.keys(ActivitiPlugin.getCustomTasksUserProperties(), categoryName);
+		  String categoryId = streamCategoryId.findFirst().get();
+		  if (categoryId == null || categoryId.isEmpty())
+			  return null;
+		  return RestClient.getUserTaskProperties(categoryId);
+	 } 
+	 
 	 //////////////////////////////////////
 	 
 	 private static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
@@ -404,5 +414,13 @@ public class DiagramHandler {
 		 }			     
 		 byte[] xmlBytes = bpmnConverter.convertToXML(model);
 		 return new String(xmlBytes, "UTF-8");		
+	 }
+	 
+	 private static <K, V> Stream<K> keys(Map<K, V> map, V value) {
+		 return map
+		 .entrySet()
+		 .stream()
+		 .filter(entry -> value.equals(entry.getValue()))
+		 .map(Map.Entry::getKey);
 	 }
 }
