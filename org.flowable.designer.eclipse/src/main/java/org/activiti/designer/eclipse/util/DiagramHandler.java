@@ -141,7 +141,7 @@ public class DiagramHandler {
 	 }
 	 
 	 public static Map<String, String> loadCategories() {
-		 return RestClient.getTaskCategories();
+		 return ActivitiPlugin.getCustomTasksUserProperties();
 	 }
 	
 	 public static String[] buildListFromMap(Map<String, String> mapString) {		

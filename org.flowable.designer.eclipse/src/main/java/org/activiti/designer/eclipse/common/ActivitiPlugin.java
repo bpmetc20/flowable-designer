@@ -16,11 +16,13 @@ package org.activiti.designer.eclipse.common;
 import java.awt.Menu;
 import java.awt.MenuItem;
 import java.net.URL;
+import java.util.Map;
 
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
 import org.activiti.designer.eclipse.editor.ActivitiDiagramEditorInput;
 import org.activiti.designer.eclipse.util.FileService;
 import org.activiti.designer.eclipse.util.PaletteExtensionUtil;
+import org.activiti.designer.eclipse.util.RestClient;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.action.IContributionItem;
@@ -61,6 +63,7 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   public static final String PALETTE_EXTENSION_PROVIDER_EXTENSIONPOINT_ID = "org.activiti.designer.eclipse.extension.PaletteExtensionProvider";
 
   private static ActivitiPlugin _plugin;
+  private static Map<String, String> customTaskCategories = null;
 
   // The image cache object used in the plugin
   private static ImageCache imageCache;
@@ -94,6 +97,7 @@ public class ActivitiPlugin extends AbstractUIPlugin {
     
     hideMenu();
     startTabtListener();
+    loadCustomTasksUserProperties();
   }
 
   @Override
@@ -175,6 +179,15 @@ public class ActivitiPlugin extends AbstractUIPlugin {
    */
   public static ImageDescriptor getImageDescriptor(String path) {
     return imageDescriptorFromPlugin(PLUGIN_ID, path);
+  }
+  
+  /**
+   * Returns the custom tasks properties.
+   * 
+   * @return the custom tasks properties.
+   */
+  public static Map<String, String> getCustomTasksUserProperties() {
+	  return customTaskCategories;
   }
 
   /**
@@ -276,5 +289,9 @@ public class ActivitiPlugin extends AbstractUIPlugin {
     	  item.setVisible(visible);
       }
       ((WorkbenchWindow)workbenchWindow).getMenuBarManager().update();     
-  }  
+  }
+  
+  private static void loadCustomTasksUserProperties() {
+	  customTaskCategories = RestClient.getTaskCategories();
+  } 
 }
