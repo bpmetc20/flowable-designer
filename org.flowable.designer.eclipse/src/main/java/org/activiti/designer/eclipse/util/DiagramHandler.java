@@ -127,7 +127,9 @@ public class DiagramHandler {
 	 }
 	 
 	 public static Map<String, String> loadForms() { 
-		return RestClient.getForms();
+		 Map<String, String> forms = RestClient.getForms();
+		 forms.put("", "New Form");
+		 return forms;
 	 }	 
 	 
 	 public static Map<String, String> loadUsers() {
@@ -139,7 +141,7 @@ public class DiagramHandler {
 	 }
 	 
 	 public static Map<String, String> loadCategories() {
-		 return RestClient.getTaskCategories();
+		 return ActivitiPlugin.getCustomTasksUserProperties();
 	 }
 	
 	 public static String[] buildListFromMap(Map<String, String> mapString) {		

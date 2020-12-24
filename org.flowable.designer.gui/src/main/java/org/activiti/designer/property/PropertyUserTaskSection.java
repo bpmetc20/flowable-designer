@@ -174,9 +174,10 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			public void widgetSelected(SelectionEvent evt) {
 				String formId = (String) loadedForms.entrySet().stream()
 						.filter(e -> e.getValue().equals(formTypeCombo.getText())).map(Map.Entry::getKey).findFirst()
-						.orElse(null);
-				String url = formId != null? "https://165.227.16.142.nip.io:8443/orbeon/fr/orbeon/builder/edit/" + formId :
-						"https://165.227.16.142.nip.io:8443/orbeon/fr/orbeon/builder/new";if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+						.orElse("");
+				String url = !formId.isEmpty() ? "https://165.227.16.142.nip.io:8443/orbeon/fr/orbeon/builder/edit/" + formId :
+						"https://165.227.16.142.nip.io:8443/orbeon/fr/orbeon/builder/new";
+				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 					try {
 						Desktop.getDesktop().browse(new URI(url));
 					} catch (IOException | URISyntaxException e) {
