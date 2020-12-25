@@ -40,7 +40,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class RestClient {
 
@@ -54,7 +56,8 @@ public class RestClient {
 	private static String usersUrl = ftdProxyRsPrefix + "users/data.designer";
 	private static String groupsUrl = ftdProxyRsPrefix + "groups/data.designer";
 	private static String taskCategoriesUrl = ftdProxyRsPrefix + "taskcategories/data.designer";
-	private static String taskPropertiesUrl = ftdProxyRsPrefix + "taskcategories/%s/taskproperties";
+	private static String taskPropertiesByCategoryUrl = ftdProxyRsPrefix + "taskcategories/%s/taskproperties";
+	private static String taskPropertiesUrl = ftdProxyRsPrefix + "taskcategories/taskproperties";
 	private static String user = "rest";
 	private static String password = "test";
 	
@@ -113,8 +116,14 @@ public class RestClient {
 	}
 
 	public static UserTaskProperties getUserTaskProperties(String categoryId) {
-		return get(String.format(taskPropertiesUrl, categoryId), UserTaskProperties.class);
+		return get(String.format(taskPropertiesByCategoryUrl, categoryId), UserTaskProperties.class);
 	}
+	
+    public static List<UserTaskProperties> getUserTaskProperties() {
+        JavaType returnedType = TypeFactory.defaultInstance().constructCollectionType(List.class, UserTaskProperties.class);
+        return getList(taskPropertiesUrl, returnedType);
+    }
+
 	
 	// returns model source in form of xml string by modelId
 	public static String getModelSource(String modelId) {
@@ -304,6 +313,31 @@ public class RestClient {
 		
 		return result;
 	}
+	
+    private static <T> List<T> getList(String url, JavaType javaType) {
+        HttpGet request = new HttpGet(url);
+        request.addHeader("Accept", "application/json");
+        request.addHeader("Content-Type", "application/json");
+        List<T> result;
+        try (CloseableHttpClient httpClient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .setHostnameVerifier(createHostnameVerifier())
+                .setDefaultCredentialsProvider(provider)
+                .build();
+             CloseableHttpResponse response = httpClient.execute(request)) {
+
+            if (response.getStatusLine().getStatusCode() != 200) {
+                throw new Exception("couldn't invoke url ");
+            }
+            result = new ObjectMapper().readValue(response.getEntity().getContent(), javaType);
+
+        } catch (Exception ex) {
+            result = null;
+        }
+
+        return result;
+    }
+
 	
 	@SuppressWarnings("unchecked")
 	private static byte[] getBytes(String url) {

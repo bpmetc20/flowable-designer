@@ -37,6 +37,7 @@ Bundle-Vendor: Flowable
 Export-Package: com.fasterxml.jackson.core,
  com.fasterxml.jackson.databind,
  com.fasterxml.jackson.databind.node,
+ com.fasterxml.jackson.databind.type,
  org.activiti.bpmn;
   uses:="com.mxgraph.layout.hierarchical,
    com.mxgraph.view,

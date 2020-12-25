@@ -2,6 +2,7 @@ package org.activiti.designer.util.extension;
 
 public class UserTaskProperties {
 	private Long categoryId;
+	private String categoryName;
     private int duration;
     private String formKey;
     private String formName;
@@ -92,4 +93,11 @@ public class UserTaskProperties {
         isRoleDefaultActive = roleDefaultActive;
     }
     
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 }
