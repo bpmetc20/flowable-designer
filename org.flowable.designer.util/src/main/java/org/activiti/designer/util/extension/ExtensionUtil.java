@@ -792,6 +792,18 @@ public final class ExtensionUtil {
   public static UserTaskProperties getCustomTasksUserProperties() {
 	  return userProperties;
   }
+  
+  public static String getCustomProprtyValueFromCloud(CustomProperty property) {
+	  String propertyValue = property.getSimpleValue();
+	  String propertyName =	property.getName();
+	  if ("duration".equals(propertyName))
+		  return new Integer(userProperties.getDuration()).toString();
+	  else if ("formKey".equals(propertyName))
+		  return userProperties.getFormKey();
+	  else if ("formName".equals(propertyName))
+		  return userProperties.getFormName();
+	  return "";
+  }
 
   private static void showExtensionExceptionMessage(final String detailMessage) {
     MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error in extension", detailMessage);
