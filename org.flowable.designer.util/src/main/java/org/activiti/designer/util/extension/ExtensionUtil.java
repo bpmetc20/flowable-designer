@@ -83,7 +83,7 @@ public final class ExtensionUtil {
   public static List<CustomUserTaskDescriptor> providedCustomUserTaskDescriptors;
   
   private static Map<String, String> customTaskCategories = null;
-  private static UserTaskProperties userProperties;
+  private static List<UserTaskProperties> userProperties;
   
   private ExtensionUtil() {
 
@@ -785,15 +785,13 @@ public final class ExtensionUtil {
 	  customTaskCategories = customTaskCategoriesParam;
   }
   
-  public static void loadCustomTasksUserProperties(UserTaskProperties userPropertiesParam) {
+  public static void loadCustomTasksUserProperties(List<UserTaskProperties> userPropertiesParam) {
 	  userProperties = userPropertiesParam;
   }
-  
-  public static UserTaskProperties getCustomTasksUserProperties() {
-	  return userProperties;
-  }
+   
   
   public static String getCustomProprtyValueFromCloud(CustomProperty property) {
+	  /*
 	  String propertyValue = property.getSimpleValue();
 	  String propertyName =	property.getName();
 	  if ("duration".equals(propertyName))
@@ -802,6 +800,7 @@ public final class ExtensionUtil {
 		  return userProperties.getFormKey();
 	  else if ("formName".equals(propertyName))
 		  return userProperties.getFormName();
+	  */	  
 	  return "";
   }
 

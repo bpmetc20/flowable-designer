@@ -22,7 +22,7 @@ public class LoadProcessHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
 		
-		List<Map<String, String>> listModels = DiagramHandler.loadModels();
+		List<Map<String, String>> listModels = ActivitiPlugin.getModels(true);
 		final String[] tasksArray = DiagramHandler.buildListFromList(listModels, "name");
 				
 		if (tasksArray != null && tasksArray.length > 0) {

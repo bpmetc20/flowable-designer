@@ -48,7 +48,7 @@ public class DiagramHandler {
 	
 	public static int isDiagramExist(String diagramName) {
 		//check cloud first
-		final Map<String, String> model = getDiagramByName(diagramName, loadModels());
+		final Map<String, String> model = getDiagramByName(diagramName, ActivitiPlugin.getModels(true));
 		if (!model.isEmpty())
 			return 1;
 		//check local
@@ -124,28 +124,6 @@ public class DiagramHandler {
 		 }		 
 	 }
 	
-	 public static List<Map<String, String>> loadModels() { 
-		return RestClient.getModels();
-	 }
-	 
-	 public static Map<String, String> loadForms() { 
-		 Map<String, String> forms = RestClient.getForms();
-		 forms.put("", "New Form");
-		 return forms;
-	 }	 
-	 
-	 public static Map<String, String> loadUsers() {
-		 return RestClient.getUsers();
-	 }
-	 
-	 public static Map<String, String> loadGroups() {
-		 return RestClient.getGroups();
-	 }
-	 
-	 public static Map<String, String> loadCategories() {
-		 return ActivitiPlugin.getCustomTasksUserProperties();
-	 }
-	
 	 public static String[] buildListFromMap(Map<String, String> mapString) {		
 		  List<String> values = new ArrayList<String>(mapString.values());
 		  Collections.sort(values);
@@ -166,7 +144,7 @@ public class DiagramHandler {
 		 if (!showYesNoMessageBox("Would you like to delete " + diagramName))
 			 return false;		 
 		 
-		 final Map<String, String> model = getDiagramByName(diagramName, loadModels());
+		 final Map<String, String> model = getDiagramByName(diagramName, ActivitiPlugin.getModels(true));
 		 if (model.isEmpty()) {
 			 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, diagramName, 
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while deleting diagram.", 
@@ -238,7 +216,7 @@ public class DiagramHandler {
 	 public static void saveAllDiagrams() {	
 		 Set<IFile> diagrams = FileService.getAllDiagramDataFiles();
 		 for (IFile dataFile : diagrams) {
-			 saveDiagram(dataFile, loadModels()); 
+			 saveDiagram(dataFile, ActivitiPlugin.getModels(true)); 
 		 }
 	 }
 	 
@@ -246,11 +224,11 @@ public class DiagramHandler {
 		 String diagramName = FileService.getDiagramName(dataFile);
 		 if (!showYesNoMessageBox("Would you like to save " + diagramName))
 			 return false;		 
-		 return saveDiagram(dataFile, loadModels());
+		 return saveDiagram(dataFile, ActivitiPlugin.getModels(true));
 	 }	 
 	 
 	 public static boolean saveDiagramInCloud(IFile dataFile) {
-		 List<Map<String, String>> listModels = loadModels();
+		 List<Map<String, String>> listModels = ActivitiPlugin.getModels(true);
 		 String diagramName = FileService.getDiagramName(dataFile);
 		 final Map<String, String> model = getDiagramByName(diagramName, listModels);
 		 return saveDiagramInCloud(dataFile, model);
@@ -287,7 +265,7 @@ public class DiagramHandler {
 	 }
 	 
 	 public static boolean deployModel(IFile dataFile, String name) {
-		 List<Map<String, String>> listModels = loadModels();
+		 List<Map<String, String>> listModels = ActivitiPlugin.getModels(true);
 		 String diagramName = FileService.getDiagramName(dataFile);
 		 final Map<String, String> model = getDiagramByName(diagramName, listModels);
 		 String id = getDiagramId(model);
@@ -309,7 +287,7 @@ public class DiagramHandler {
 		 if (diagramName.isEmpty()) 
 			 return "";
 			 
-		 for(Map<String, String> model : loadModels()) {
+		 for(Map<String, String> model : ActivitiPlugin.getModels(true)) {
 			 String modelName = getDiagramName(model);
 		 	 if (modelName.equals(diagramName)) 
 		 		 return getDiagramId(model);			
@@ -341,15 +319,8 @@ public class DiagramHandler {
 		 messageBox.setText("Warning");
 		 messageBox.setMessage(nessage);
 		 messageBox.open();	
-	 }
-	 
-	 public static UserTaskProperties getUserTaskProperties(String categoryName) {
-		  Stream<String> streamCategoryId = DiagramHandler.keys(ActivitiPlugin.getCustomTasksUserProperties(), categoryName);
-		  String categoryId = streamCategoryId.findFirst().get();
-		  if (categoryId == null || categoryId.isEmpty())
-			  return null;
-		  return RestClient.getUserTaskProperties(categoryId);
 	 } 
+	 
 	 
 	 //////////////////////////////////////
 	 

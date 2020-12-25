@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.designer.integration.usertask.CustomUserTask;
+import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.eclipse.util.RestClient;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
@@ -93,11 +94,11 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 
 	@Override
 	public void createFormControls(TabbedPropertySheetPage aTabbedPropertySheetPage) {
-		loadedForms = DiagramHandler.loadForms();		
-		String[] usersValues = DiagramHandler.buildListFromMap(DiagramHandler.loadUsers());
-		String[] groupsValues = DiagramHandler.buildListFromMap(DiagramHandler.loadGroups());
+		loadedForms = ActivitiPlugin.getForms(true);		
+		String[] usersValues = DiagramHandler.buildListFromMap(ActivitiPlugin.getUsers(false));
+		String[] groupsValues = DiagramHandler.buildListFromMap(ActivitiPlugin.getGroups(false));
 		String[] formsValues = DiagramHandler.buildListFromMap(loadedForms);
-		String[] categoryValues = DiagramHandler.buildListFromMap(DiagramHandler.loadCategories());
+		String[] categoryValues = DiagramHandler.buildListFromMap(ActivitiPlugin.getTaskCategories(false));
 		userCombo = createComboboxMy(usersValues, 0, false);
 		createLabel("Assignee", userCombo);
 	    

@@ -117,7 +117,7 @@ public class PropertyCallActivitySection extends ActivitiPropertySection impleme
     //chooseCalledElementButton.setLayoutData(data);
     //chooseCalledElementButton.addSelectionListener(chooseCalledElementSelected);
     
-	loadModels = DiagramHandler.loadModels();
+	loadModels = ActivitiPlugin.getModels(true);
 	String[] tasksArray = DiagramHandler.buildListFromList(loadModels, "name");
 	calledElementCombo = createComboboxMy(tasksArray, 0 );
     FormData formData = (FormData) calledElementCombo.getLayoutData();

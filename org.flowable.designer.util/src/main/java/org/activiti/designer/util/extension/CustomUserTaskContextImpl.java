@@ -39,7 +39,7 @@ public class CustomUserTaskContextImpl implements CustomUserTaskContext {
     this.customUserTask = customUserTask;
     this.extensionName = extensionName;
     this.extensionJarPath = extensionJarPath;
-    customUserTaskkProperties = ExtensionUtil.getCustomTasksUserProperties();
+    //customUserTaskkProperties = ExtensionUtil.getCustomTasksUserProperties();
     try {
       this.extensionJarFile = new JarFile(this.extensionJarPath);
     } catch (IOException e) {

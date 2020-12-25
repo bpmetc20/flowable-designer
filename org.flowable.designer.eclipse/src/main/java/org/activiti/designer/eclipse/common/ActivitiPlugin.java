@@ -13,10 +13,11 @@
  */
 package org.activiti.designer.eclipse.common;
 
-import java.awt.List;
+import java.util.List;
 import java.awt.Menu;
 import java.awt.MenuItem;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -68,7 +69,17 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   public static final String PALETTE_EXTENSION_PROVIDER_EXTENSIONPOINT_ID = "org.activiti.designer.eclipse.extension.PaletteExtensionProvider";
 
   private static ActivitiPlugin _plugin;
-  private static Map<String, String> customTaskCategories = null;
+  
+  
+  /// from cloud /////
+  private static List<Map<String, String>> models = null;
+  private static Map<String, String> forms = null;
+  private static Map<String, String> taskCategories = null;
+  private static Map<String, String> groups = null;
+  private static Map<String, String> users = null;
+  private static List<UserTaskProperties> userTaskProperties;
+  
+  ///////////////
 
   // The image cache object used in the plugin
   private static ImageCache imageCache;
@@ -102,8 +113,14 @@ public class ActivitiPlugin extends AbstractUIPlugin {
     
     hideMenu();
     startTabtListener();
-    loadCustomTasksCategories();
-    loadCustomTasksUserProperties();
+    
+    //load data from cloud
+    getModels(true); 
+    getForms(true); 
+    getTaskCategories(true);
+    getGroups(true);
+    getUsers(true);
+    getTasksUserProperties(true);    	  
   }
 
   @Override
@@ -187,15 +204,63 @@ public class ActivitiPlugin extends AbstractUIPlugin {
     return imageDescriptorFromPlugin(PLUGIN_ID, path);
   }
   
+  ///// data from cloud //////////////////  
+  public static List<Map<String, String>> getModels(boolean reload) { 
+	if (reload) 
+		models = RestClient.getModels();
+	return models;
+  }
+  
+  public static Map<String, String> getForms(boolean reload) { 
+	 if (reload) 
+		 forms = RestClient.getForms();
+	 forms.put("", "New Form");
+	 return forms;
+  }	
+  
   /**
    * Returns the custom tasks properties.
    * 
    * @return the custom tasks properties.
    */
-  public static Map<String, String> getCustomTasksUserProperties() {
-	  return customTaskCategories;
+  public static Map<String, String> getTaskCategories(boolean reload) {
+	  if (reload)  
+		  taskCategories = RestClient.getTaskCategories();
+	  ExtensionUtil.loadCustomTasksCategories(taskCategories);
+	  return taskCategories;
   }
-
+  
+  /**
+   * Returns the groups.
+   * 
+   * @return the groups.
+   */
+  public static Map<String, String> getGroups(boolean reload) {
+	  if (reload) 
+		  groups = RestClient.getGroups();
+	  return groups;
+  }
+  
+  /**
+   * Returns the users.
+   * 
+   * @return the users.
+   */
+  public static Map<String, String> getUsers(boolean reload) {
+	  if (reload) 
+		  users = RestClient.getUsers();
+	  return users;
+  }
+  
+  private static List<UserTaskProperties> getTasksUserProperties(boolean reload) {
+	  if (reload)
+		  userTaskProperties = RestClient.getUserTaskProperties();
+	  ExtensionUtil.loadCustomTasksUserProperties(userTaskProperties);
+	  return userTaskProperties;
+  } 
+  
+  ////////////////////////////////
+  
   /**
    * Gets an image from this plugin and serves it from the {@link ImageCache}.
    * 
@@ -295,16 +360,5 @@ public class ActivitiPlugin extends AbstractUIPlugin {
     	  item.setVisible(visible);
       }
       ((WorkbenchWindow)workbenchWindow).getMenuBarManager().update();     
-  }
-  
-  private static void loadCustomTasksCategories() {
-	  customTaskCategories = RestClient.getTaskCategories();
-	  ExtensionUtil.loadCustomTasksCategories(customTaskCategories);
-  }
-  
-  private static void loadCustomTasksUserProperties() {
-	  UserTaskProperties userProp = RestClient.getUserTaskProperties("1");
-	  ExtensionUtil.loadCustomTasksUserProperties(userProp);
-  } 
-  
+  }  
 }
