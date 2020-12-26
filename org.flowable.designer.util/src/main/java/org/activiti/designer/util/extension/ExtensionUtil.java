@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.Manifest;
+import java.util.stream.Stream;
 
 import org.activiti.bpmn.model.CustomProperty;
 import org.activiti.bpmn.model.ServiceTask;
@@ -780,15 +781,26 @@ public final class ExtensionUtil {
 
     return result;
   }
-  
-  public static void loadCustomTasksCategories(Map<String, String> customTaskCategoriesParam) {
+    
+  public static void setCustomTasksCategories(Map<String, String> customTaskCategoriesParam) {
 	  customTaskCategories = customTaskCategoriesParam;
   }
   
-  public static void loadCustomTasksUserProperties(List<UserTaskProperties> userPropertiesParam) {
+  public static void setCustomTasksUserProperties(List<UserTaskProperties> userPropertiesParam) {
 	  userProperties = userPropertiesParam;
   }
-   
+  
+  public static UserTaskProperties getCustomTasksUserProperties(String categoryName) {
+	  try {
+		  String categoryId = keys(customTaskCategories, categoryName).findFirst().get();
+		  return categoryId != null && !categoryId.isEmpty() ? userProperties.stream()
+			  .filter(userProperty -> categoryId.equals(Long.toString(userProperty.getCategoryId())))
+			  .findAny()
+			  .orElse(null) : null;
+	  } catch(Exception e) {
+		  return null;
+	  }
+  }   
   
   public static String getCustomProprtyValueFromCloud(CustomProperty property) {
 	  /*
@@ -838,5 +850,13 @@ public final class ExtensionUtil {
         }
       }
     }
+  }
+  
+  private static <K, V> Stream<K> keys(Map<K, V> map, V value) {
+	  return map
+	  .entrySet()
+	  .stream()
+	  .filter(entry -> value.equals(entry.getValue()))
+	  .map(Map.Entry::getKey);
   }
 }

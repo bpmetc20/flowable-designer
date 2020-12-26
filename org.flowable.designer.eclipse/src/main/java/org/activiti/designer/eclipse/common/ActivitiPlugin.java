@@ -226,7 +226,7 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   public static Map<String, String> getTaskCategories(boolean reload) {
 	  if (reload)  
 		  taskCategories = RestClient.getTaskCategories();
-	  ExtensionUtil.loadCustomTasksCategories(taskCategories);
+	  ExtensionUtil.setCustomTasksCategories(taskCategories);
 	  return taskCategories;
   }
   
@@ -255,7 +255,7 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   private static List<UserTaskProperties> getTasksUserProperties(boolean reload) {
 	  if (reload)
 		  userTaskProperties = RestClient.getUserTaskProperties();
-	  ExtensionUtil.loadCustomTasksUserProperties(userTaskProperties);
+	  ExtensionUtil.setCustomTasksUserProperties(userTaskProperties);
 	  return userTaskProperties;
   } 
   
