@@ -48,7 +48,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	protected Text dueDateText;
 	protected Text taskDurationText;
 	//protected Text priorityText;
-	protected Combo categoryText;
+	protected Combo categoryCombo;
 	//protected Text skipExpressionText;
 	//protected Text reccomendedFormText;
 
@@ -192,8 +192,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		//priorityText = createTextControl(false);
 		//createLabel("Priority", priorityText);
 		
-		categoryText = createComboboxMy(categoryValues, 0, false);
-		createLabel("Category", categoryText);
+		categoryCombo = createComboboxMy(categoryValues, 0, false);
+		createLabel("Category", categoryCombo);
 		//skipExpressionText = createTextControl(false);
 		//createLabel("Skip expression", skipExpressionText);		
 		
@@ -221,9 +221,12 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			return task.getDueDate();
 		} else if (control == taskDurationText) {
 			return task.getPriority();
-		} else if (control == categoryText) {
+		} else if (control == categoryCombo) {
 			control.setEnabled(!task.isExtended());
-			return task.getCategory();
+			String taskKey = task.getCategory();
+			if (taskKey != null && !taskKey.isEmpty())
+				categoryCombo.setText(ActivitiPlugin.getTaskCategories(false).get(taskKey));
+			return taskKey;					
 		//} else if (control == skipExpressionText) {
 		//	return task.getSkipExpression();
 		} else if (control == formTypeCombo) {
@@ -232,7 +235,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 				formTypeCombo.setText(ActivitiPlugin.NEW_FORM);
 			else {			
 				if (lastFormId.isEmpty() || !lastFormId.equals(taskKey))
-					formTypeCombo.setText(getFormNameFromId(taskKey));
+					formTypeCombo.setText(loadedForms.get(taskKey));
 				lastFormId = taskKey;
 			}			
 			return taskKey; 
@@ -255,13 +258,15 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.setDueDate(dueDateText.getText());
 		} else if (control == taskDurationText) {
 			task.setPriority(taskDurationText.getText());
-		} else if (control == categoryText) {
-			task.setCategory(categoryText.getText()); 
+		} else if (control == categoryCombo) {
+			String categoryValue = categoryCombo.getText();
+			String categoryId = DiagramHandler.keys(ActivitiPlugin.getTaskCategories(false), categoryValue).findFirst().get();
+			task.setCategory(categoryId); 
 		//} else if (control == skipExpressionText) {
 		//	task.setSkipExpression(skipExpressionText.getText());
 		} else if (control == formTypeCombo) {	
 			String formName = formTypeCombo.getText();
-			String formId = getFormIdFromName(formName);
+			String formId = DiagramHandler.keys(loadedForms, formName).findFirst().get();
 			task.setFormKey(formId);  
 		}
 	}
@@ -282,17 +287,5 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	      }
 	    }
 	    return result;
-	}
-	
-	private String getFormIdFromName(String formName) {		
-		for (Map.Entry<String, String> entry : loadedForms.entrySet()) {
-			if (formName.equals(entry.getValue())) 
-				return entry.getKey();			
-        }
-		return "";
-	}
-	
-	private String getFormNameFromId(String formId) {	
-		return loadedForms.get(formId);		
-	}
+	}	
 }

@@ -77,7 +77,8 @@ public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
 
         newUserTask.setName(targetTask.getName());
         
-    	//set task values from property reusing this field
+    	//set task values from property 
+        //reusing this field !!!
         String targetTaskCategory = targetTask.getLargeIconPath();
     	
     	UserTaskProperties userTaskProperties = DiagramHandler.getCustomTasksUserProperties(targetTaskCategory);

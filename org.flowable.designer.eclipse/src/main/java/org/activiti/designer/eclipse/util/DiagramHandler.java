@@ -321,19 +321,14 @@ public class DiagramHandler {
 		 messageBox.open();	
 	 } 
 	 
-	 public static UserTaskProperties getCustomTasksUserProperties(String categoryName) {
-		  try {
-			  String categoryId = keys(ActivitiPlugin.getTaskCategories(false), categoryName).findFirst().get();
-			  return categoryId != null && !categoryId.isEmpty() ? ActivitiPlugin.getTasksUserProperties(false).stream()
+	 public static UserTaskProperties getCustomTasksUserProperties(String categoryId) {
+		  return categoryId != null && !categoryId.isEmpty() ? ActivitiPlugin.getTasksUserProperties(false).stream()
 				  .filter(userProperty -> categoryId.equals(Long.toString(userProperty.getCategoryId())))
 				  .findAny()
 				  .orElse(null) : null;
-		  } catch(Exception e) {
-			  return null;
-		  }
-	  }   
+	 }   
 	  
-	 private static <K, V> Stream<K> keys(Map<K, V> map, V value) {
+	 public static <K, V> Stream<K> keys(Map<K, V> map, V value) {
 		  return map
 		  .entrySet()
 		  .stream()
