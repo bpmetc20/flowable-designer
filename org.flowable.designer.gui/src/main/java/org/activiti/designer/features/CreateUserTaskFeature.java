@@ -75,16 +75,18 @@ public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
 
       if (targetTask != null) {
 
-        String targetTaskName = targetTask.getName();
-    	newUserTask.setName(targetTaskName);
+        newUserTask.setName(targetTask.getName());
         
-    	//set task values from property
-    	UserTaskProperties userTaskProperties = DiagramHandler.getCustomTasksUserProperties(targetTaskName);
-    	newUserTask.setCategory(targetTaskName);
-    	newUserTask.setPriority(Integer.toString(userTaskProperties.getDuration()));
-    	newUserTask.setFormKey(userTaskProperties.getFormKey());
-    	newUserTask.setAssignee(Boolean.toString(!userTaskProperties.isRoleDefaultActive()));
-        
+    	//set task values from property reusing this field
+        String targetTaskCategory = targetTask.getLargeIconPath();
+    	
+    	UserTaskProperties userTaskProperties = DiagramHandler.getCustomTasksUserProperties(targetTaskCategory);
+    	if (userTaskProperties != null) {
+    		newUserTask.setCategory(targetTaskCategory);
+    		newUserTask.setPriority(Integer.toString(userTaskProperties.getDuration()));
+    		newUserTask.setFormKey(userTaskProperties.getFormKey());
+    		newUserTask.setAssignee(Boolean.toString(!userTaskProperties.isRoleDefaultActive()));
+    	}        
         
         final List<Class<CustomUserTask>> classHierarchy = new ArrayList<Class<CustomUserTask>>();
         final List<FieldInfo> fieldInfoObjects = new ArrayList<FieldInfo>();
