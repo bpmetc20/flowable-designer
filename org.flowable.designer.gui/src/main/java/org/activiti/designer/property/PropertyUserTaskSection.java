@@ -222,6 +222,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		} else if (control == taskDurationText) {
 			return task.getPriority();
 		} else if (control == categoryText) {
+			if (task.isExtended())
+				control.setEnabled(false);
 			return task.getCategory();
 		//} else if (control == skipExpressionText) {
 		//	return task.getSkipExpression();
