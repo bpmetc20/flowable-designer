@@ -142,8 +142,7 @@ public abstract class AbstractCustomPropertyField implements CustomPropertyField
     String result = null;
     final CustomProperty property = ExtensionUtil.getCustomProperty(task, customPropertyId);
     if (property != null) {
-      //final String propertyValue = property.getSimpleValue();
-      final String propertyValue = ExtensionUtil.getCustomProprtyValueFromCloud(property);
+      final String propertyValue = property.getSimpleValue();
       if (propertyValue != null) {
         result = propertyValue;
       }

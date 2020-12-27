@@ -31,6 +31,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PartInitException;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
+import org.activiti.designer.util.extension.UserTaskProperties;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -320,6 +321,25 @@ public class DiagramHandler {
 		 messageBox.open();	
 	 } 
 	 
+	 public static UserTaskProperties getCustomTasksUserProperties(String categoryName) {
+		  try {
+			  String categoryId = keys(ActivitiPlugin.getTaskCategories(false), categoryName).findFirst().get();
+			  return categoryId != null && !categoryId.isEmpty() ? ActivitiPlugin.getTasksUserProperties(false).stream()
+				  .filter(userProperty -> categoryId.equals(Long.toString(userProperty.getCategoryId())))
+				  .findAny()
+				  .orElse(null) : null;
+		  } catch(Exception e) {
+			  return null;
+		  }
+	  }   
+	  
+	 private static <K, V> Stream<K> keys(Map<K, V> map, V value) {
+		  return map
+		  .entrySet()
+		  .stream()
+		  .filter(entry -> value.equals(entry.getValue()))
+		  .map(Map.Entry::getKey);
+	  }
 	 
 	 //////////////////////////////////////
 	 

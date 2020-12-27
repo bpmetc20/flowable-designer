@@ -60,12 +60,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	private Combo userCombo;
 	private Combo groupCombo;
 	private boolean userSelection = false;
-	private String lastFormId = "";  
-	
-	
-	private Map<String, String> taskForms = new HashMap<String, String>();
+	private String lastFormId = "";	
 	private Map<String, String> loadedForms = new HashMap<String, String>();
-	private Map<String, String> formSelection = new HashMap<String, String>();
 	
 	protected Combo createComboboxMy(String[] values, int defaultSelectionIndex, boolean change) {
 		Combo comboControl = new Combo(formComposite, change ? SWT.DROP_DOWN : SWT.READ_ONLY);
@@ -230,9 +226,10 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		//} else if (control == skipExpressionText) {
 		//	return task.getSkipExpression();
 		} else if (control == formTypeCombo) {
-			String taskKey = task.getFormKey();			
-			selectTaskForm(task);
-			if (taskKey != null && !taskKey.isEmpty()) {
+			String taskKey = task.getFormKey();	
+			if (taskKey == null || taskKey.isEmpty())
+				formTypeCombo.setText(ActivitiPlugin.NEW_FORM);
+			else {			
 				if (lastFormId.isEmpty() || !lastFormId.equals(taskKey))
 					formTypeCombo.setText(getFormNameFromId(taskKey));
 				lastFormId = taskKey;
@@ -268,21 +265,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		}
 	}
 	
-	private void selectTaskForm(UserTask task) {
-		CustomUserTask customerTask = findCustomUserTask(task);
-		//reccomendedFormText.setVisible(true);
-		//if (customerTask == null) {
-		//	reccomendedFormText.setText("New Form");
-		//} else {
-		//	String taskName = customerTask.getName();
-		//	String selectedForm = taskForms.getOrDefault(taskName, "");
-		//	reccomendedFormText.setText(selectedForm);			
-		//}
-		//if (formTypeCombo.getText().equalsIgnoreCase(reccomendedFormText.getText())) 
-		//	reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
-		//else
-		//	reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-	}	
+		
 	
 	private CustomUserTask findCustomUserTask(UserTask userTask) {
 	    CustomUserTask result = null;

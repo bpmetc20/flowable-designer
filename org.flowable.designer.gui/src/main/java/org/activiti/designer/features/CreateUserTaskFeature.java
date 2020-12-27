@@ -24,6 +24,7 @@ import org.activiti.bpmn.model.ExtensionElement;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.designer.PluginImage;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.integration.annotation.Locale;
 import org.activiti.designer.integration.annotation.Locales;
 import org.activiti.designer.integration.annotation.Property;
@@ -35,6 +36,7 @@ import org.activiti.designer.property.extension.field.FieldInfo;
 import org.activiti.designer.util.bpmn.BpmnExtensions;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.activiti.designer.util.extension.ExtensionUtil;
+import org.activiti.designer.util.extension.UserTaskProperties;
 import org.activiti.designer.util.preferences.Preferences;
 import org.activiti.designer.util.preferences.PreferencesUtil;
 import org.apache.commons.lang.StringUtils;
@@ -61,6 +63,9 @@ public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
     UserTask newUserTask = new UserTask();
     newUserTask.setExtensionId(customUserTaskId);
     
+    //new form
+    newUserTask.setFormKey("");
+    
     boolean isCustomNameSet = false; 
     
     // Process custom user tasks
@@ -70,7 +75,16 @@ public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
 
       if (targetTask != null) {
 
-        newUserTask.setName(targetTask.getName());
+        String targetTaskName = targetTask.getName();
+    	newUserTask.setName(targetTaskName);
+        
+    	//set task values from property
+    	UserTaskProperties userTaskProperties = DiagramHandler.getCustomTasksUserProperties(targetTaskName);
+    	newUserTask.setCategory(targetTaskName);
+    	newUserTask.setPriority(Integer.toString(userTaskProperties.getDuration()));
+    	newUserTask.setFormKey(userTaskProperties.getFormKey());
+    	newUserTask.setAssignee(Boolean.toString(!userTaskProperties.isRoleDefaultActive()));
+        
         
         final List<Class<CustomUserTask>> classHierarchy = new ArrayList<Class<CustomUserTask>>();
         final List<FieldInfo> fieldInfoObjects = new ArrayList<FieldInfo>();

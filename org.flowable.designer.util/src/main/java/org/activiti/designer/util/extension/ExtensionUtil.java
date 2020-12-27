@@ -81,10 +81,7 @@ public final class ExtensionUtil {
 
   public static List<CustomServiceTaskDescriptor> providedCustomServiceTaskDescriptors;
   
-  public static List<CustomUserTaskDescriptor> providedCustomUserTaskDescriptors;
-  
-  private static Map<String, String> customTaskCategories = null;
-  private static List<UserTaskProperties> userProperties;
+  public static List<CustomUserTaskDescriptor> providedCustomUserTaskDescriptors;  
   
   private ExtensionUtil() {
 
@@ -780,42 +777,8 @@ public final class ExtensionUtil {
     }
 
     return result;
-  }
-    
-  public static void setCustomTasksCategories(Map<String, String> customTaskCategoriesParam) {
-	  customTaskCategories = customTaskCategoriesParam;
-  }
+  }  
   
-  public static void setCustomTasksUserProperties(List<UserTaskProperties> userPropertiesParam) {
-	  userProperties = userPropertiesParam;
-  }
-  
-  public static UserTaskProperties getCustomTasksUserProperties(String categoryName) {
-	  try {
-		  String categoryId = keys(customTaskCategories, categoryName).findFirst().get();
-		  return categoryId != null && !categoryId.isEmpty() ? userProperties.stream()
-			  .filter(userProperty -> categoryId.equals(Long.toString(userProperty.getCategoryId())))
-			  .findAny()
-			  .orElse(null) : null;
-	  } catch(Exception e) {
-		  return null;
-	  }
-  }   
-  
-  public static String getCustomProprtyValueFromCloud(CustomProperty property) {
-	  /*
-	  String propertyValue = property.getSimpleValue();
-	  String propertyName =	property.getName();
-	  if ("duration".equals(propertyName))
-		  return new Integer(userProperties.getDuration()).toString();
-	  else if ("formKey".equals(propertyName))
-		  return userProperties.getFormKey();
-	  else if ("formName".equals(propertyName))
-		  return userProperties.getFormName();
-	  */	  
-	  return "";
-  }
-
   private static void showExtensionExceptionMessage(final String detailMessage) {
     MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), "Error in extension", detailMessage);
   }
@@ -850,13 +813,5 @@ public final class ExtensionUtil {
         }
       }
     }
-  }
-  
-  private static <K, V> Stream<K> keys(Map<K, V> map, V value) {
-	  return map
-	  .entrySet()
-	  .stream()
-	  .filter(entry -> value.equals(entry.getValue()))
-	  .map(Map.Entry::getKey);
-  }
+  }  
 }

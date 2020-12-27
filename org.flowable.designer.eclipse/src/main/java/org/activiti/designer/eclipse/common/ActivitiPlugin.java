@@ -67,6 +67,8 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   public static final String ICON_PROVIDER_EXTENSIONPOINT_ID = "org.activiti.designer.eclipse.extension.IconProvider";
 
   public static final String PALETTE_EXTENSION_PROVIDER_EXTENSIONPOINT_ID = "org.activiti.designer.eclipse.extension.PaletteExtensionProvider";
+  
+  public static final String NEW_FORM = "New Form";
 
   private static ActivitiPlugin _plugin;
   
@@ -214,7 +216,7 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   public static Map<String, String> getForms(boolean reload) { 
 	 if (reload) 
 		 forms = RestClient.getForms();
-	 forms.put("", "New Form");
+	 forms.put("", NEW_FORM);
 	 return forms;
   }	
   
@@ -226,7 +228,6 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   public static Map<String, String> getTaskCategories(boolean reload) {
 	  if (reload)  
 		  taskCategories = RestClient.getTaskCategories();
-	  ExtensionUtil.setCustomTasksCategories(taskCategories);
 	  return taskCategories;
   }
   
@@ -252,10 +253,9 @@ public class ActivitiPlugin extends AbstractUIPlugin {
 	  return users;
   }
   
-  private static List<UserTaskProperties> getTasksUserProperties(boolean reload) {
+  public static List<UserTaskProperties> getTasksUserProperties(boolean reload) {
 	  if (reload)
 		  userTaskProperties = RestClient.getUserTaskProperties();
-	  ExtensionUtil.setCustomTasksUserProperties(userTaskProperties);
 	  return userTaskProperties;
   } 
   
