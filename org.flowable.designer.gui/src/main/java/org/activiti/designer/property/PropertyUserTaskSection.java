@@ -224,8 +224,11 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		} else if (control == categoryCombo) {
 			control.setEnabled(!task.isExtended());
 			String taskKey = task.getCategory();
-			if (taskKey != null && !taskKey.isEmpty())
-				categoryCombo.setText(ActivitiPlugin.getTaskCategories(false).get(taskKey));
+			if (taskKey != null && !taskKey.isEmpty()) {
+				//String categoryValue = ActivitiPlugin.getTaskCategories(false).get(taskKey);
+				//if (categoryValue != null)
+					categoryCombo.setText(taskKey);
+			}
 			return taskKey;					
 		//} else if (control == skipExpressionText) {
 		//	return task.getSkipExpression();
@@ -260,8 +263,9 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.setPriority(taskDurationText.getText());
 		} else if (control == categoryCombo) {
 			String categoryValue = categoryCombo.getText();
-			String categoryId = DiagramHandler.keys(ActivitiPlugin.getTaskCategories(false), categoryValue).findFirst().get();
-			task.setCategory(categoryId); 
+			//String categoryId = DiagramHandler.keys(ActivitiPlugin.getTaskCategories(false), categoryValue).findFirst().get();
+			//if (categoryId != null)
+				task.setCategory(categoryValue); 
 		//} else if (control == skipExpressionText) {
 		//	task.setSkipExpression(skipExpressionText.getText());
 		} else if (control == formTypeCombo) {	

@@ -79,11 +79,12 @@ public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
         
     	//set task values from property 
         //reusing this field !!!
-        String targetTaskCategory = targetTask.getLargeIconPath();
-    	
-    	UserTaskProperties userTaskProperties = DiagramHandler.getCustomTasksUserProperties(targetTaskCategory);
+        String targetTaskCategoryId = targetTask.getLargeIconPath();
+        String targetTaskCategoryValue = ActivitiPlugin.getTaskCategories(false).get(targetTaskCategoryId);
+        
+        UserTaskProperties userTaskProperties = DiagramHandler.getCustomTasksUserProperties(targetTaskCategoryId);
     	if (userTaskProperties != null) {
-    		newUserTask.setCategory(targetTaskCategory);
+    		newUserTask.setCategory(targetTaskCategoryValue);
     		newUserTask.setPriority(Integer.toString(userTaskProperties.getDuration()));
     		newUserTask.setFormKey(userTaskProperties.getFormKey());
     		newUserTask.setAssignee(Boolean.toString(!userTaskProperties.isRoleDefaultActive()));
