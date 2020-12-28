@@ -88,6 +88,12 @@ public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
     		newUserTask.setPriority(Integer.toString(userTaskProperties.getDuration()));
     		newUserTask.setFormKey(userTaskProperties.getFormKey());
     		newUserTask.setAssignee(Boolean.toString(!userTaskProperties.isRoleDefaultActive()));
+    		String actorAssigneeValue = ActivitiPlugin.getUsers(false).get(userTaskProperties.getActorAssigneeId());
+    		if (actorAssigneeValue != null)
+    			newUserTask.getCandidateUsers().add(actorAssigneeValue);
+    		String roleAssigneeValue = ActivitiPlugin.getGroups(false).get(userTaskProperties.getRoleAssigneeId());
+    		if (roleAssigneeValue != null)
+    			newUserTask.getCandidateGroups().add(roleAssigneeValue);
     	}        
         
         final List<Class<CustomUserTask>> classHierarchy = new ArrayList<Class<CustomUserTask>>();
