@@ -22,14 +22,10 @@ import org.activiti.designer.integration.usertask.CustomUserTask;
 
 public class CustomUserTaskContextImpl implements CustomUserTaskContext {
 
-  private static final String DEFAULT_ICON_PATH = "icons/defaultCustomUserTask.png";
   private static final String ERROR_ICON_PATH = "icons/errorCustomUserTask.png";
   private static final String FTD_ICON_PATH = "icons/Ftd.png";
-
   private static final String ERROR_ICON_MESSAGE_PATTERN = "The CustomUserTask '%s' has an incorrect icon path '%s', so the icon cannot be shown. A placeholder error icon will be shown instead.";
-
   private final CustomUserTask customUserTask;
-
   private final String extensionName;
   private final String extensionJarPath;
   private JarFile extensionJarFile;
@@ -47,100 +43,17 @@ public class CustomUserTaskContextImpl implements CustomUserTaskContext {
 
   @Override
   public InputStream getSmallIconStream() {
-	  InputStream result = null;
-	    
-	  try {
-	    	result = getFtdCustomUserTaskIconStream();
-	  } catch (Exception e) {
-		  System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), 
-				  this.customUserTask.getSmallIconPath()));
-	      result = getErrorCustomUserTaskIconStream();
-	  }  
-    
-
-    /*
-    
-    final String path = this.customUserTask.getSmallIconPath();
-    if (path != null) {
-      JarEntry imgentry = extensionJarFile.getJarEntry(path);
-
-      try {
-        result = extensionJarFile.getInputStream(imgentry);
-      } catch (Exception e) {
-        System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), path));
-        result = getErrorCustomUserTaskIconStream();
-      }
-    } else {
-      result = getDefaultCustomUserTaskIconStream();
-    }
-    */
-
-    return result;
+	 return getFefaultIconsStream();
   }
+  
   @Override
   public InputStream getLargeIconStream() {
-	  InputStream result = null;
-	    
-	  try {
-	    	result = getFtdCustomUserTaskIconStream();
-	  } catch (Exception e) {
-		  System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), 
-				  this.customUserTask.getSmallIconPath()));
-	      result = getErrorCustomUserTaskIconStream();
-	  }
-	  
-    /*
-	InputStream result = null;
-
-    final String path = this.customUserTask.getLargeIconPath();
-    if (path != null) {
-      JarEntry imgentry = extensionJarFile.getJarEntry(path);
-
-      try {
-        result = extensionJarFile.getInputStream(imgentry);
-      } catch (Exception e) {
-        System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), path));
-        result = getErrorCustomUserTaskIconStream();
-      }
-    } else {
-      result = getDefaultCustomUserTaskIconStream();
-    }
-	*/
-	
-    return result;
+	  return getFefaultIconsStream();
   }
 
   @Override
   public InputStream getShapeIconStream() {
-    InputStream result = null;
-    
-	  try {
-	    	result = getFtdCustomUserTaskIconStream();
-	  } catch (Exception e) {
-		  System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), 
-				  this.customUserTask.getSmallIconPath()));
-	      result = getErrorCustomUserTaskIconStream();
-	  }
-	
-	/*  
-
-    final String path = this.customUserTask.getShapeIconPath();
-    if (path != null) {
-      JarEntry imgentry = extensionJarFile.getJarEntry(path);
-
-      try {
-        result = extensionJarFile.getInputStream(imgentry);
-      } catch (Exception e) {
-        System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), path));
-        result = getErrorCustomUserTaskIconStream();
-      }
-    } else {
-      result = getDefaultCustomUserTaskIconStream();
-    }
-    
-    */
-
-    return result;
+    return getFefaultIconsStream();
   }
 
   @Override
@@ -167,19 +80,7 @@ public class CustomUserTaskContextImpl implements CustomUserTaskContext {
   public String getShapeImageKey() {
     return getExtensionName() + "/shape/" + getUserTask().getId();
   }
-
-  private InputStream getDefaultCustomUserTaskIconStream() {
-    return Thread.currentThread().getContextClassLoader().getResourceAsStream(DEFAULT_ICON_PATH);
-  }
-
-  private InputStream getErrorCustomUserTaskIconStream() {
-    return Thread.currentThread().getContextClassLoader().getResourceAsStream(ERROR_ICON_PATH);
-  }
   
-  private InputStream getFtdCustomUserTaskIconStream() {
-    return Thread.currentThread().getContextClassLoader().getResourceAsStream(FTD_ICON_PATH);
-  }
-
   @Override
   public int compareTo(CustomUserTaskContext otherCustomUserTaskContext) {
     if (otherCustomUserTaskContext instanceof CustomUserTaskContext) {
@@ -187,4 +88,35 @@ public class CustomUserTaskContextImpl implements CustomUserTaskContext {
     }
     return 0;
   }
+  
+  private InputStream getFefaultIconsStream() {
+	InputStream result = null;
+	    
+	try {
+		result = Thread.currentThread().getContextClassLoader().getResourceAsStream(FTD_ICON_PATH);
+	} catch (Exception e) {
+		System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), 
+				this.customUserTask.getSmallIconPath()));
+		result = Thread.currentThread().getContextClassLoader().getResourceAsStream(ERROR_ICON_PATH);
+	}
+		
+	return result;
+	  
+  }
+  
+  /* sample how to get path from extension jar
+  final String path = this.customUserTask.getSmallIconPath();
+  if (path != null) {
+    JarEntry imgentry = extensionJarFile.getJarEntry(path);
+
+    try {
+      result = extensionJarFile.getInputStream(imgentry);
+    } catch (Exception e) {
+      System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), path));
+      result = getErrorCustomUserTaskIconStream();
+    }
+  } else {
+    result = getDefaultCustomUserTaskIconStream();
+  }
+  */
 }
