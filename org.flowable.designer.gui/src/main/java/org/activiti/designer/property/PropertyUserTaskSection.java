@@ -214,9 +214,21 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		if (control == userCombo) {
 			userSelection = Boolean.valueOf(task.getAssignee());
 			changeSelection();
-			return getCommaSeperatedString(task.getCandidateUsers());
+			List <String> user = task.getCandidateUsers();
+			if (user == null || user.isEmpty())
+				return "";
+			String userValue = ActivitiPlugin.getUsers(false).get(user.get(0));
+			if (userValue != null && !userValue.isEmpty())
+				userCombo.setText(userValue);
+			return userValue;
 		} else if (control == groupCombo) {
-			return getCommaSeperatedString(task.getCandidateGroups());
+			List <String> group = task.getCandidateGroups();
+			if (group == null || group.isEmpty())
+				return "";
+			String roleAssigneeValue = ActivitiPlugin.getGroups(false).get(group.get(0));
+			if (roleAssigneeValue != null && !roleAssigneeValue.isEmpty())
+				groupCombo.setText(roleAssigneeValue);
+			return roleAssigneeValue;
 		} else if (control == dueDateText) {
 			return task.getDueDate();
 		} else if (control == taskDurationText) {
@@ -252,11 +264,15 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		if (control == userCombo) {
 			task.setAssignee(Boolean.toString(true));
 			task.getCandidateUsers().clear();
-			task.getCandidateUsers().add(userCombo.getText());			
+			String userId = DiagramHandler.keys(ActivitiPlugin.getUsers(false), userCombo.getText()).findFirst().get();
+			if (userId != null && !userId.isEmpty())
+				task.getCandidateUsers().add(userId);			
 		} else if (control == groupCombo) {	
 			task.setAssignee(Boolean.toString(false));
 			task.getCandidateGroups().clear();
-			task.getCandidateGroups().add(groupCombo.getText());
+			String groupId = DiagramHandler.keys(ActivitiPlugin.getGroups(false), groupCombo.getText()).findFirst().get();
+			if (groupId != null && !groupId.isEmpty())
+				task.getCandidateGroups().add(groupId);
 		} else if (control == dueDateText) {
 			task.setDueDate(dueDateText.getText());
 		} else if (control == taskDurationText) {

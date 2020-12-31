@@ -95,8 +95,7 @@ public class CustomUserTaskContextImpl implements CustomUserTaskContext {
 	try {
 		result = Thread.currentThread().getContextClassLoader().getResourceAsStream(FTD_ICON_PATH);
 	} catch (Exception e) {
-		System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), 
-				this.customUserTask.getSmallIconPath()));
+		System.err.println(String.format(ERROR_ICON_MESSAGE_PATTERN, this.customUserTask.getId(), FTD_ICON_PATH));
 		result = Thread.currentThread().getContextClassLoader().getResourceAsStream(ERROR_ICON_PATH);
 	}
 		
