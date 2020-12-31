@@ -50,7 +50,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	//protected Text priorityText;
 	protected Combo categoryCombo;
 	//protected Text skipExpressionText;
-	//protected Text reccomendedFormText;
+	protected Text selectAssignee; // store radio button selection
 
 	private Combo formTypeCombo;
 	protected Button formSelectButton;
@@ -59,7 +59,6 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	protected Button btnGroup;
 	private Combo userCombo;
 	private Combo groupCombo;
-	private boolean userSelection = false;
 	private String lastFormId = "";	
 	private Map<String, String> loadedForms = new HashMap<String, String>();
 	
@@ -113,38 +112,25 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	    data.left = new FormAttachment(userCombo, 0);
 	    data.right = new FormAttachment(100, 0);
 	    data.top = new FormAttachment(groupCombo, +2, SWT.TOP);
-	    btnGroup.setLayoutData(data); 	
-	    
-	    //reccomendedFormText = createTextControl(false);
-	    //createLabel("Reccomended form", reccomendedFormText);
-	    //reccomendedFormText.setEnabled(false);
-	    //reccomendedFormText.setVisible(false);
+	    btnGroup.setLayoutData(data); 		    
 	    
 	    btnUser.addSelectionListener(new SelectionAdapter() {
 	        @Override
 	        public void widgetSelected(SelectionEvent evt) {
-	        	if (btnGroup.getSelection()) {
-	        		userSelection = false;
-	        		changeSelection();
-	        	}
-	        	
+	        	if (btnGroup.getSelection()) 
+	        		changeSelection("false");
 	        }
 	      });
 	    
 	    btnGroup.addSelectionListener(new SelectionAdapter() {
 	        @Override
 	        public void widgetSelected(SelectionEvent evt) {
-	        	if (btnUser.getSelection()) {
-	        		userSelection = true;
-	        		changeSelection();
-	        	}
+	        	if (btnUser.getSelection()) 
+	        		changeSelection("true");
 	        }
 	      });	
 	    
-	    changeSelection();
-		
-		
-		formTypeCombo = createComboboxMy(formsValues, 0, true);
+	    formTypeCombo = createComboboxMy(formsValues, 0, true);
 		createLabel("Form", formTypeCombo);
 		
 		formTypeCombo.addSelectionListener(new SelectionAdapter() {
@@ -160,7 +146,6 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		
 		formSelectButton = getWidgetFactory().createButton(formComposite, "Launch form", SWT.PUSH);
 		formSelectButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_SELECTION));
-		//formSelectButton.setForeground(SWT.COLOR_WHITE);
 		data = new FormData();
 		data.left = new FormAttachment(formTypeCombo, 0);
 		data.right = new FormAttachment(90, 0);
@@ -195,15 +180,19 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		categoryCombo = createComboboxMy(categoryValues, 0, false);
 		createLabel("Category", categoryCombo);
 		//skipExpressionText = createTextControl(false);
-		//createLabel("Skip expression", skipExpressionText);		
+		//createLabel("Skip expression", skipExpressionText);
 		
+		selectAssignee = createTextControl(false);
+	    selectAssignee.setVisible(false); //should be hidden
 	}
 	
-	private void changeSelection() {
-		userCombo.setEnabled(userSelection);
-		btnGroup.setSelection(!userSelection);
-		btnUser.setSelection(userSelection);
-		groupCombo.setEnabled(!userSelection);		
+	private void changeSelection(String selectionValue) {
+		boolean selection = selectionValue.equals("true");
+		userCombo.setEnabled(selection);
+		btnGroup.setSelection(!selection);
+		btnUser.setSelection(selection);
+		groupCombo.setEnabled(!selection);
+		selectAssignee.setText(selectionValue); 
 	}
 
 
@@ -211,9 +200,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	protected Object getModelValueForControl(Control control, Object businessObject) {
 		UserTask task = (UserTask) businessObject;		
 		
-		if (control == userCombo) {
-			userSelection = Boolean.valueOf(task.getAssignee());
-			changeSelection();
+		if (control == userCombo) {			
 			List <String> user = task.getCandidateUsers();
 			if (user == null || user.isEmpty())
 				return "";
@@ -254,6 +241,10 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 				lastFormId = taskKey;
 			}			
 			return taskKey; 
+		} else if (control == selectAssignee) {
+			String assigneeSekection = task.getAssignee();
+			changeSelection(assigneeSekection);
+			return assigneeSekection;
 		}
 		return null;
 	}
@@ -261,14 +252,13 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	@Override
 	protected void storeValueInModel(Control control, Object businessObject) {
 		UserTask task = (UserTask) businessObject;
+		task.setAssignee(selectAssignee.getText());
 		if (control == userCombo) {
-			task.setAssignee(Boolean.toString(true));
 			task.getCandidateUsers().clear();
 			String userId = DiagramHandler.keys(ActivitiPlugin.getUsers(false), userCombo.getText()).findFirst().get();
 			if (userId != null && !userId.isEmpty())
 				task.getCandidateUsers().add(userId);			
-		} else if (control == groupCombo) {	
-			task.setAssignee(Boolean.toString(false));
+		} else if (control == groupCombo) {				
 			task.getCandidateGroups().clear();
 			String groupId = DiagramHandler.keys(ActivitiPlugin.getGroups(false), groupCombo.getText()).findFirst().get();
 			if (groupId != null && !groupId.isEmpty())
@@ -288,7 +278,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			String formName = formTypeCombo.getText();
 			String formId = DiagramHandler.keys(loadedForms, formName).findFirst().get();
 			task.setFormKey(formId);  
-		}
+		} 
 	}
 	
 		
