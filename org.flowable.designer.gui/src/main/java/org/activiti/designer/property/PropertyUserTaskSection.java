@@ -223,12 +223,12 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		} else if (control == categoryCombo) {
 			control.setEnabled(!task.isExtended());
 			String taskKey = task.getCategory();
-			if (taskKey != null && !taskKey.isEmpty()) {
-				//String categoryValue = ActivitiPlugin.getTaskCategories(false).get(taskKey);
-				//if (categoryValue != null)
-					categoryCombo.setText(taskKey);
-			}
-			return taskKey;					
+			if (taskKey == null || taskKey.isEmpty()) 
+				return "";
+			String categoryValue = ActivitiPlugin.getTaskCategories(false).get(taskKey);
+			if (categoryValue != null && !categoryValue.isEmpty())
+				categoryCombo.setText(categoryValue);			
+			return categoryValue;					
 		//} else if (control == skipExpressionText) {
 		//	return task.getSkipExpression();
 		} else if (control == formTypeCombo) {
@@ -269,9 +269,9 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.setPriority(taskDurationText.getText());
 		} else if (control == categoryCombo) {
 			String categoryValue = categoryCombo.getText();
-			//String categoryId = DiagramHandler.keys(ActivitiPlugin.getTaskCategories(false), categoryValue).findFirst().get();
-			//if (categoryId != null)
-				task.setCategory(categoryValue); 
+			String categoryId = DiagramHandler.keys(ActivitiPlugin.getTaskCategories(false), categoryValue).findFirst().get();
+			if (categoryId != null && !categoryId.isEmpty())
+				task.setCategory(categoryId); 
 		//} else if (control == skipExpressionText) {
 		//	task.setSkipExpression(skipExpressionText.getText());
 		} else if (control == formTypeCombo) {	
