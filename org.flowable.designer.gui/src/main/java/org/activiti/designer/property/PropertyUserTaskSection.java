@@ -17,8 +17,6 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +24,8 @@ import java.util.Map;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.designer.integration.usertask.CustomUserTask;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
+import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
 import org.activiti.designer.eclipse.util.DiagramHandler;
-import org.activiti.designer.eclipse.util.RestClient;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.activiti.designer.util.extension.ExtensionUtil;
 import org.eclipse.swt.SWT;
@@ -179,16 +177,6 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		selectAssignee = createTextControl(false);
 	    selectAssignee.setVisible(false); //should be hidden
 	}
-	
-	private void changeSelection(String selectionValue) {
-		boolean selection = selectionValue.equals("true");
-		userCombo.setEnabled(selection);
-		btnGroup.setSelection(!selection);
-		btnUser.setSelection(selection);
-		groupCombo.setEnabled(!selection);
-		selectAssignee.setText(selectionValue); 
-	}
-
 
 	@Override
 	protected Object getModelValueForControl(Control control, Object businessObject) {
@@ -298,9 +286,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			if (formId != null && !formId.isEmpty())
 				task.setFormKey(formId);  
 		} 
-	}
-	
-		
+	}		
 	
 	private CustomUserTask findCustomUserTask(UserTask userTask) {
 	    CustomUserTask result = null;
@@ -316,5 +302,14 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	      }
 	    }
 	    return result;
-	}	
+	}
+	
+	private void changeSelection(String selectionValue) {
+		boolean selection = selectionValue.equals("true");
+		userCombo.setEnabled(selection);
+		btnGroup.setSelection(!selection);
+		btnUser.setSelection(selection);
+		groupCombo.setEnabled(!selection);
+		selectAssignee.setText(selectionValue);
+	}
 }
