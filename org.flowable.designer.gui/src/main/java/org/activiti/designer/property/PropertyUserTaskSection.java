@@ -59,7 +59,12 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	protected Button btnGroup;
 	private Combo userCombo;
 	private Combo groupCombo;
+	
 	private String lastFormId = "";	
+	private String lastUserId = "";
+	private String lastGroupId = "";
+	private String lastCategoryId = "";
+	
 	private Map<String, String> loadedForms = new HashMap<String, String>();
 	
 	protected Combo createComboboxMy(String[] values, int defaultSelectionIndex, boolean change) {
@@ -132,18 +137,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	    
 	    formTypeCombo = createComboboxMy(formsValues, 0, true);
 		createLabel("Form", formTypeCombo);
-		
-		formTypeCombo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent evt) {
-				//if (formTypeCombo.getText().equalsIgnoreCase(reccomendedFormText.getText())) 
-				//	reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_GREEN));
-				//else
-				//	reccomendedFormText.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 				
-			}
-		});
-		
 		formSelectButton = getWidgetFactory().createButton(formComposite, "Launch form", SWT.PUSH);
 		formSelectButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_SELECTION));
 		data = new FormData();
@@ -204,18 +198,26 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			List <String> user = task.getCandidateUsers();
 			if (user == null || user.isEmpty())
 				return "";
-			String userValue = ActivitiPlugin.getUsers(false).get(user.get(0));
-			if (userValue != null && !userValue.isEmpty())
+			String taskKey = user.get(0);
+			String userValue = ActivitiPlugin.getUsers(false).get(taskKey);
+			if (userValue == null || userValue.isEmpty())
+				return "";			
+			if (lastUserId.isEmpty() || !lastUserId.equals(taskKey))
 				userCombo.setText(userValue);
+			lastUserId = taskKey;
 			return userValue;
 		} else if (control == groupCombo) {
 			List <String> group = task.getCandidateGroups();
 			if (group == null || group.isEmpty())
 				return "";
-			String roleAssigneeValue = ActivitiPlugin.getGroups(false).get(group.get(0));
-			if (roleAssigneeValue != null && !roleAssigneeValue.isEmpty())
+			String taskKey = group.get(0);
+			String roleAssigneeValue = ActivitiPlugin.getGroups(false).get(taskKey);
+			if (roleAssigneeValue == null || roleAssigneeValue.isEmpty())
+				return "";			
+			if (lastGroupId.isEmpty() || !lastGroupId.equals(taskKey))
 				groupCombo.setText(roleAssigneeValue);
-			return roleAssigneeValue;
+			lastGroupId = taskKey;
+			return roleAssigneeValue;			
 		} else if (control == dueDateText) {
 			return task.getDueDate();
 		} else if (control == taskDurationText) {
@@ -226,21 +228,27 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			if (taskKey == null || taskKey.isEmpty()) 
 				return "";
 			String categoryValue = ActivitiPlugin.getTaskCategories(false).get(taskKey);
-			if (categoryValue != null && !categoryValue.isEmpty())
-				categoryCombo.setText(categoryValue);			
+			if (categoryValue == null || categoryValue.isEmpty())
+				return "";
+			if (lastCategoryId.isEmpty() || !lastCategoryId.equals(taskKey))
+				categoryCombo.setText(categoryValue);
+			lastCategoryId = taskKey;
 			return categoryValue;					
 		//} else if (control == skipExpressionText) {
 		//	return task.getSkipExpression();
 		} else if (control == formTypeCombo) {
 			String taskKey = task.getFormKey();	
-			if (taskKey == null || taskKey.isEmpty())
+			if (taskKey == null || taskKey.isEmpty()) {
 				formTypeCombo.setText(ActivitiPlugin.NEW_FORM);
-			else {			
-				if (lastFormId.isEmpty() || !lastFormId.equals(taskKey))
-					formTypeCombo.setText(loadedForms.get(taskKey));
-				lastFormId = taskKey;
-			}			
-			return taskKey; 
+				return "";
+			}
+			String formValue = loadedForms.get(taskKey);
+			if (formValue == null || formValue.isEmpty())
+				return "";
+			if (lastFormId.isEmpty() || !lastFormId.equals(taskKey))
+				formTypeCombo.setText(formValue);
+			lastFormId = taskKey;
+			return formValue; 
 		} else if (control == selectAssignee) {
 			String assigneeSekection = task.getAssignee();
 			changeSelection(assigneeSekection);
@@ -255,12 +263,18 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		task.setAssignee(selectAssignee.getText());
 		if (control == userCombo) {
 			task.getCandidateUsers().clear();
-			String userId = DiagramHandler.keys(ActivitiPlugin.getUsers(false), userCombo.getText()).findFirst().get();
+			String userValue = userCombo.getText();
+			if (userValue == null || userValue.isEmpty())
+				return;
+			String userId = DiagramHandler.keys(ActivitiPlugin.getUsers(false), userValue).findFirst().get();
 			if (userId != null && !userId.isEmpty())
 				task.getCandidateUsers().add(userId);			
 		} else if (control == groupCombo) {				
 			task.getCandidateGroups().clear();
-			String groupId = DiagramHandler.keys(ActivitiPlugin.getGroups(false), groupCombo.getText()).findFirst().get();
+			String groupValue = groupCombo.getText();
+			if (groupValue == null || groupValue.isEmpty())
+				return;
+			String groupId = DiagramHandler.keys(ActivitiPlugin.getGroups(false), groupValue).findFirst().get();
 			if (groupId != null && !groupId.isEmpty())
 				task.getCandidateGroups().add(groupId);
 		} else if (control == dueDateText) {
@@ -269,6 +283,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			task.setPriority(taskDurationText.getText());
 		} else if (control == categoryCombo) {
 			String categoryValue = categoryCombo.getText();
+			if (categoryValue == null || categoryValue.isEmpty())
+				return;
 			String categoryId = DiagramHandler.keys(ActivitiPlugin.getTaskCategories(false), categoryValue).findFirst().get();
 			if (categoryId != null && !categoryId.isEmpty())
 				task.setCategory(categoryId); 
@@ -276,8 +292,11 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		//	task.setSkipExpression(skipExpressionText.getText());
 		} else if (control == formTypeCombo) {	
 			String formName = formTypeCombo.getText();
+			if (formName == null || formName.isEmpty())
+				return;
 			String formId = DiagramHandler.keys(loadedForms, formName).findFirst().get();
-			task.setFormKey(formId);  
+			if (formId != null && !formId.isEmpty())
+				task.setFormKey(formId);  
 		} 
 	}
 	
