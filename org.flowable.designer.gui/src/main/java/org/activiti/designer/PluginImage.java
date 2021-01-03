@@ -61,6 +61,7 @@ public enum PluginImage {
   IMG_GATEWAY_EVENT("gateway.event", "type.gateway.event.png"), //$NON-NLS-1$
 
   // Task image icons
+  IMG_FTD_USERTASK("ftdusertask", "type.user.ftd.png"), //$NON-NLS-1$
   IMG_USERTASK("usertask", "type.user.png"), //$NON-NLS-1$
   IMG_SCRIPTTASK("scripttask", "type.script.png"), //$NON-NLS-1$
   IMG_SERVICETASK("servicetask", "type.service.png"), //$NON-NLS-1$

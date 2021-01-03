@@ -13,6 +13,7 @@
  */
 package org.activiti.designer.diagram;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -837,7 +838,7 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
                   new Image(Display.getCurrent(), taskContext.getShapeIconStream()));
         }
       } catch (Exception e) {
-        Logger.logError("Error loading image", e);
+        Logger.logError("addCustomServiceTasks: Error loading image", e);
       }
     }
 
@@ -894,22 +895,35 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
     String prefixId = getDiagramTypeProvider().getProviderId() + "||";
     @SuppressWarnings("restriction")
     final ImageRegistry reg = GraphitiUIPlugin.getDefault().getImageRegistry();
+    
     for (final CustomUserTaskContext taskContext : customUserTaskContexts) {
       try {
         if (reg.get(prefixId + taskContext.getSmallImageKey()) == null) {
-          reg.put(prefixId + taskContext.getSmallImageKey(), 
-              new Image(Display.getCurrent(), taskContext.getSmallIconStream()));
+        	InputStream samallIconsStream = taskContext.getSmallIconStream();
+        	if (samallIconsStream == null) {
+        		samallIconsStream = getFefaultIconsStream(PluginImage.IMG_FTD_USERTASK.getImagePath());
+        	}
+        	reg.put(prefixId + taskContext.getSmallImageKey(), 
+        		new Image(Display.getCurrent(), samallIconsStream));
         }
         if (reg.get(prefixId + taskContext.getLargeImageKey()) == null) {
-          reg.put(prefixId + taskContext.getLargeImageKey(),
-                  new Image(Display.getCurrent(), taskContext.getLargeIconStream()));
+        	InputStream largeIconsStream = taskContext.getLargeIconStream();
+            if (largeIconsStream == null) {
+            	largeIconsStream = getFefaultIconsStream(PluginImage.IMG_FTD_USERTASK.getImagePath());
+            }	
+            reg.put(prefixId + taskContext.getLargeImageKey(),
+                 new Image(Display.getCurrent(), largeIconsStream));
         }
         if (reg.get(prefixId + taskContext.getShapeImageKey()) == null) {
-          reg.put(prefixId + taskContext.getShapeImageKey(),
-                  new Image(Display.getCurrent(), taskContext.getShapeIconStream()));
+        	InputStream shapeIconsStream = taskContext.getShapeIconStream();
+            if (shapeIconsStream == null) {
+            	shapeIconsStream = getFefaultIconsStream(PluginImage.IMG_FTD_USERTASK.getImagePath());
+            }
+            reg.put(prefixId + taskContext.getShapeImageKey(),
+            	new Image(Display.getCurrent(), shapeIconsStream));
         }
       } catch (Exception e) {
-        Logger.logError("Error loading image", e);
+        Logger.logError("addCustomUserTask: Error loading image", e);
       }
     }
 
@@ -1041,4 +1055,17 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
       }
     }
   }
+  
+  private InputStream getFefaultIconsStream(String iconPath) {
+		InputStream result = null;
+		    
+		try {
+			result = Thread.currentThread().getContextClassLoader().getResourceAsStream(iconPath);
+		} catch (Exception e) {
+			
+		}
+			
+		return result;
+		  
+	  }
 }
