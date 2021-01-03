@@ -162,128 +162,128 @@
                id="org.activiti.designer.mainConfigTab.customservicetask"
                tab="org.activiti.designer.mainConfigTab">
          </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyCustomUserTaskSection"
-               filter="org.activiti.designer.property.PropertyCustomUserTaskFilter"
-               id="org.activiti.designer.taskConfigTab.customusertask"
-               tab="org.activiti.designer.taskConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyUserTaskSection"
-               filter="org.activiti.designer.property.PropertyUserTaskFilter"
-               id="org.activiti.designer.mainConfigTab.usertask"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyMailTaskSection"
-               filter="org.activiti.designer.property.PropertyMailTaskFilter"
-               id="org.activiti.designer.mainConfigTab.mailtask"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyGeneralSection"
-               filter="org.activiti.designer.property.PropertyGeneralFilter"
-               id="org.activiti.designer.generalTab.flowelement"
-               tab="org.activiti.designer.generalTab">
-         </propertySection>
-         <propertySection
-               afterSection="org.activiti.designer.generalTab.flowelement"
-               class="org.activiti.designer.property.PropertyDefaultFlowSection"
-               filter="org.activiti.designer.property.PropertyDefaultFlowFilter"
-               id="org.activiti.designer.generalTab.defaultflow"
-               tab="org.activiti.designer.generalTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyExecutionListenerSection"
-               filter="org.activiti.designer.property.PropertyExecutionListenerFilter"
-               id="org.activiti.designer.listenerTab.ExecutionTab"
-               tab="org.activiti.designer.listenerTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyTaskListenerSection"
-               filter="org.activiti.designer.property.PropertyTaskListenerFilter"
-               id="org.activiti.designer.listenerTab.TaskTab"
-               tab="org.activiti.designer.listenerTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyStartEventSection"
-               filter="org.activiti.designer.property.PropertyStartEventFilter"
-               id="org.activiti.designer.mainConfigTab.startevent"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyTimerStartEventSection"
-               filter="org.activiti.designer.property.PropertyTimerStartEventFilter"
-               id="org.activiti.designer.mainConfigTab.timerstartevent"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyMessageStartEventSection"
-               filter="org.activiti.designer.property.PropertyMessageStartEventFilter"
-               id="org.activiti.designer.mainConfigTab.messagestartevent"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyBoundaryTimerSection"
-               filter="org.activiti.designer.property.PropertyBoundaryTimerFilter"
-               id="org.activiti.designer.mainConfigTab.timerboundaryevent"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyBoundaryErrorSection"
-               filter="org.activiti.designer.property.PropertyBoundaryErrorFilter"
-               id="org.activiti.designer.mainConfigTab.errorboundaryevent"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyBoundaryMessageSection"
-               filter="org.activiti.designer.property.PropertyBoundaryMessageFilter"
-               id="org.activiti.designer.mainConfigTab.messageboundaryevent"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyBoundarySignalSection"
-               filter="org.activiti.designer.property.PropertyBoundarySignalFilter"
-               id="org.activiti.designer.mainConfigTab.signalboundaryevent"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyCallActivitySection"
-               filter="org.activiti.designer.property.PropertyCallActivityFilter"
-               id="org.activiti.designer.mainConfigTab.callactivity"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyBusinessRuleTaskSection"
-               filter="org.activiti.designer.property.PropertyBusinessRuleTaskFilter"
-               id="org.activiti.designer.mainConfigTab.businessruletask"
-               tab="org.activiti.designer.mainConfigTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyFormPropertySection"
-               filter="org.activiti.designer.property.PropertyFormPropertyFilter"
-               id="org.activiti.designer.formTab.formProperty"
-               tab="org.activiti.designer.formTab">
-         </propertySection>
-         <propertySection
-               class="org.activiti.designer.property.PropertyDataPropertySection"
-               filter="org.activiti.designer.property.PropertyDataPropertyFilter"
-               id="org.activiti.designer.dataTab.dataProperty"
-               tab="org.activiti.designer.dataTab">
-         </propertySection>
           <!-- <propertySection
-                afterSection="org.activiti.designer.mainConfigTab.callactivity"
-                class="org.activiti.designer.property.PropertyIOParameterSection"
-                filter="org.activiti.designer.property.PropertyCallActivityFilter"
-                id="org.activiti.designer.mainConfigTab.parameter"
-                tab="org.activiti.designer.mainConfigTab">
+                class="org.activiti.designer.property.PropertyCustomUserTaskSection"
+                filter="org.activiti.designer.property.PropertyCustomUserTaskFilter"
+                id="org.activiti.designer.taskConfigTab.customusertask"
+                tab="org.activiti.designer.taskConfigTab">
           </propertySection> -->
           <propertySection
-                class="org.activiti.designer.property.PropertyMultiInstanceSection"
-                filter="org.activiti.designer.property.PropertyMultiInstanceFilter"
-                id="org.activiti.designer.multiInstanceTab.multiInstance"
-                tab="org.activiti.designer.multiInstanceTab">
+                class="org.activiti.designer.property.PropertyUserTaskSection"
+                filter="org.activiti.designer.property.PropertyUserTaskFilter"
+                id="org.activiti.designer.mainConfigTab.usertask"
+                tab="org.activiti.designer.mainConfigTab">
           </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyMailTaskSection"
+                filter="org.activiti.designer.property.PropertyMailTaskFilter"
+                id="org.activiti.designer.mainConfigTab.mailtask"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyGeneralSection"
+                filter="org.activiti.designer.property.PropertyGeneralFilter"
+                id="org.activiti.designer.generalTab.flowelement"
+                tab="org.activiti.designer.generalTab">
+          </propertySection>
+          <propertySection
+                afterSection="org.activiti.designer.generalTab.flowelement"
+                class="org.activiti.designer.property.PropertyDefaultFlowSection"
+                filter="org.activiti.designer.property.PropertyDefaultFlowFilter"
+                id="org.activiti.designer.generalTab.defaultflow"
+                tab="org.activiti.designer.generalTab">
+          </propertySection>
+          <!-- <propertySection
+                class="org.activiti.designer.property.PropertyExecutionListenerSection"
+                filter="org.activiti.designer.property.PropertyExecutionListenerFilter"
+                id="org.activiti.designer.listenerTab.ExecutionTab"
+                tab="org.activiti.designer.listenerTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyTaskListenerSection"
+                filter="org.activiti.designer.property.PropertyTaskListenerFilter"
+                id="org.activiti.designer.listenerTab.TaskTab"
+                tab="org.activiti.designer.listenerTab">
+          </propertySection> -->
+          <propertySection
+                class="org.activiti.designer.property.PropertyStartEventSection"
+                filter="org.activiti.designer.property.PropertyStartEventFilter"
+                id="org.activiti.designer.mainConfigTab.startevent"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyTimerStartEventSection"
+                filter="org.activiti.designer.property.PropertyTimerStartEventFilter"
+                id="org.activiti.designer.mainConfigTab.timerstartevent"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyMessageStartEventSection"
+                filter="org.activiti.designer.property.PropertyMessageStartEventFilter"
+                id="org.activiti.designer.mainConfigTab.messagestartevent"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyBoundaryTimerSection"
+                filter="org.activiti.designer.property.PropertyBoundaryTimerFilter"
+                id="org.activiti.designer.mainConfigTab.timerboundaryevent"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyBoundaryErrorSection"
+                filter="org.activiti.designer.property.PropertyBoundaryErrorFilter"
+                id="org.activiti.designer.mainConfigTab.errorboundaryevent"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyBoundaryMessageSection"
+                filter="org.activiti.designer.property.PropertyBoundaryMessageFilter"
+                id="org.activiti.designer.mainConfigTab.messageboundaryevent"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyBoundarySignalSection"
+                filter="org.activiti.designer.property.PropertyBoundarySignalFilter"
+                id="org.activiti.designer.mainConfigTab.signalboundaryevent"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyCallActivitySection"
+                filter="org.activiti.designer.property.PropertyCallActivityFilter"
+                id="org.activiti.designer.mainConfigTab.callactivity"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+          <propertySection
+                class="org.activiti.designer.property.PropertyBusinessRuleTaskSection"
+                filter="org.activiti.designer.property.PropertyBusinessRuleTaskFilter"
+                id="org.activiti.designer.mainConfigTab.businessruletask"
+                tab="org.activiti.designer.mainConfigTab">
+          </propertySection>
+           <!-- <propertySection
+                 class="org.activiti.designer.property.PropertyFormPropertySection"
+                 filter="org.activiti.designer.property.PropertyFormPropertyFilter"
+                 id="org.activiti.designer.formTab.formProperty"
+                 tab="org.activiti.designer.formTab">
+           </propertySection>
+           <propertySection
+                 class="org.activiti.designer.property.PropertyDataPropertySection"
+                 filter="org.activiti.designer.property.PropertyDataPropertyFilter"
+                 id="org.activiti.designer.dataTab.dataProperty"
+                 tab="org.activiti.designer.dataTab">
+           </propertySection>
+             <propertySection
+                  afterSection="org.activiti.designer.mainConfigTab.callactivity"
+                  class="org.activiti.designer.property.PropertyIOParameterSection"
+                  filter="org.activiti.designer.property.PropertyCallActivityFilter"
+                  id="org.activiti.designer.mainConfigTab.parameter"
+                  tab="org.activiti.designer.mainConfigTab">
+            </propertySection>
+           <propertySection
+                 class="org.activiti.designer.property.PropertyMultiInstanceSection"
+                 filter="org.activiti.designer.property.PropertyMultiInstanceFilter"
+                 id="org.activiti.designer.multiInstanceTab.multiInstance"
+                 tab="org.activiti.designer.multiInstanceTab">
+           </propertySection> -->
           <propertySection
                 class="org.activiti.designer.property.PropertyIntermediateCatchTimerSection"
                 filter="org.activiti.designer.property.PropertyIntermediateCatchTimerFilter"
@@ -333,7 +333,7 @@
                 id="org.activiti.designer.documentationTab.documentation"
                 tab="org.activiti.designer.documentationTab">
           </propertySection>
-          <propertySection
+          <!-- <propertySection
                 class="org.activiti.designer.property.PropertySignalDefinitionPropertySection"
                 filter="org.activiti.designer.property.PropertySignalDefinitionPropertyFilter"
                 id="org.activiti.designer.signalTab.signalDefinition"
@@ -344,7 +344,7 @@
                 filter="org.activiti.designer.property.PropertyMessageDefinitionPropertyFilter"
                 id="org.activiti.designer.messageTab.messageDefinition"
                 tab="org.activiti.designer.messageTab">
-          </propertySection>
+          </propertySection> -->
           <propertySection
                 class="org.activiti.designer.property.PropertySignalStartEventSection"
                 filter="org.activiti.designer.property.PropertySignalStartEventFilter"
