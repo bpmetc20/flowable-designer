@@ -239,6 +239,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			return formValue; 
 		} else if (control == selectAssignee) {
 			String assigneeSekection = task.getAssignee();
+			if (assigneeSekection == null || assigneeSekection.isEmpty()) 
+				assigneeSekection = "false";
 			changeSelection(assigneeSekection);
 			return assigneeSekection;
 		}
