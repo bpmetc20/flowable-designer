@@ -368,9 +368,9 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
     	CallActivity callActivity = (CallActivity) bo;
         editElementButton.setText("Launch " + callActivity.getCalledElement() + " element diagram from cloud"); //$NON-NLS-1$
         editElementButton.setDescription("Launch diagram"); //$NON-NLS-1$
-        editElementButton.setIconId(PluginImage.IMG_FTD_USERTASK.getImageKey());
+        editElementButton.setIconId(PluginImage.IMG_CALLACTIVITY.getImageKey());
         addContextButton(editElementButton, new LaunchCallActivityFeature(getFeatureProvider(), callActivity), customContext, 
-        		"Launch " + callActivity.getCalledElement() + " element diagram from cloud", "Launch diagram", PluginImage.IMG_FTD_USERTASK);
+        		"Launch " + callActivity.getCalledElement() + " element diagram from cloud", "Launch diagram", PluginImage.IMG_CALLACTIVITY);
     }
 
     return data;
