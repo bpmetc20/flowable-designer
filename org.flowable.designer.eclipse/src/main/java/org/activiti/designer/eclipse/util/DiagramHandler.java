@@ -113,9 +113,9 @@ public class DiagramHandler {
 		}		
 	 }
 	
-	 public static void createNewDiagram(String newDiagramNam) {
+	 public static void createNewDiagram(String newDiagramName) {
 		try {			 	
-			 IFile newDiagram = FileService.getDiagramFile(newDiagramNam);	
+			 IFile newDiagram = FileService.getDiagramFile(newDiagramName);	
 			 ActivitiDiagramEditor.get().createNewDiagram(newDiagram);
 		 } catch(Exception e) {
 			 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, "", 

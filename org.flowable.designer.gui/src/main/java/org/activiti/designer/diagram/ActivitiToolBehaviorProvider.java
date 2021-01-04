@@ -103,6 +103,7 @@ import org.activiti.designer.features.CreateTimerStartEventFeature;
 import org.activiti.designer.features.CreateTransactionFeature;
 import org.activiti.designer.features.CreateUserTaskFeature;
 import org.activiti.designer.features.DeletePoolFeature;
+import org.activiti.designer.features.LaunchCallActivityFeature;
 import org.activiti.designer.features.contextmenu.OpenCalledElementForCallActivity;
 import org.activiti.designer.integration.annotation.TaskName;
 import org.activiti.designer.integration.annotation.TaskNames;
@@ -213,7 +214,7 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
      */
     
     //open call activity called element
-    openCallActivityCalledElement(context);
+    //openCallActivityCalledElement(context);
     
     return super.getDoubleClickFeature(context);
   }
@@ -363,6 +364,13 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
       addThrowEventButtons(editElementButton, (ThrowEvent) bo, customContext);
     } else if (bo instanceof IntermediateCatchEvent) {
       addIntermediateCatchEventButtons(editElementButton, (IntermediateCatchEvent) bo, customContext);
+    } else if (bo instanceof CallActivity) {
+    	CallActivity callActivity = (CallActivity) bo;
+        editElementButton.setText("Launch " + callActivity.getCalledElement() + " element diagram from cloud"); //$NON-NLS-1$
+        editElementButton.setDescription("Launch diagram"); //$NON-NLS-1$
+        editElementButton.setIconId(PluginImage.IMG_FTD_USERTASK.getImageKey());
+        addContextButton(editElementButton, new LaunchCallActivityFeature(getFeatureProvider(), callActivity), customContext, 
+        		"Launch " + callActivity.getCalledElement() + " element diagram from cloud", "Launch diagram", PluginImage.IMG_FTD_USERTASK);
     }
 
     return data;
@@ -615,6 +623,17 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
     newButton.setIconId(image.getImageKey());
     button.getContextButtonMenuEntries().add(newButton);
   }
+  
+  private void addContextButton(ContextButtonEntry button, LaunchCallActivityFeature feature, CustomContext customContext, String text, String description,
+          PluginImage image) {
+
+    ContextButtonEntry newButton = new ContextButtonEntry(feature, customContext);
+    newButton.setText(text);
+    newButton.setDescription(description);
+    newButton.setIconId(image.getImageKey());
+    button.getContextButtonMenuEntries().add(newButton);
+  }
+
 
   private void addContextButton(ContextButtonEntry button, AbstractCreateBPMNFeature feature, CreateContext context, String text, String description,
           PluginImage image) {
