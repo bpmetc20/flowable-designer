@@ -267,11 +267,10 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
       
       CreateEqualGatewayFeature equalGatewayFeature = new CreateEqualGatewayFeature(getFeatureProvider());
       ContextButtonEntry newEqualGatewayButton = new ContextButtonEntry(equalGatewayFeature, taskContext);
-      /*
-      equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      */
+      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
+      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
+      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
+      
       data.getDomainSpecificContextButtons().add(newEqualGatewayButton);
 
       CreateEndEventFeature endFeature = new CreateEndEventFeature(getFeatureProvider());

@@ -21,6 +21,10 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 public class CreateEqualGatewayFeature extends AbstractCreateFastBPMNFeature {
 
   public static final String FEATURE_ID_KEY = "equalgateway";
+  public static final String CONDITION_EXPRESSION = "${A} = ${B}";
+  public static final String FLOW_YES = "Yes";
+  public static final String FLOW_NO = "No";
+
 
   public CreateEqualGatewayFeature(IFeatureProvider fp) {
     // set name and description of the creation feature
