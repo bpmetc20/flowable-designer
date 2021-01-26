@@ -88,6 +88,7 @@ import org.activiti.designer.features.CreateCancelEndEventFeature;
 import org.activiti.designer.features.CreateCompensationThrowingEventFeature;
 import org.activiti.designer.features.CreateEmbeddedSubProcessFeature;
 import org.activiti.designer.features.CreateEndEventFeature;
+import org.activiti.designer.features.CreateEqualGatewayFeature;
 import org.activiti.designer.features.CreateErrorEndEventFeature;
 import org.activiti.designer.features.CreateErrorStartEventFeature;
 import org.activiti.designer.features.CreateEventGatewayFeature;
@@ -283,8 +284,9 @@ public class ActivitiBPMNFeatureProvider extends DefaultFeatureProvider {
         new CreateErrorEndEventFeature(this), new CreateTerminateEndEventFeature(this), new CreateCancelEndEventFeature(this), new CreateUserTaskFeature(this),
         new CreateScriptTaskFeature(this), new CreateServiceTaskFeature(this), new CreateMailTaskFeature(this),
         new CreateManualTaskFeature(this), new CreateReceiveTaskFeature(this), new CreateBusinessRuleTaskFeature(this), 
-        new CreateParallelGatewayFeature(this), new CreateExclusiveGatewayFeature(this), new CreateInclusiveGatewayFeature(this), new CreateEventGatewayFeature(this),
-        new CreateBoundaryTimerFeature(this), new CreateBoundaryErrorFeature(this), new CreateBoundaryMessageFeature(this), new CreateBoundaryCancelFeature(this), new CreateBoundaryCompensateFeature(this), new CreateBoundarySignalFeature(this), 
+        new CreateParallelGatewayFeature(this), new CreateExclusiveGatewayFeature(this), new CreateInclusiveGatewayFeature(this), 
+        new CreateEventGatewayFeature(this),
+        new CreateEqualGatewayFeature(this), new CreateBoundaryTimerFeature(this), new CreateBoundaryErrorFeature(this), new CreateBoundaryMessageFeature(this), new CreateBoundaryCancelFeature(this), new CreateBoundaryCompensateFeature(this), new CreateBoundarySignalFeature(this), 
         new CreateTimerCatchingEventFeature(this), new CreateSignalCatchingEventFeature(this), new CreateMessageCatchingEventFeature(this), 
         new CreateSignalThrowingEventFeature(this), new CreateCompensationThrowingEventFeature(this), new CreateNoneThrowingEventFeature(this),
         new CreateEventSubProcessFeature(this), new CreateTransactionFeature(this), new CreateEmbeddedSubProcessFeature(this), new CreatePoolFeature(this), new CreateLaneFeature(this),

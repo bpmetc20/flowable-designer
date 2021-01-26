@@ -74,6 +74,7 @@ import org.activiti.designer.features.CreateCustomServiceTaskFeature;
 import org.activiti.designer.features.CreateCustomUserTaskFeature;
 import org.activiti.designer.features.CreateEmbeddedSubProcessFeature;
 import org.activiti.designer.features.CreateEndEventFeature;
+import org.activiti.designer.features.CreateEqualGatewayFeature;
 import org.activiti.designer.features.CreateErrorEndEventFeature;
 import org.activiti.designer.features.CreateErrorStartEventFeature;
 import org.activiti.designer.features.CreateEventGatewayFeature;
@@ -263,6 +264,15 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
       newExclusiveGatewayButton.setDescription("Create a new exclusive gateway"); //$NON-NLS-1$
       newExclusiveGatewayButton.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
       data.getDomainSpecificContextButtons().add(newExclusiveGatewayButton);
+      
+      CreateEqualGatewayFeature equalGatewayFeature = new CreateEqualGatewayFeature(getFeatureProvider());
+      ContextButtonEntry newEqualGatewayButton = new ContextButtonEntry(equalGatewayFeature, taskContext);
+      /*
+      equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
+      equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
+      equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
+      */
+      data.getDomainSpecificContextButtons().add(newEqualGatewayButton);
 
       CreateEndEventFeature endFeature = new CreateEndEventFeature(getFeatureProvider());
       ContextButtonEntry newEndButton = new ContextButtonEntry(endFeature, taskContext);
