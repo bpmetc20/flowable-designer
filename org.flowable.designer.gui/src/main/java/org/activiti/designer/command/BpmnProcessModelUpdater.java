@@ -14,9 +14,8 @@
 package org.activiti.designer.command;
 
 import org.activiti.bpmn.model.BaseElement;
-import org.activiti.bpmn.model.ExclusiveGateway;
 import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.designer.features.CreateEqualGatewayFeature;
+import org.activiti.designer.util.CustomGatewayUtil;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
 import org.activiti.designer.util.editor.ModelHandler;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -55,48 +54,16 @@ public abstract class BpmnProcessModelUpdater {
   }
   
   public BpmnProcessModelUpdater init(Object businessObject, PictogramElement pictogramElement) {
-	/*
-	int yesNO = -1;
-    if (businessObject instanceof ExclusiveGateway) {
-		ExclusiveGateway exclusiveGateway = (ExclusiveGateway)businessObject; 
-		if (exclusiveGateway.getId().contains(CreateEqualGatewayFeature.FEATURE_ID_KEY)) {
-			for (SequenceFlow flow : exclusiveGateway.getOutgoingFlows()) {
-		        if (flow.getName().equals(CreateEqualGatewayFeature.FLOW_YES)) {
-		        	switch(yesNO) { 
-		        		case -1:
-		        			yesNO = 0;
-		        		break;
-		        		case 0:
-		        			yesNO = 1;
-		        		break;
-		        	}		        		
-		        } else if (flow.getName().equals(CreateEqualGatewayFeature.FLOW_YES)) {
-		        	switch(yesNO) { 
-	        			case -1:
-	        				yesNO = 0;
-	        			break;
-	        			case 0:
-	        				yesNO = 1;
-	        			break;
-	        	}	
-		        }
-		    }
-		}	
-	}
-	*/
-    BpmnProcessModelUpdater clone = createUpdater(featureProvider);
+	BpmnProcessModelUpdater clone = createUpdater(featureProvider);
     clone.businessObject = businessObject;
     clone.newBusinessObject = cloneBusinessObject(businessObject);
     clone.oldBusinessObject = cloneBusinessObject(businessObject);
     clone.pictogramElement = pictogramElement;
     
     if (businessObject instanceof SequenceFlow) {
-    	SequenceFlow sequenceFlow = (SequenceFlow)clone.businessObject;
-    	if (sequenceFlow.getSourceRef().contains(CreateEqualGatewayFeature.FEATURE_ID_KEY)) {
-    		sequenceFlow.setConditionExpression(CreateEqualGatewayFeature.CONDITION_EXPRESSION);
-    		sequenceFlow.setName(CreateEqualGatewayFeature.FLOW_YES);
-    	}
-    	
+    	Diagram diagram = featureProvider.getDiagramTypeProvider().getDiagram();        
+    	BpmnMemoryModel model = (ModelHandler.getModel(EcoreUtil.getURI(diagram)));
+        CustomGatewayUtil.addYesSequencFlow((SequenceFlow)clone.businessObject, model);
     }
     return clone;
   }
