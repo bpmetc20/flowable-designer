@@ -63,7 +63,7 @@ public abstract class BpmnProcessModelUpdater {
     if (businessObject instanceof SequenceFlow) {
     	Diagram diagram = featureProvider.getDiagramTypeProvider().getDiagram();        
     	BpmnMemoryModel model = (ModelHandler.getModel(EcoreUtil.getURI(diagram)));
-        CustomGatewayUtil.addYesSequencFlow((SequenceFlow)clone.businessObject, model);
+        CustomGatewayUtil.addSequencFlow((SequenceFlow)clone.businessObject, model);
     }
     return clone;
   }
