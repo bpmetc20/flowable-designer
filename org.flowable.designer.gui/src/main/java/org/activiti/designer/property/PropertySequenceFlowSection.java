@@ -13,7 +13,17 @@
  */
 package org.activiti.designer.property;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
+
+import javax.xml.crypto.Data;
+
 import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.designer.features.CreateEqualGatewayFeature;
+import org.activiti.designer.handlers.MyGatewayAreaDialog;
 import org.activiti.designer.util.TextUtil;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.apache.commons.lang.math.NumberUtils;
@@ -21,7 +31,14 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.graphiti.mm.pictograms.ConnectionDecorator;
 import org.eclipse.graphiti.mm.pictograms.FreeFormConnection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertyConstants;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -31,15 +48,26 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
   protected Text flowLabelWidthText;
   protected Text conditionExpressionText;
   protected Text skipExpressionText;
+  protected Button setConditionButton;
   
   @Override
   public void createFormControls(TabbedPropertySheetPage aTabbedPropertySheetPage) {
     flowLabelWidthText = createTextControl(false);
-    createLabel("Label width (50-500)", flowLabelWidthText);
+    //createLabel("Label width (50-500)", flowLabelWidthText);
     skipExpressionText = createTextControl(false);
-    createLabel("Skip expression", skipExpressionText);
+    setConditionButton = getWidgetFactory().createButton(formComposite, "Set Condition", SWT.PUSH);
+	setConditionButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_SELECTION));
+	setConditionButton.setVisible(false);
+	setConditionButton.addSelectionListener(new SelectionAdapter() {
+	@Override
+	public void widgetSelected(SelectionEvent evt) {
+			
+	}
+	});
+	
+    //createLabel("Skip expression", skipExpressionText);    
     conditionExpressionText = createTextControl(true);
-    createLabel("Condition", conditionExpressionText);
+    createLabel("Condition", conditionExpressionText);    
   }
 
   @Override
@@ -55,6 +83,24 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
       }
       
     } else if (control == conditionExpressionText) {
+      if (sequenceFlow.getSourceRef().contains(CreateEqualGatewayFeature.FEATURE_ID_KEY)) {
+    	  control.setEnabled(false);
+    	  skipExpressionText.setVisible(false);
+    	  flowLabelWidthText.setVisible(false);
+    	  if (sequenceFlow.getName().equals(CreateEqualGatewayFeature.FLOW_YES)) {
+    		setConditionButton.setVisible(true);
+    		setConditionButton.addSelectionListener(new SelectionAdapter() {
+    		@Override
+    		public void widgetSelected(SelectionEvent evt) {
+    			MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateEqualGatewayFeature.FLOW_YES, CreateEqualGatewayFeature.FEATURE_ID_KEY, 
+    					conditionExpressionText.getText());
+    		 	dialog.create();
+    			dialog.open();
+    			conditionExpressionText.setText(dialog.getConditionValue());    			
+    		}
+    		});
+    	  }
+      }
       return sequenceFlow.getConditionExpression();
       
     } else if (control == skipExpressionText) {
