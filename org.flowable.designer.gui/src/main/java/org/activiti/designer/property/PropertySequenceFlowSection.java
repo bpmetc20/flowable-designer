@@ -13,14 +13,6 @@
  */
 package org.activiti.designer.property;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
-
-import javax.xml.crypto.Data;
-
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.designer.features.CreateEqualGatewayFeature;
 import org.activiti.designer.handlers.MyGatewayAreaDialog;
@@ -34,8 +26,6 @@ import org.eclipse.graphiti.mm.pictograms.FreeFormConnection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
