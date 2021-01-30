@@ -59,7 +59,7 @@ public enum PluginImage {
   IMG_GATEWAY_EXCLUSIVE("gateway.exclusive", "type.gateway.exclusive.png"), //$NON-NLS-1$
   IMG_GATEWAY_INCLUSIVE("gateway.inclusive", "type.gateway.inclusive.png"), //$NON-NLS-1$
   IMG_GATEWAY_EVENT("gateway.event", "type.gateway.event.png"), //$NON-NLS-1$
-  IMG_GATEWAY_EQUAL("gateway.equal", "type.user.ftd.png"), //$NON-NLS-1$
+  IMG_GATEWAY_EQUAL("gateway.equal", "type.gateway.exclusive.equal.png"), //$NON-NLS-1s
   
 
   // Task image icons
