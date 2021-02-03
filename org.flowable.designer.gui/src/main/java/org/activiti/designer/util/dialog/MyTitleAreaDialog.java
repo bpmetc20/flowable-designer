@@ -1,4 +1,4 @@
-package org.activiti.designer.handlers;
+package org.activiti.designer.util.dialog;
 
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;

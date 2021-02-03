@@ -1,6 +1,7 @@
 package org.activiti.designer.handlers;
 
 import org.activiti.designer.eclipse.util.FileService;
+import org.activiti.designer.util.dialog.MyTitleAreaDialog;
 import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;

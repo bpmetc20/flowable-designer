@@ -3,7 +3,7 @@ package org.activiti.designer.util;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.designer.features.CreateEqualGatewayFeature;
-import org.activiti.designer.handlers.MyGatewayAreaDialog;
+import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
 import java.util.List;
 

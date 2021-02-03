@@ -1,21 +1,18 @@
-package org.activiti.designer.handlers;
+package org.activiti.designer.util.dialog;
 
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
-import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 
 public class MyGatewayAreaDialog extends TitleAreaDialog {
 

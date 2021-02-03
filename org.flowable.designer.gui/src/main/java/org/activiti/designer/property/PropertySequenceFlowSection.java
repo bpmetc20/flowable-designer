@@ -15,8 +15,8 @@ package org.activiti.designer.property;
 
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.designer.features.CreateEqualGatewayFeature;
-import org.activiti.designer.handlers.MyGatewayAreaDialog;
 import org.activiti.designer.util.TextUtil;
+import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.apache.commons.lang.math.NumberUtils;
 import org.eclipse.emf.common.util.EList;

@@ -1,4 +1,4 @@
-package org.activiti.designer.handlers;
+package org.activiti.designer.util.dialog;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
