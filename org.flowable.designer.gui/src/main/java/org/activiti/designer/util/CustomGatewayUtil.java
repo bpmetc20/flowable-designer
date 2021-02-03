@@ -37,8 +37,9 @@ public class CustomGatewayUtil {
 	}
 	
 	static private void yesSequenceFlowFlow(SequenceFlow sequenceFlow) {
-		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateEqualGatewayFeature.FLOW_YES, CreateEqualGatewayFeature.FEATURE_ID_KEY, 
-				CreateEqualGatewayFeature.CONDITION_EXPRESSION);
+		String[] strArray = new String[1];
+		strArray[0] = CreateEqualGatewayFeature.CONDITION_EXPRESSION;
+		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateEqualGatewayFeature.FLOW_YES, CreateEqualGatewayFeature.FEATURE_ID_KEY, strArray);
 	 	dialog.create();
 		dialog.open();
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());

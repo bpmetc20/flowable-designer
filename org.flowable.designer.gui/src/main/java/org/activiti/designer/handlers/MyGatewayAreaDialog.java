@@ -12,25 +12,26 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 public class MyGatewayAreaDialog extends TitleAreaDialog {
 
-    private Text conditionText;
+    private Combo conditionText;
     private String connectionLabel = ""; 
     private String gatewayLabel = ""; 
-    private String conditionValue = ""; 
+    private String[] conditionValues;     
     private String title = "Please add condition to your %s %s connection";
-    
+    private String selectedValue = "";
             
-    public MyGatewayAreaDialog(String connectionLabel, String getewayLabel, String conditionValue) {
+    public MyGatewayAreaDialog(String connectionLabel, String getewayLabel, String[] conditionValues) {
     	super(ActivitiPlugin.getShell());
         
     	this.connectionLabel = connectionLabel;
     	this.gatewayLabel = getewayLabel;
-    	this.conditionValue = conditionValue;
+    	this.conditionValues = conditionValues;
     }
 
     @Override
@@ -56,9 +57,11 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         dataDiagramName.grabExcessHorizontalSpace = true;
         dataDiagramName.horizontalAlignment = GridData.FILL;
 
-        conditionText = new Text(container, SWT.BORDER);
+        
+        conditionText = new Combo(container, SWT.READ_ONLY | SWT.BORDER);
         conditionText.setLayoutData(dataDiagramName);
-        conditionText.setText(conditionValue);
+        conditionText.setItems(conditionValues);
+        conditionText.select(0);
                        
         return area;
     }  
@@ -71,27 +74,16 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     @Override
     protected boolean isResizable() {
         return true;
-    }
-
-    // save content of the Text fields because they get disposed
-    // as soon as the Dialog closes
-    private boolean saveInput() {
-    	conditionValue = conditionText.getText();
-    	if (conditionValue.isEmpty()) {
-    		showMesaage("Condition value swhould not be empty!");
-    		return false;
-    	}    	
-    	return true;
-    }
+    }    
 
     @Override
     protected void okPressed() {
-        if (saveInput())
-        	super.okPressed();        
+    	selectedValue = conditionText.getText();
+        super.okPressed();        
     }
 
     public String getConditionValue() {
-        return conditionValue;
+        return selectedValue;
     }    
     
     private void showMesaage(String message) {
