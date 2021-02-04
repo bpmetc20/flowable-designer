@@ -285,7 +285,14 @@ public class ActivitiBPMNFeatureProvider extends DefaultFeatureProvider {
         new CreateScriptTaskFeature(this), new CreateServiceTaskFeature(this), new CreateMailTaskFeature(this),
         new CreateManualTaskFeature(this), new CreateReceiveTaskFeature(this), new CreateBusinessRuleTaskFeature(this), 
         new CreateParallelGatewayFeature(this), new CreateExclusiveGatewayFeature(this), new CreateInclusiveGatewayFeature(this), new CreateEventGatewayFeature(this),
+        
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Equals), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.NotEqual),
+        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Contains), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.DoesNotContain),
+        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Greater), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.GreaterThanOrEqualTo),
+        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.LessThan), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.LessThanOrEqualTo),
+        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.StartWith), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.EndWith),
+        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Range),
+        
         new CreateBoundaryTimerFeature(this), new CreateBoundaryErrorFeature(this), new CreateBoundaryMessageFeature(this), 
         new CreateBoundaryCancelFeature(this), new CreateBoundaryCompensateFeature(this), new CreateBoundarySignalFeature(this), 
         new CreateTimerCatchingEventFeature(this), new CreateSignalCatchingEventFeature(this), new CreateMessageCatchingEventFeature(this), 
