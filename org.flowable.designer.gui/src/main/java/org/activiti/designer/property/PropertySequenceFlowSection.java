@@ -14,7 +14,7 @@
 package org.activiti.designer.property;
 
 import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.designer.features.CreateEqualGatewayFeature;
+import org.activiti.designer.features.CreateCustomGatewayFeature;
 import org.activiti.designer.util.TextUtil;
 import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
@@ -73,18 +73,18 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
       }
       
     } else if (control == conditionExpressionText) {
-      if (sequenceFlow.getSourceRef().contains(CreateEqualGatewayFeature.FEATURE_ID_KEY)) {
+      if (sequenceFlow.getSourceRef().contains(CreateCustomGatewayFeature.FEATURE_ID_KEY)) {
     	  control.setEnabled(false);
     	  skipExpressionText.setVisible(false);
     	  flowLabelWidthText.setVisible(false);
-    	  if (sequenceFlow.getName().equals(CreateEqualGatewayFeature.FLOW_YES)) {
+    	  if (sequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES)) {
     		setConditionButton.setVisible(true);
     		setConditionButton.addSelectionListener(new SelectionAdapter() {
     		@Override
     		public void widgetSelected(SelectionEvent evt) {
     			String[] strArray = new String[1];
     			strArray[0] = conditionExpressionText.getText();    			
-    			MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateEqualGatewayFeature.FLOW_YES, CreateEqualGatewayFeature.FEATURE_ID_KEY, strArray);
+    			MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, CreateCustomGatewayFeature.FEATURE_ID_KEY, strArray);
     		 	dialog.create();
     			dialog.open();
     			conditionExpressionText.setText(dialog.getConditionValue());    			

@@ -74,7 +74,7 @@ import org.activiti.designer.features.CreateCustomServiceTaskFeature;
 import org.activiti.designer.features.CreateCustomUserTaskFeature;
 import org.activiti.designer.features.CreateEmbeddedSubProcessFeature;
 import org.activiti.designer.features.CreateEndEventFeature;
-import org.activiti.designer.features.CreateEqualGatewayFeature;
+import org.activiti.designer.features.CreateCustomGatewayFeature;
 import org.activiti.designer.features.CreateErrorEndEventFeature;
 import org.activiti.designer.features.CreateErrorStartEventFeature;
 import org.activiti.designer.features.CreateEventGatewayFeature;
@@ -265,13 +265,21 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
       newExclusiveGatewayButton.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
       data.getDomainSpecificContextButtons().add(newExclusiveGatewayButton);
       
-      CreateEqualGatewayFeature equalGatewayFeature = new CreateEqualGatewayFeature(getFeatureProvider());
+      CreateCustomGatewayFeature equalGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
+    		  CreateCustomGatewayFeature.GatewayType.Equals); 
       ContextButtonEntry newEqualGatewayButton = new ContextButtonEntry(equalGatewayFeature, taskContext);
       //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
       //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
       //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      
       data.getDomainSpecificContextButtons().add(newEqualGatewayButton);
+      
+      CreateCustomGatewayFeature nonequalGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
+    		  CreateCustomGatewayFeature.GatewayType.NotEqual); 
+      ContextButtonEntry newNotEqualGatewayButton = new ContextButtonEntry(nonequalGatewayFeature, taskContext);
+      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
+      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
+      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
+      data.getDomainSpecificContextButtons().add(newNotEqualGatewayButton);
 
       CreateEndEventFeature endFeature = new CreateEndEventFeature(getFeatureProvider());
       ContextButtonEntry newEndButton = new ContextButtonEntry(endFeature, taskContext);
