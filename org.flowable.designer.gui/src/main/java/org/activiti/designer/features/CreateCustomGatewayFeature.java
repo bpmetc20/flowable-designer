@@ -77,27 +77,27 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
 	  switch(getewayType) {
 	  	default:
 	  	case Equals:
-	  		return PluginImage.IMG_GATEWAY_EQUAL.getImageKey();
+	  		return PluginImage.IMG_GATEWAY_Equals.getImageKey();
 	  	case NotEqual:
-	  		return PluginImage.IMG_GATEWAY_NOTEQUAL.getImageKey();
+	  		return PluginImage.IMG_GATEWAY_NotEqual.getImageKey();
 	  	case Contains: 
-	  		return "ContainsGateway";
+	  		return PluginImage.IMG_GATEWAY_Contains.getImageKey();
 	  	case DoesNotContain:
-	  		return "DoesNotContainGateway";
+	  		return PluginImage.IMG_GATEWAY_Contains.getImageKey();
 	  	case Greater:
-	  		return "GreaterGateway";
+	  		return PluginImage.IMG_GATEWAY_DoesNotContain.getImageKey();
 	  	case GreaterThanOrEqualTo:
-	  		return "GreaterThanOrEqualToGateway";
+	  		return PluginImage.IMG_GATEWAY_GreaterThanOrEqualTo.getImageKey();
 	  	case LessThan:
-	  		return "LessThanGateway";
+	  		return PluginImage.IMG_GATEWAY_LessThan.getImageKey();
 	  	case LessThanOrEqualTo:
-	  		return "LessThanOrEqualToGateway";
+	  		return PluginImage.IMG_GATEWAY_LessThanOrEqualTo.getImageKey();
 	  	case StartWith:
-	  		return "StartWithGateway";
+	  		return PluginImage.IMG_GATEWAY_StartWith.getImageKey();
 	  	case EndWith:
-	  		return "EndWithGateway";
+	  		return PluginImage.IMG_GATEWAY_EndWith.getImageKey();
 	  	case Range:
-	  		return "RangeGateway";	  		  		
+	  		return PluginImage.IMG_GATEWAY_Range.getImageKey();	  		  		
 	  }
   }
 

@@ -60,10 +60,18 @@ public enum PluginImage {
   IMG_GATEWAY_INCLUSIVE("gateway.inclusive", "type.gateway.inclusive.png"), //$NON-NLS-1$
   IMG_GATEWAY_EVENT("gateway.event", "type.gateway.event.png"), //$NON-NLS-1$
   
-  IMG_GATEWAY_EQUAL("gateway.equal", "type.gateway.exclusive.equal.png"), //$NON-NLS-1s
-  IMG_GATEWAY_NOTEQUAL("gateway.notequal", "type.gateway.exclusive.notequal.png"), //$NON-NLS-1s
+  IMG_GATEWAY_Equals("gateway.equal", "type.gateway.equal.png"), //$NON-NLS-1s
+  IMG_GATEWAY_NotEqual("gateway.notequal", "type.gateway.notequal.png"), //$NON-NLS-1s  
+  IMG_GATEWAY_Contains("gateway.contains", "type.gateway.contains.png"), //$NON-NLS-1s
+  IMG_GATEWAY_DoesNotContain("gateway.doesnotcontain", "type.gateway.doesnotcontain.png"), //$NON-NLS-1s
+  IMG_GATEWAY_Greater("gateway.greater", "type.gateway.greater.png"), //$NON-NLS-1s
+  IMG_GATEWAY_GreaterThanOrEqualTo("gateway.greaterthanorequalto", "type.gateway.greaterthanorequalto.png"), //$NON-NLS-1s
+  IMG_GATEWAY_LessThan("gateway.lessthan", "type.gateway.lessthan.png"), //$NON-NLS-1s
+  IMG_GATEWAY_LessThanOrEqualTo("gateway.lessthanorequalto", "type.gateway.lessthanorequalto.png"), //$NON-NLS-1s
+  IMG_GATEWAY_StartWith("gateway.startwith", "type.gateway.startwith.png"), //$NON-NLS-1s
+  IMG_GATEWAY_EndWith("gateway.endwith", "type.gateway.endwith.png"), //$NON-NLS-1s
+  IMG_GATEWAY_Range("gateway.range", "type.gateway.range.png"), //$NON-NLS-1s
   
-
   // Task image icons
   IMG_FTD_USERTASK("ftdusertask", "type.user.ftd.png"), //$NON-NLS-1$
   IMG_USERTASK("usertask", "type.user.png"), //$NON-NLS-1$
