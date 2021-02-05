@@ -11,13 +11,14 @@ import org.activiti.bpmn.model.ExclusiveGateway;
 
 public class CustomGatewayUtil { 
 	static public void addSequencFlow(SequenceFlow sequenceFlow, BpmnMemoryModel model) {
-		if (sequenceFlow.getSourceRef().contains(CreateCustomGatewayFeature.FEATURE_ID_KEY)) {
-			if (sequenceFlow.getName().isEmpty()) {			
+		String customGatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(sequenceFlow.getSourceRef());	
+	    if (!customGatewayName.isEmpty()) {		
+	    	if (sequenceFlow.getName().isEmpty()) {			
 				FlowElement sourceElement = model.getFlowElement(sequenceFlow.getSourceRef());
 				ExclusiveGateway exclusiveGateway = (ExclusiveGateway)sourceElement; 
 				List<SequenceFlow> flows = exclusiveGateway.getOutgoingFlows();
 				if (flows.size() == 1) {
-					yesSequenceFlowFlow(sequenceFlow);
+					yesSequenceFlowFlow(sequenceFlow, customGatewayName);
 				} else {
 					boolean flowYes = false;
 					for (SequenceFlow outgoingSequenceFlow : exclusiveGateway.getOutgoingFlows()) {					
@@ -29,17 +30,17 @@ public class CustomGatewayUtil {
 					if (flowYes) {
 						sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_NO);
 					} else {
-						yesSequenceFlowFlow(sequenceFlow);				
+						yesSequenceFlowFlow(sequenceFlow, customGatewayName);				
 					}		
 				}
 			}			
 		}
 	}
 	
-	static private void yesSequenceFlowFlow(SequenceFlow sequenceFlow) {
+	static private void yesSequenceFlowFlow(SequenceFlow sequenceFlow, String customGatewayName) {
 		String[] strArray = new String[1];
 		strArray[0] = CreateCustomGatewayFeature.CONDITION_EXPRESSION;
-		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, CreateCustomGatewayFeature.FEATURE_ID_KEY, strArray);
+		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, strArray);
 	 	dialog.create();
 		dialog.open();
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());

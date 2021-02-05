@@ -13,7 +13,9 @@
  */
 package org.activiti.designer.features;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.activiti.bpmn.model.ExclusiveGateway;
@@ -22,8 +24,7 @@ import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
-
-  public static final String FEATURE_ID_KEY = "equalgateway";
+  
   public static final String CONDITION_EXPRESSION = "${A} = ${B}";
   public static final String FLOW_YES = "Yes";
   public static final String FLOW_NO = "No";
@@ -71,6 +72,15 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   
   public static String getFeatureName(GatewayType getewayType) {
 	  return nameMap.get(getewayType);
+  }
+  
+  public static String isCustomGatewayRef(String sourceRef) {
+	  List<String> gatewayNames = new ArrayList<String>(nameMap.values());
+	  for (String name : gatewayNames) {
+		  if (sourceRef.contains(name))
+			  return name;		 
+	  }
+	  return "";
   }
   
   public String getImageKey(GatewayType getewayType) {

@@ -73,7 +73,8 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
       }
       
     } else if (control == conditionExpressionText) {
-      if (sequenceFlow.getSourceRef().contains(CreateCustomGatewayFeature.FEATURE_ID_KEY)) {
+      String customGatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(sequenceFlow.getSourceRef());	
+      if (!customGatewayName.isEmpty()) {
     	  control.setEnabled(false);
     	  skipExpressionText.setVisible(false);
     	  flowLabelWidthText.setVisible(false);
@@ -84,7 +85,7 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
     		public void widgetSelected(SelectionEvent evt) {
     			String[] strArray = new String[1];
     			strArray[0] = conditionExpressionText.getText();    			
-    			MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, CreateCustomGatewayFeature.FEATURE_ID_KEY, strArray);
+    			MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, strArray);
     		 	dialog.create();
     			dialog.open();
     			conditionExpressionText.setText(dialog.getConditionValue());    			
