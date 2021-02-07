@@ -489,7 +489,7 @@
            id="processMenu"
            label="Processes">
           		<command
-                  	icon="icons/type.user.png"
+                  	icon="icons/type.user.ftd.png"
                   	commandId="org.activiti.designer.commands.NewProcessHandler"
                   	label="New"
                   	style="push"
@@ -500,7 +500,7 @@
             id="processMenu"
             label="Processes">
           		<command
-                  	icon="icons/type.user.png"
+                  	icon="icons/type.user.ftd.png"
                   	commandId="org.activiti.designer.commands.LoadProcessHandler"
                   	label="Load"
                   	style="push"
@@ -511,7 +511,7 @@
             id="processMenu"
             label="Processes">
           		<command
-                  	icon="icons/type.user.png"
+                  	icon="icons/type.user.ftd.png"
                   	commandId="org.activiti.designer.commands.SaveProcessHandler"
                   	label="Save"
                   	style="push"
@@ -522,7 +522,7 @@
             id="processMenu"
             label="Processes">
           		<command
-                  	icon="icons/type.user.png"
+                  	icon="icons/type.user.ftd.png"
                   	commandId="org.activiti.designer.commands.SaveAsProcessHandler"
                   	label="Save As..."
                   	style="push"
@@ -533,7 +533,7 @@
             id="processMenu"
             label="Processes">
           		<command
-                  	icon="icons/type.user.png"
+                  	icon="icons/type.user.ftd.png"
                   	commandId="org.activiti.designer.commands.SaveAllProcessHandler"
                   	label="Save All"
                   	style="push"
@@ -544,7 +544,7 @@
              id="processMenu"
              label="Processes">
             	<command
-                	icon="icons/type.user.png"
+                	icon="icons/type.user.ftd.png"
                 	commandId="org.activiti.designer.commands.DeleteProcessHandler"
                 	label="Delete"
                 	style="push"
