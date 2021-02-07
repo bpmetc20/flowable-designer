@@ -258,101 +258,48 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
       newUserTaskButton.setIconId(PluginImage.IMG_USERTASK.getImageKey());
       data.getDomainSpecificContextButtons().add(newUserTaskButton); //do not allow to create new task from diagram 
 
+      /*
       CreateExclusiveGatewayFeature exclusiveGatewayFeature = new CreateExclusiveGatewayFeature(getFeatureProvider());
       ContextButtonEntry newExclusiveGatewayButton = new ContextButtonEntry(exclusiveGatewayFeature, taskContext);
       newExclusiveGatewayButton.setText("new exclusive gateway"); //$NON-NLS-1$
       newExclusiveGatewayButton.setDescription("Create a new exclusive gateway"); //$NON-NLS-1$
       newExclusiveGatewayButton.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
       data.getDomainSpecificContextButtons().add(newExclusiveGatewayButton);
+      */
       
       CreateCustomGatewayFeature equalGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.Equals); 
-      ContextButtonEntry newEqualGatewayButton = new ContextButtonEntry(equalGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(newEqualGatewayButton);
       
       CreateCustomGatewayFeature nonequalGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.NotEqual); 
-      ContextButtonEntry newNotEqualGatewayButton = new ContextButtonEntry(nonequalGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(newNotEqualGatewayButton);
-
+      
       CreateCustomGatewayFeature containsGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.Contains); 
-      ContextButtonEntry newContainsGatewayButton = new ContextButtonEntry(containsGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(newContainsGatewayButton);
-      
+       
       CreateCustomGatewayFeature doesNotContainGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.DoesNotContain); 
-      ContextButtonEntry doesNotContainGatewayButton = new ContextButtonEntry(doesNotContainGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(doesNotContainGatewayButton);
-      
+        
       CreateCustomGatewayFeature greaterGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.Greater); 
-      ContextButtonEntry greaterGatewayButton = new ContextButtonEntry(greaterGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(greaterGatewayButton);
       
       CreateCustomGatewayFeature greaterThanOrEqualToGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.GreaterThanOrEqualTo); 
-      ContextButtonEntry greaterThanOrEqualToGatewayButton = new ContextButtonEntry(greaterThanOrEqualToGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(greaterThanOrEqualToGatewayButton);
       
       CreateCustomGatewayFeature lessThanGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.LessThan); 
-      ContextButtonEntry lessThanGatewayButton = new ContextButtonEntry(lessThanGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(lessThanGatewayButton);
       
       CreateCustomGatewayFeature lessThanOrEqualToGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.LessThanOrEqualTo); 
-      ContextButtonEntry lessThanOrEqualToGatewayButton = new ContextButtonEntry(lessThanOrEqualToGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(lessThanOrEqualToGatewayButton);
       
       CreateCustomGatewayFeature startWithGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.StartWith); 
-      ContextButtonEntry startWithGatewayButton = new ContextButtonEntry(startWithGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(startWithGatewayButton);
-    
+      
       CreateCustomGatewayFeature endWithGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.EndWith); 
-      ContextButtonEntry endWithGatewayButton = new ContextButtonEntry(endWithGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(endWithGatewayButton);
-    
+      
       CreateCustomGatewayFeature rangeGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.Range); 
-      ContextButtonEntry rangeGatewayButton = new ContextButtonEntry(rangeGatewayFeature, taskContext);
-      //equalGatewayFeature.setText("new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setDescription("Create a new equal gateway"); //$NON-NLS-1$
-      //equalGatewayFeature.setIconId(PluginImage.IMG_GATEWAY_EXCLUSIVE.getImageKey());
-      data.getDomainSpecificContextButtons().add(rangeGatewayButton);
-    
+      
       
       CreateEndEventFeature endFeature = new CreateEndEventFeature(getFeatureProvider());
       ContextButtonEntry newEndButton = new ContextButtonEntry(endFeature, taskContext);
@@ -443,7 +390,14 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
     if (bo instanceof Task) {
       addTaskButtons(editElementButton, (Task) bo, customContext);
     } else if (bo instanceof Gateway) {
-      addGatewayButtons(editElementButton, (Gateway) bo, customContext);
+      Gateway gateway = (Gateway)bo;	
+      String gatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(gateway.getId());
+      if (!gatewayName.isEmpty()) {
+    	  editElementButton.setText(gatewayName); //$NON-NLS-1$
+    	  editElementButton.setDescription("This is a custom Gateway!"); //$NON-NLS-1$        	
+    	  //disable changing element type for gateway	
+    	  //addGatewayButtons(editElementButton, (Gateway) bo, customContext);
+      }
     } else if (bo instanceof StartEvent) {
       addStartEventButtons(editElementButton, (StartEvent) bo, customContext);
     } else if (bo instanceof EndEvent) {

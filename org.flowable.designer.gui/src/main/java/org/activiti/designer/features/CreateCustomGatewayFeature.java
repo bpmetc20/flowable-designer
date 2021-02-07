@@ -69,7 +69,7 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   
   private static Map<GatewayType, String> createMap() {
 	    Map<GatewayType, String> myMap = new HashMap<GatewayType, String>();
-	    myMap.put(GatewayType.Equals, "EqualsGateway");
+	    myMap.put(GatewayType.Equals, "EqualGateway");
 	    myMap.put(GatewayType.NotEqual, "NotEqualGateway");
 	    myMap.put(GatewayType.Contains, "ContainsGateway");
 	    myMap.put(GatewayType.DoesNotContain, "DoesNotContainGateway");
@@ -90,7 +90,7 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   public static String isCustomGatewayRef(String sourceRef) {
 	  List<String> gatewayNames = new ArrayList<String>(nameMap.values());
 	  for (String name : gatewayNames) {
-		  if (sourceRef.contains(name))
+		  if (sourceRef.toLowerCase().contains(name.toLowerCase()))
 			  return name;		 
 	  }
 	  return "";
