@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.activiti.bpmn.model.ExclusiveGateway;
 import org.activiti.designer.PluginImage;
@@ -25,7 +27,18 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   
-  public static final String CONDITION_EXPRESSION = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_EQUAL = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_NOTEQUAL = "${A} != ${B}";
+  private static final String CONDITION_EXPRESSION_CONTAINS = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_NOTCONTAIN = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_GRATER = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_GRATEROR = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_LESS = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_LESSOR = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_STARTWITH = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_ENDWITH = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_RANGE = "${A} : ${B}";
+    
   public static final String FLOW_YES = "Yes";
   public static final String FLOW_NO = "No";
   
@@ -83,6 +96,39 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
 	  return "";
   }
   
+  public static GatewayType getKey(String value) {
+	  Stream<GatewayType> stream = keys(nameMap, value);
+	  return stream.collect(Collectors.toList()).get(0); 	  
+  }
+  
+  public static String getCondition(String value) {
+	  switch(getKey(value)) {
+	  	default:
+	  	case Equals:
+	  		return CONDITION_EXPRESSION_EQUAL;
+	  	case NotEqual:
+	  		return CONDITION_EXPRESSION_NOTEQUAL;
+	  	case Contains: 
+	  		return CONDITION_EXPRESSION_CONTAINS;
+	  	case DoesNotContain:
+	  		return CONDITION_EXPRESSION_NOTCONTAIN;
+	  	case Greater:
+	  		return CONDITION_EXPRESSION_GRATER;
+	  	case GreaterThanOrEqualTo:
+	  		return CONDITION_EXPRESSION_GRATEROR;
+	  	case LessThan:
+	  		return CONDITION_EXPRESSION_LESS;
+	  	case LessThanOrEqualTo:
+	  		return CONDITION_EXPRESSION_LESSOR;
+	  	case StartWith:
+	  		return CONDITION_EXPRESSION_STARTWITH;
+	  	case EndWith:
+	  		return CONDITION_EXPRESSION_ENDWITH;
+	  	case Range:
+	  		return CONDITION_EXPRESSION_RANGE;	  		  		
+	  }
+  }
+  
   public String getImageKey(GatewayType getewayType) {
 	  switch(getewayType) {
 	  	default:
@@ -126,5 +172,13 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   @Override
   protected String getFeatureIdKey() {
     return getFeatureName(getewayType);
+  }
+  
+  public static <K, V> Stream<K> keys(Map<K, V> map, V value) {
+	  return map
+	  .entrySet()
+	  .stream()
+	  .filter(entry -> value.equals(entry.getValue()))
+	  .map(Map.Entry::getKey);
   }
 }
