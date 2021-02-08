@@ -399,8 +399,10 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
     	  editElementButton.setText(feature.getGatewayName()); //$NON-NLS-1$
           editElementButton.setDescription("Change condition for YES connectiion flow"); //$NON-NLS-1$
           editElementButton.setIconId(feature.getImageKey());
-          addGatewayButtons(editElementButton, feature, customContext, 
-          		String.format("Launch Dialog to channge %s condition flow", feature.getGatewayName()), "Launch dialog", PluginImage.IMG_GATEWAY_EXCLUSIVE);      
+          if (feature.getYesFlow() != null) {
+        	  addGatewayButtons(editElementButton, feature, customContext, 
+        			  String.format("Launch Dialog to channge %s condition flow", feature.getGatewayName()), "Launch dialog", PluginImage.IMG_GATEWAY_EXCLUSIVE); 
+          }
       }
     } else if (bo instanceof StartEvent) {
       addStartEventButtons(editElementButton, (StartEvent) bo, customContext);

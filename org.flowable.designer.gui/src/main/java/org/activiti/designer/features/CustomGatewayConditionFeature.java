@@ -78,4 +78,16 @@ public class CustomGatewayConditionFeature extends AbstractCustomFeature {
 		return CreateCustomGatewayFeature.getImageKey(getGatewayType());
 	}
 	
+	public SequenceFlow getYesFlow() {
+		List<SequenceFlow> flows = exclusiveGateway.getOutgoingFlows();
+		for (SequenceFlow outgoingSequenceFlow : exclusiveGateway.getOutgoingFlows()) {					
+			if (!outgoingSequenceFlow.getName().isEmpty()) {
+				if (outgoingSequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES))
+					return outgoingSequenceFlow;
+			}
+		}
+		return null;
+		
+	}
+	
 }
