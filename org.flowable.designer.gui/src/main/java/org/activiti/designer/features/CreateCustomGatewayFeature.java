@@ -129,7 +129,7 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
 	  }
   }
   
-  public String getImageKey(GatewayType getewayType) {
+  public static String getImageKey(GatewayType getewayType) {
 	  switch(getewayType) {
 	  	default:
 	  	case Equals:
@@ -156,6 +156,8 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
 	  		return PluginImage.IMG_GATEWAY_Range.getImageKey();	  		  		
 	  }
   }
+  
+  
 
   public Object[] create(ICreateContext context) {
     ExclusiveGateway exclusiveGateway = new ExclusiveGateway();

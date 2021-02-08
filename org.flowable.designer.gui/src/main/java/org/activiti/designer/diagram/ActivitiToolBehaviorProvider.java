@@ -103,6 +103,7 @@ import org.activiti.designer.features.CreateTimerCatchingEventFeature;
 import org.activiti.designer.features.CreateTimerStartEventFeature;
 import org.activiti.designer.features.CreateTransactionFeature;
 import org.activiti.designer.features.CreateUserTaskFeature;
+import org.activiti.designer.features.CustomGatewayConditionFeature;
 import org.activiti.designer.features.DeletePoolFeature;
 import org.activiti.designer.features.LaunchCallActivityFeature;
 import org.activiti.designer.features.contextmenu.OpenCalledElementForCallActivity;
@@ -389,14 +390,17 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
 
     if (bo instanceof Task) {
       addTaskButtons(editElementButton, (Task) bo, customContext);
-    } else if (bo instanceof Gateway) {
-      Gateway gateway = (Gateway)bo;	
+    } else if (bo instanceof ExclusiveGateway) {
+      ExclusiveGateway gateway = (ExclusiveGateway)bo;	
       String gatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(gateway.getId());
-      if (!gatewayName.isEmpty()) {
-    	  editElementButton.setText(gatewayName); //$NON-NLS-1$
-    	  editElementButton.setDescription("This is a custom Gateway!"); //$NON-NLS-1$        	
-    	  //disable changing element type for gateway	
-    	  //addGatewayButtons(editElementButton, (Gateway) bo, customContext);
+      if (!gatewayName.isEmpty()) {    	      	
+    	  //disable changing element type for gateway
+    	  CustomGatewayConditionFeature feature = new CustomGatewayConditionFeature(getFeatureProvider(), gateway, gatewayName);
+    	  editElementButton.setText(feature.getGatewayName()); //$NON-NLS-1$
+          editElementButton.setDescription("Change condition for YES connectiion flow"); //$NON-NLS-1$
+          editElementButton.setIconId(feature.getImageKey());
+          addGatewayButtons(editElementButton, feature, customContext, 
+          		String.format("Launch Dialog to channge %s condition flow", feature.getGatewayName()), "Launch dialog", PluginImage.IMG_GATEWAY_EXCLUSIVE);      
       }
     } else if (bo instanceof StartEvent) {
       addStartEventButtons(editElementButton, (StartEvent) bo, customContext);
@@ -437,6 +441,15 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
       addContextButton(otherElementButton, new ChangeElementTypeFeature(getFeatureProvider(), ChangeElementTypeFeature.GATEWAY_EVENT), customContext, 
           "Change to event gateway", "Change to a event gateway", PluginImage.IMG_GATEWAY_EVENT);
     }
+  }
+  
+  private void addGatewayButtons(ContextButtonEntry button, CustomGatewayConditionFeature feature, CustomContext customContext, String text, String description,
+          PluginImage image) {
+    ContextButtonEntry newButton = new ContextButtonEntry(feature, customContext);
+    newButton.setText(text);
+    newButton.setDescription(description);
+    newButton.setIconId(image.getImageKey());
+    button.getContextButtonMenuEntries().add(newButton);
   }
 
   private void addStartEventButtons(ContextButtonEntry otherElementButton, StartEvent notStartEvent, CustomContext customContext) {
