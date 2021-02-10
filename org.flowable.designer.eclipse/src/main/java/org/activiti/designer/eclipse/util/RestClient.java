@@ -54,10 +54,11 @@ public class RestClient {
 	private static String modelXmlSourceUrl = ftdProxyRsPrefix + "models/%s/source.xml";
 	private static String modelDeploymentUrl = ftdProxyRsPrefix + "deployments/models/%s";
 	private static String usersUrl = ftdProxyRsPrefix + "users/data.designer";
-	private static String groupsUrl = ftdProxyRsPrefix + "groups/data.designer";
+	private static String groupsUrl = ftdProxyRsPrefix + "roles/data.designer";
 	private static String taskCategoriesUrl = ftdProxyRsPrefix + "taskcategories/data.designer";
 	private static String taskPropertiesByCategoryUrl = ftdProxyRsPrefix + "taskcategories/%s/taskproperties";
 	private static String taskPropertiesUrl = ftdProxyRsPrefix + "taskcategories/taskproperties";
+	private static String projectsParamNamesUrl = ftdProxyRsPrefix + "projects/paramnames/data.designer";
 	private static String user = "rest";
 	private static String password = "test";
 	
@@ -92,6 +93,10 @@ public class RestClient {
 		return getCollection(taskCategoriesUrl);
 	}
 	
+	public static Map<String, String> getProjectsParamNames() {
+		return getCollection(projectsParamNamesUrl);
+	}
+	
 	// returns a hash map with pairs where key is modelId and value is modelName
 	// for example
 	//	[
@@ -124,7 +129,6 @@ public class RestClient {
         return getList(taskPropertiesUrl, returnedType);
     }
 
-	
 	// returns model source in form of xml string by modelId
 	public static String getModelSource(String modelId) {
 		byte[] modelSource = getBytes(String.format(modelXmlSourceUrl, modelId));
