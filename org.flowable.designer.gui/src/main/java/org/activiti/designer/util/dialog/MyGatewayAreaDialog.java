@@ -29,14 +29,16 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     private String title = "Please add condition to your %s %s connection";
     private String selectedValue = "";
     private Map<String, String> projectParams;
+    String conditionExpression;
     private Text valueText; // store radio button selection
 
                 
     public MyGatewayAreaDialog(String connectionLabel, String getewayLabel, 
-    		String[] conditionValues, Map<String, String> projectParams) {
+    		String conditionExpression, Map<String, String> projectParams) {
     	super(ActivitiPlugin.getShell());
         
     	this.connectionLabel = connectionLabel;
+    	this.conditionExpression = conditionExpression;
     	this.gatewayLabel = getewayLabel;
     	this.projectParams = projectParams;
     }
@@ -96,7 +98,7 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
 
     @Override
     protected void okPressed() {
-    	selectedValue = conditionText.getText();
+    	selectedValue = String.format(conditionExpression, conditionText.getText());
         super.okPressed();        
     }
 

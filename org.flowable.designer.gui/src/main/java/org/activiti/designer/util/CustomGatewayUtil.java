@@ -39,9 +39,8 @@ public class CustomGatewayUtil {
 	}
 	
 	static private void yesSequenceFlowFlow(SequenceFlow sequenceFlow, String customGatewayName) {
-		String[] strArray = new String[1];
-		strArray[0] = CreateCustomGatewayFeature.getCondition(customGatewayName);
-		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, strArray,
+		String conditionExpression = CreateCustomGatewayFeature.getCondition(customGatewayName);
+		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, conditionExpression,
 				ActivitiPlugin.getProjectsParam(false));
 	 	dialog.create();
 		dialog.open();
