@@ -79,7 +79,8 @@ public class ActivitiPlugin extends AbstractUIPlugin {
   private static Map<String, String> taskCategories = null;
   private static Map<String, String> groups = null;
   private static Map<String, String> users = null;
-  private static List<UserTaskProperties> userTaskProperties;
+  private static List<UserTaskProperties> userTaskProperties = null;
+  private static Map<String, String> projectParams = null;
   
   ///////////////
 
@@ -122,7 +123,8 @@ public class ActivitiPlugin extends AbstractUIPlugin {
     getTaskCategories(true);
     getGroups(true);
     getUsers(true);
-    getTasksUserProperties(true);    	  
+    getTasksUserProperties(true); 
+    getProjectsParam(true);
   }
 
   @Override
@@ -257,6 +259,12 @@ public class ActivitiPlugin extends AbstractUIPlugin {
 	  if (reload)
 		  userTaskProperties = RestClient.getUserTaskProperties();
 	  return userTaskProperties;
+  } 
+  
+  public static Map<String, String> getProjectsParam(boolean reload) {
+	  if (reload)
+		  projectParams = RestClient.getProjectsParamNames();
+	  return projectParams;
   } 
   
   ////////////////////////////////
