@@ -27,16 +27,16 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   
-  private static final String CONDITION_EXPRESSION_EQUAL = "${A} = ${B}";
-  private static final String CONDITION_EXPRESSION_NOTEQUAL = "${A} != ${B}";
-  private static final String CONDITION_EXPRESSION_CONTAINS = "${A} = ${B}";
-  private static final String CONDITION_EXPRESSION_NOTCONTAIN = "${A} = ${B}";
-  private static final String CONDITION_EXPRESSION_GRATER = "${A} = ${B}";
-  private static final String CONDITION_EXPRESSION_GRATEROR = "${A} = ${B}";
-  private static final String CONDITION_EXPRESSION_LESS = "${A} = ${B}";
-  private static final String CONDITION_EXPRESSION_LESSOR = "${A} = ${B}";
-  private static final String CONDITION_EXPRESSION_STARTWITH = "${A} = ${B}";
-  private static final String CONDITION_EXPRESSION_ENDWITH = "${A} = ${B}";
+  private static final String CONDITION_EXPRESSION_EQUAL = "${%s} = '%s'";
+  private static final String CONDITION_EXPRESSION_NOTEQUAL = "${%s} != '%s'";
+  private static final String CONDITION_EXPRESSION_CONTAINS = "${%s}.includes('%s')";
+  private static final String CONDITION_EXPRESSION_NOTCONTAIN = "!${%s}.includes('%s')";
+  private static final String CONDITION_EXPRESSION_GRATER = "${%s} > '%s'";
+  private static final String CONDITION_EXPRESSION_GRATEROR = "${%s} >= '%s'";
+  private static final String CONDITION_EXPRESSION_LESS = "${%s} < '%s'";
+  private static final String CONDITION_EXPRESSION_LESSOR = "${%s} <= '%s'";
+  private static final String CONDITION_EXPRESSION_STARTWITH = "${%s}.startsWith('%s'}";
+  private static final String CONDITION_EXPRESSION_ENDWITH = "${%s}.endsWith('%s'}";
   private static final String CONDITION_EXPRESSION_RANGE = "${A} : ${B}";
     
   public static final String FLOW_YES = "Yes";

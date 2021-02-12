@@ -98,7 +98,9 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
 
     @Override
     protected void okPressed() {
-    	selectedValue = String.format(conditionExpression, conditionText.getText());
+    	String selectedParam = conditionText.getText();
+    	String paramValue = valueText.getText();
+    	selectedValue = String.format(conditionExpression, selectedParam, paramValue);
         super.okPressed();        
     }
 
