@@ -6,8 +6,11 @@ import org.eclipse.swt.widgets.Text;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
+import org.activiti.designer.PluginImage;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
+import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -25,21 +28,24 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
 
     private Combo conditionText;
     private String connectionLabel = ""; 
+    private GatewayType gatewayType;
     private String gatewayLabel = ""; 
     private String title = "Please add condition to your %s %s connection";
     private String selectedValue = "";
     private Map<String, String> projectParams;
     String conditionExpression;
     private Text valueText; // store radio button selection
+    private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
 
                 
-    public MyGatewayAreaDialog(String connectionLabel, String getewayLabel, 
+    public MyGatewayAreaDialog(String connectionLabel, String getewayLabel, GatewayType gatewayType,
     		String conditionExpression, Map<String, String> projectParams) {
     	super(ActivitiPlugin.getShell());
         
     	this.connectionLabel = connectionLabel;
     	this.conditionExpression = conditionExpression;
     	this.gatewayLabel = getewayLabel;
+    	this.gatewayType = gatewayType;
     	this.projectParams = projectParams;
     }
 
@@ -74,7 +80,7 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         conditionText.select(0);
         
         conditionText.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent event) {
+			public void widgetSelected(SelectionEvent event) {				
 				valueText.setText(projectParams.get(conditionText.getText()));		        
 			}
 		});
@@ -84,7 +90,7 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         valueText = new Text(container, SWT.BORDER);
                                
         return area;
-    }  
+    }    
     
     @Override
     protected void createButtonsForButtonBar(Composite parent) {    	
@@ -98,8 +104,25 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
 
     @Override
     protected void okPressed() {
-    	String selectedParam = conditionText.getText();
     	String paramValue = valueText.getText();
+    	if (paramValue.isEmpty()) {
+    		showMessage("Value Should be Empty!");
+    		return;
+    	}    		
+    	switch(gatewayType) {
+  			case Greater:			  		
+  			case GreaterThanOrEqualTo:			  		
+  			case LessThan:			  		
+  			case LessThanOrEqualTo:
+  				if (!isNumeric(paramValue)) {
+  					showMessage("Value Should be Numeric!");
+  					return; 
+  				}
+  				break;
+  			default:  	  			
+  				break;		
+    	}
+    	String selectedParam = conditionText.getText();
     	selectedValue = String.format(conditionExpression, selectedParam, paramValue);
         super.okPressed();        
     }
@@ -108,10 +131,17 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         return selectedValue;
     }    
     
-    private void showMesaage(String message) {
+    private void showMessage(String message) {
     	MessageBox messageBox = new MessageBox(ActivitiPlugin.getShell(), SWT.ICON_WARNING | SWT.OK);
     	messageBox.setText("Warning");
     	messageBox.setMessage(message);
     	messageBox.open();	
+    }
+    
+    public boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false; 
+        }
+        return pattern.matcher(strNum).matches();
     }
 }

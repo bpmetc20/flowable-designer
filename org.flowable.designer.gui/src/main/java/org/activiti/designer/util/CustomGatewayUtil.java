@@ -4,6 +4,7 @@ import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.features.CreateCustomGatewayFeature;
+import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
 import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
 import java.util.List;
@@ -40,8 +41,9 @@ public class CustomGatewayUtil {
 	
 	static private void yesSequenceFlowFlow(SequenceFlow sequenceFlow, String customGatewayName) {
 		String conditionExpression = CreateCustomGatewayFeature.getCondition(customGatewayName);
-		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, conditionExpression,
-				ActivitiPlugin.getProjectsParam(false));
+		GatewayType gatewayType = CreateCustomGatewayFeature.getKey(customGatewayName);
+		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, 
+				gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false));
 	 	dialog.create();
 		dialog.open();
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());

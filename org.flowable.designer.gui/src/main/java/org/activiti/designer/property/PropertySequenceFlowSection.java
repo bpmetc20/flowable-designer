@@ -16,6 +16,7 @@ package org.activiti.designer.property;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.features.CreateCustomGatewayFeature;
+import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
 import org.activiti.designer.util.TextUtil;
 import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
@@ -85,8 +86,9 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
     		@Override
     		public void widgetSelected(SelectionEvent evt) {
     			String conditionExpression = conditionExpressionText.getText();    			
+    			GatewayType gatewayType = CreateCustomGatewayFeature.getKey(customGatewayName);    			
     			MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, 
-    					conditionExpression, ActivitiPlugin.getProjectsParam(false));
+    					gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false));
     		 	dialog.create();
     			dialog.open();
     			conditionExpressionText.setText(dialog.getConditionValue());    			
