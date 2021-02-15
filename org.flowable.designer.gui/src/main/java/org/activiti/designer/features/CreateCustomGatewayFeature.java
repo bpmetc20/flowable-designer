@@ -37,7 +37,7 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   private static final String CONDITION_EXPRESSION_LESSOR = "${%s} <= '%s'";
   private static final String CONDITION_EXPRESSION_STARTWITH = "${%s}.startsWith('%s'}";
   private static final String CONDITION_EXPRESSION_ENDWITH = "${%s}.endsWith('%s'}";
-  private static final String CONDITION_EXPRESSION_RANGE = "${A} : ${B}";
+  private static final String CONDITION_EXPRESSION_RANGE = "${%s} >= '%s' && ${%s} <= '%s'" ;
     
   public static final String FLOW_YES = "Yes";
   public static final String FLOW_NO = "No";

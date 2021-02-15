@@ -146,6 +146,10 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
 	  		case DoesNotContain:
 	  			selectedValue = String.format(conditionExpression, getStringArray(paramValue), selectedParam);
 	  			break;
+	  		case Range:
+	  			List<String> items = Arrays.asList(paramValue.split("\\s*,\\s*"));
+	  			selectedValue = String.format(conditionExpression, selectedParam, items.get(0), selectedParam, items.get(1));
+	  			break;
 	  		default:
 	  			selectedValue = String.format(conditionExpression, selectedParam, paramValue);
 	  			break;	
@@ -176,14 +180,14 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
             return false; 
         }
         List<String> items = Arrays.asList(strRange.split("\\s*,\\s*"));
-        if (items.size() > 2)
+        if (items.size() != 2)
         	return false;
         
         for(String item : items) {
         	if (!isNumeric(item))					
         		return false;				
         }  
-        if (items.get(1).compareTo(items.get(0)) < 0) 
+        if (Integer.valueOf(items.get(1)) < Integer.valueOf(items.get(0))) 
         	return false;
         return true;
     }
