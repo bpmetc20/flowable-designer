@@ -29,8 +29,8 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   
   private static final String CONDITION_EXPRESSION_EQUAL = "${%s} = '%s'";
   private static final String CONDITION_EXPRESSION_NOTEQUAL = "${%s} != '%s'";
-  private static final String CONDITION_EXPRESSION_CONTAINS = "${%s}.includes('%s')";
-  private static final String CONDITION_EXPRESSION_NOTCONTAIN = "!${%s}.includes('%s')";
+  private static final String CONDITION_EXPRESSION_CONTAINS = "[%s].includes(${%s})";
+  private static final String CONDITION_EXPRESSION_NOTCONTAIN = "!${%s}.includes(${%s})";
   private static final String CONDITION_EXPRESSION_GRATER = "${%s} > '%s'";
   private static final String CONDITION_EXPRESSION_GRATEROR = "${%s} >= '%s'";
   private static final String CONDITION_EXPRESSION_LESS = "${%s} < '%s'";

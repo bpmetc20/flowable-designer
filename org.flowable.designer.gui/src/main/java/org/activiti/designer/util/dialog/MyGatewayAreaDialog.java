@@ -4,6 +4,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -86,8 +88,19 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
 		});
         
         Label valueLabel = new Label(container, SWT.NONE);
-        valueLabel.setText("Value");    
+        switch(gatewayType) {
+			case Contains:			  		
+			case DoesNotContain:			  		
+			case Range:
+				valueLabel.setText("Values separated by , ");				
+				break;
+			default: 
+				valueLabel.setText("Value");
+				break;		
+        }
         valueText = new Text(container, SWT.BORDER);
+        
+        
                                
         return area;
     }    
@@ -106,7 +119,7 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     protected void okPressed() {
     	String paramValue = valueText.getText();
     	if (paramValue.isEmpty()) {
-    		showMessage("Value Should be Empty!");
+    		showMessage("Value field should be Empty!");
     		return;
     	}    		
     	switch(gatewayType) {
@@ -123,8 +136,16 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
   				break;		
     	}
     	String selectedParam = conditionText.getText();
-    	selectedValue = String.format(conditionExpression, selectedParam, paramValue);
-        super.okPressed();        
+    	switch(gatewayType) {
+    		case Contains: 
+	  		case DoesNotContain:
+	  			selectedValue = String.format(conditionExpression, getStringArray(paramValue), selectedParam);
+	  			break;
+	  		default:
+	  			selectedValue = String.format(conditionExpression, selectedParam, paramValue);
+	  			break;	
+    	}
+    	super.okPressed();        
     }
 
     public String getConditionValue() {
@@ -143,5 +164,20 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
             return false; 
         }
         return pattern.matcher(strNum).matches();
+    }
+    
+    public String getStringArray(String paramValue) {	
+    	List<String> items = Arrays.asList(paramValue.split("\\s*,\\s*"));
+    	String out = "";
+    	
+    	int size = items.size();
+    	for (int i = 0; i < items.size(); i++) {
+    		out += ("'" + items.get(i) + "'"); 
+    		if (size > 1 && i < (size - 1))
+    			out += ", ";
+    	}
+    	
+    	return out;
+    	
     }
 }
