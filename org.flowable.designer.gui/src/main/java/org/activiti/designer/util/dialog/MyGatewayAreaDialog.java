@@ -90,18 +90,17 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         Label valueLabel = new Label(container, SWT.NONE);
         switch(gatewayType) {
 			case Contains:			  		
-			case DoesNotContain:			  		
-			case Range:
+			case DoesNotContain:		
 				valueLabel.setText("Values separated by , ");				
+				break;
+			case Range:
+				valueLabel.setText("Values range separated by , ");
 				break;
 			default: 
 				valueLabel.setText("Value");
 				break;		
         }
-        valueText = new Text(container, SWT.BORDER);
-        
-        
-                               
+        valueText = new Text(container, SWT.BORDER);     
         return area;
     }    
     
@@ -132,6 +131,12 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
   					return; 
   				}
   				break;
+  			case Range:
+  				if (!isNumericRange(paramValue)) {
+  					showMessage("Incorrect Numeric range!");
+  					return; 
+  				}
+  				break;
   			default:  	  			
   				break;		
     	}
@@ -159,14 +164,31 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	messageBox.open();	
     }
     
-    public boolean isNumeric(String strNum) {
+    private boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false; 
         }
         return pattern.matcher(strNum).matches();
     }
     
-    public String getStringArray(String paramValue) {	
+    private boolean isNumericRange(String strRange) {
+        if (strRange == null) {
+            return false; 
+        }
+        List<String> items = Arrays.asList(strRange.split("\\s*,\\s*"));
+        if (items.size() > 2)
+        	return false;
+        
+        for(String item : items) {
+        	if (!isNumeric(item))					
+        		return false;				
+        }  
+        if (items.get(1).compareTo(items.get(0)) < 0) 
+        	return false;
+        return true;
+    }
+    
+    private String getStringArray(String paramValue) {	
     	List<String> items = Arrays.asList(paramValue.split("\\s*,\\s*"));
     	String out = "";
     	
