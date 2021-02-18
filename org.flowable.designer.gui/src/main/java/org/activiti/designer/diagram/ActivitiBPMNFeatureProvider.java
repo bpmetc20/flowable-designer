@@ -20,6 +20,7 @@ import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.Artifact;
 import org.activiti.bpmn.model.BoundaryEvent;
 import org.activiti.bpmn.model.Event;
+import org.activiti.bpmn.model.ExclusiveGateway;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.Gateway;
 import org.activiti.bpmn.model.Lane;
@@ -55,6 +56,7 @@ import org.activiti.designer.controller.BoundaryEventShapeController;
 import org.activiti.designer.controller.BusinessObjectShapeController;
 import org.activiti.designer.controller.CallActivityShapeController;
 import org.activiti.designer.controller.CatchEventShapeController;
+import org.activiti.designer.controller.CustomGatewayShapeController;
 import org.activiti.designer.controller.EventBasedGatewayShapeController;
 import org.activiti.designer.controller.EventShapeController;
 import org.activiti.designer.controller.EventSubProcessShapeController;
@@ -186,6 +188,7 @@ public class ActivitiBPMNFeatureProvider extends DefaultFeatureProvider {
     shapeControllers.add(new EventShapeController(this));
     shapeControllers.add(new TaskShapeController(this));
     shapeControllers.add(new ExclusiveGatewayShapeController(this));
+    shapeControllers.add(new CustomGatewayShapeController(this));
     shapeControllers.add(new EventBasedGatewayShapeController(this));
     shapeControllers.add(new InclusiveGatewayShapeController(this));
     shapeControllers.add(new ParallelGatewayShapeController(this));
@@ -237,10 +240,29 @@ public class ActivitiBPMNFeatureProvider extends DefaultFeatureProvider {
   public BusinessObjectShapeController getShapeController(Object businessObject) {
     for (BusinessObjectShapeController controller : shapeControllers) {
       if (controller.canControlShapeFor(businessObject)) {
-        return controller;
+    	if (businessObject instanceof  ExclusiveGateway) {
+    		return getExclusiveGatewayShapeController((ExclusiveGateway)businessObject, controller);
+    	} else {
+    		return controller;
+    	}	
       }
     }
     throw new IllegalArgumentException("No controller can be found for object: " + businessObject);
+  }
+  
+  /**
+   * @return true, if a {@link BusinessObjectShapeController} is available for the given business object.
+   */
+  public BusinessObjectShapeController getExclusiveGatewayShapeController(ExclusiveGateway exclusiveGateway, BusinessObjectShapeController controller) {
+	  String gatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(exclusiveGateway.getId());
+	  if (gatewayName.isEmpty()) 
+		  return controller;
+	  for (BusinessObjectShapeController shepeController : shapeControllers) {
+		  if (shepeController instanceof CustomGatewayShapeController) {
+			  return shepeController;
+		  }
+      }
+	  return controller;
   }
   
   /**
