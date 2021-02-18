@@ -15,13 +15,14 @@ package org.activiti.designer.controller;
 
 import org.activiti.bpmn.model.ExclusiveGateway;
 import org.activiti.bpmn.model.Task;
+import org.activiti.designer.PluginImage;
 import org.activiti.designer.diagram.ActivitiBPMNFeatureProvider;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.activiti.designer.util.style.StyleUtil;
 import org.eclipse.graphiti.features.context.IAddContext;
 import org.eclipse.graphiti.mm.algorithms.Ellipse;
+import org.eclipse.graphiti.mm.algorithms.Image;
 import org.eclipse.graphiti.mm.algorithms.Polygon;
-import org.eclipse.graphiti.mm.algorithms.Polyline;
 import org.eclipse.graphiti.mm.pictograms.BoxRelativeAnchor;
 import org.eclipse.graphiti.mm.pictograms.ContainerShape;
 import org.eclipse.graphiti.mm.pictograms.Diagram;
@@ -37,10 +38,11 @@ import org.eclipse.graphiti.services.IPeCreateService;
  * @author Tijs Rademakers
  */
 public class CustomGatewayShapeController extends AbstractBusinessObjectShapeController {
-  
+  private static final int IMAGE_SIZE = 20;
+	
   public CustomGatewayShapeController(ActivitiBPMNFeatureProvider featureProvider) {
     super(featureProvider);
-  }
+  } 
 
   @Override
   public boolean canControlShapeFor(Object businessObject) {
@@ -61,10 +63,10 @@ public class CustomGatewayShapeController extends AbstractBusinessObjectShapeCon
     
     // check whether the context has a size (e.g. from a create feature)
     // otherwise define a default size for the shape
-    width = 40;
-    height = 40;
     //width = width <= 0 ? 40 : width;
     //height = height <= 0 ? 40 : height;
+    width = 40;
+    height = 40;
     
     int xy[] = new int[] { 0, 20, 20, 0, 40, 20, 20, 40, 0, 20 };
     final Polygon invisiblePolygon = gaService.createPolygon(containerShape, xy);
@@ -72,39 +74,39 @@ public class CustomGatewayShapeController extends AbstractBusinessObjectShapeCon
     invisiblePolygon.setLineVisible(false);
     gaService.setLocationAndSize(invisiblePolygon, context.getX(), context.getY(), width, height);
 
-    // create and set visible circle inside invisible circle
+    // create and set visible polygon inside invisible polygon
     Polygon polygon = gaService.createPolygon(invisiblePolygon, xy);
     polygon.setParentGraphicsAlgorithm(invisiblePolygon);
     polygon.setStyle(StyleUtil.getStyleForEvent(diagram));
     gaService.setLocationAndSize(polygon, 0, 0, width, height);
-    
-    Shape shape = peCreateService.createShape(containerShape, false);
-      
-    Polyline polyline = gaService.createPolyline(shape, new int[] { width - 10, 10, 10, height - 10 });
-    polyline.setLineWidth(5);
-    polyline.setStyle(StyleUtil.getStyleForEvent(diagram));
-    
-    shape = peCreateService.createShape(containerShape, false);
-    polyline = gaService.createPolyline(shape, new int[] { 10, 10, width - 10, height - 10});
-    polyline.setLineWidth(5);
-    polyline.setStyle(StyleUtil.getStyleForEvent(diagram));
 
+    final Shape shape = peCreateService.createShape(containerShape, false);
+    
+    //ExclusiveGateway exclusiveGatewa = (ExclusiveGateway)businessObject;
+    //GatewayType gatewayType = CreateCustomGatewayFeature.getKey(exclusiveGatewa.getId());
+    
+    final Image image = gaService.createImage(shape, PluginImage.IMG_GATEWAY_Equals.getImageKey());
+    image.setWidth(IMAGE_SIZE);
+    image.setHeight(IMAGE_SIZE);
+
+    gaService.setLocationAndSize(image, (width - IMAGE_SIZE) / 2, (height - IMAGE_SIZE) / 2, IMAGE_SIZE, IMAGE_SIZE);
+    
     // add a chopbox anchor to the shape
     peCreateService.createChopboxAnchor(containerShape);
-    BoxRelativeAnchor boxAnchor = peCreateService.createBoxRelativeAnchor(containerShape);
+    final BoxRelativeAnchor boxAnchor = peCreateService.createBoxRelativeAnchor(containerShape);
     boxAnchor.setRelativeWidth(0.51);
     boxAnchor.setRelativeHeight(0.10);
     boxAnchor.setReferencedGraphicsAlgorithm(polygon);
     Ellipse ellipse = ActivitiUiUtil.createInvisibleEllipse(boxAnchor, gaService);
     gaService.setLocationAndSize(ellipse, 0, 0, 0, 0);
-
+    
     // add a another chopbox anchor to the shape
     peCreateService.createChopboxAnchor(containerShape);
-    boxAnchor = peCreateService.createBoxRelativeAnchor(containerShape);
-    boxAnchor.setRelativeWidth(0.51);
-    boxAnchor.setRelativeHeight(0.93);
-    boxAnchor.setReferencedGraphicsAlgorithm(polygon);
-    ellipse = ActivitiUiUtil.createInvisibleEllipse(boxAnchor, gaService);
+    final BoxRelativeAnchor boxAnchor2 = peCreateService.createBoxRelativeAnchor(containerShape);
+    boxAnchor2.setRelativeWidth(0.51);
+    boxAnchor2.setRelativeHeight(0.93);
+    boxAnchor2.setReferencedGraphicsAlgorithm(polygon);
+    ellipse = ActivitiUiUtil.createInvisibleEllipse(boxAnchor2, gaService);
     gaService.setLocationAndSize(ellipse, 0, 0, 0, 0);
 
     return containerShape;
