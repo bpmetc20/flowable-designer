@@ -168,7 +168,8 @@ public final class ExtensionUtil {
                             try {
                               DefaultPaletteCustomizer DefaultPaletteCustomizer = (DefaultPaletteCustomizer) clazz.newInstance();
                               // Add this DefaultPaletteCustomizer to the result
-                              result.addAll(DefaultPaletteCustomizer.disablePaletteEntries());
+                              //do not remove any elements by extension lib 
+                              //result.addAll(DefaultPaletteCustomizer.disablePaletteEntries());
                             } catch (Exception e) {
                               e.printStackTrace();
                             }
