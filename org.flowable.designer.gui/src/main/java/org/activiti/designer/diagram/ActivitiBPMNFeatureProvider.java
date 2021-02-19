@@ -307,8 +307,7 @@ public class ActivitiBPMNFeatureProvider extends DefaultFeatureProvider {
         new CreateScriptTaskFeature(this), new CreateServiceTaskFeature(this), new CreateMailTaskFeature(this),
         new CreateManualTaskFeature(this), new CreateReceiveTaskFeature(this), new CreateBusinessRuleTaskFeature(this), 
              
-        //Exclusive Gateways
-        //new CreateExclusiveGatewayFeature(this),
+        //Custom Gateways
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Equals), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.NotEqual),
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Contains), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.DoesNotContain),
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Greater), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.GreaterThanOrEqualTo),
@@ -316,7 +315,9 @@ public class ActivitiBPMNFeatureProvider extends DefaultFeatureProvider {
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.StartWith), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.EndWith),
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Range),
         
-        //new CreateParallelGatewayFeature(this), new CreateInclusiveGatewayFeature(this), new CreateEventGatewayFeature(this),
+        //Standard Gateways
+        new CreateParallelGatewayFeature(this), new CreateInclusiveGatewayFeature(this), new CreateEventGatewayFeature(this), new CreateExclusiveGatewayFeature(this),
+        
         /////////////////////////////////
         
         new CreateBoundaryTimerFeature(this), new CreateBoundaryErrorFeature(this), new CreateBoundaryMessageFeature(this), 
