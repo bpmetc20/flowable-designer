@@ -17,6 +17,8 @@ import org.activiti.bpmn.model.ExclusiveGateway;
 import org.activiti.bpmn.model.Task;
 import org.activiti.designer.PluginImage;
 import org.activiti.designer.diagram.ActivitiBPMNFeatureProvider;
+import org.activiti.designer.features.CreateCustomGatewayFeature;
+import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.activiti.designer.util.style.StyleUtil;
 import org.eclipse.graphiti.features.context.IAddContext;
@@ -82,10 +84,10 @@ public class CustomGatewayShapeController extends AbstractBusinessObjectShapeCon
 
     final Shape shape = peCreateService.createShape(containerShape, false);
     
-    //ExclusiveGateway exclusiveGatewa = (ExclusiveGateway)businessObject;
-    //GatewayType gatewayType = CreateCustomGatewayFeature.getKey(exclusiveGatewa.getId());
-    
-    final Image image = gaService.createImage(shape, PluginImage.IMG_GATEWAY_Equals.getImageKey());
+    ExclusiveGateway exclusiveGatewa = (ExclusiveGateway)businessObject;
+    String getewayName = CreateCustomGatewayFeature.isCustomGatewayRef(exclusiveGatewa.getId());
+    GatewayType gatewayType = CreateCustomGatewayFeature.getKey(getewayName);    
+    final Image image = gaService.createImage(shape, CreateCustomGatewayFeature.getImageKey(gatewayType));
     image.setWidth(IMAGE_SIZE);
     image.setHeight(IMAGE_SIZE);
 
