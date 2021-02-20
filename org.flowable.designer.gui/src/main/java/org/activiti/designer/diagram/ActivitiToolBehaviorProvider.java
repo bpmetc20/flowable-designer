@@ -111,6 +111,7 @@ import org.activiti.designer.integration.annotation.TaskName;
 import org.activiti.designer.integration.annotation.TaskNames;
 import org.activiti.designer.integration.palette.PaletteEntry;
 import org.activiti.designer.util.ActivitiConstants;
+import org.activiti.designer.util.DesignerExtensionUtil;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.activiti.designer.util.extension.CustomServiceTaskContext;
 import org.activiti.designer.util.extension.CustomUserTaskContext;
@@ -1058,7 +1059,9 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
    */
   private void pruneDisabledPaletteEntries(final IProject project, final IPaletteCompartmentEntry entry) {
 
-    final Set<PaletteEntry> disabledPaletteEntries = ExtensionUtil.getDisabledPaletteEntries(project);
+    //final Set<PaletteEntry> disabledPaletteEntries = ExtensionUtil.getDisabledPaletteEntries(project);
+	final Set<PaletteEntry> disabledPaletteEntries = DesignerExtensionUtil.getDisabledPaletteEntries();
+		  
 
     if (!disabledPaletteEntries.isEmpty()) {
 

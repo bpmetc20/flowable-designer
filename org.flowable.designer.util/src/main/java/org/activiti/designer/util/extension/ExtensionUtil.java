@@ -166,7 +166,8 @@ public final class ExtensionUtil {
 
                           if (DefaultPaletteCustomizer.class.isAssignableFrom(clazz)) {
                             try {
-                              DefaultPaletteCustomizer DefaultPaletteCustomizer = (DefaultPaletteCustomizer) clazz.newInstance();
+                              //result.addAll(DesignerExtensionUtil.disablePaletteEntries());
+                              //DefaultPaletteCustomizer DefaultPaletteCustomizer = (DefaultPaletteCustomizer) clazz.newInstance();
                               // Add this DefaultPaletteCustomizer to the result
                               //do not remove any elements by extension lib 
                               //result.addAll(DefaultPaletteCustomizer.disablePaletteEntries());
