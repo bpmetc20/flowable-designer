@@ -19,6 +19,7 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -100,7 +101,8 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
 				valueLabel.setText("Value");
 				break;		
         }
-        valueText = new Text(container, SWT.BORDER);     
+        valueText = new Text(container, SWT.BORDER);           
+        valueText.setLayoutData(gridData);
         return area;
     }    
     
@@ -110,51 +112,19 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     }
 
     @Override
-    protected boolean isResizable() {
+    protected boolean isResizable() {    	
         return true;
-    }    
+    }   
+    
+    @Override
+    protected boolean canHandleShellCloseEvent() {
+    	 return validateInput();
+    }
 
     @Override
     protected void okPressed() {
-    	String paramValue = valueText.getText();
-    	if (paramValue.isEmpty()) {
-    		showMessage("Value field should be Empty!");
-    		return;
-    	}    		
-    	switch(gatewayType) {
-  			case Greater:			  		
-  			case GreaterThanOrEqualTo:			  		
-  			case LessThan:			  		
-  			case LessThanOrEqualTo:
-  				if (!isNumeric(paramValue)) {
-  					showMessage("Value Should be Numeric!");
-  					return; 
-  				}
-  				break;
-  			case Range:
-  				if (!isNumericRange(paramValue)) {
-  					showMessage("Incorrect Numeric range!");
-  					return; 
-  				}
-  				break;
-  			default:  	  			
-  				break;		
-    	}
-    	String selectedParam = conditionText.getText();
-    	switch(gatewayType) {
-    		case Contains: 
-	  		case DoesNotContain:
-	  			selectedValue = String.format(conditionExpression, getStringArray(paramValue), selectedParam);
-	  			break;
-	  		case Range:
-	  			List<String> items = Arrays.asList(paramValue.split("\\s*,\\s*"));
-	  			selectedValue = String.format(conditionExpression, selectedParam, items.get(0), selectedParam, items.get(1));
-	  			break;
-	  		default:
-	  			selectedValue = String.format(conditionExpression, selectedParam, paramValue);
-	  			break;	
-    	}
-    	super.okPressed();        
+    	if (validateInput())
+    		super.okPressed();        
     }
 
     public String getConditionValue() {
@@ -205,5 +175,47 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	
     	return out;
     	
+    }
+    
+    private boolean validateInput() {
+    	String paramValue = valueText.getText();
+    	if (paramValue.isEmpty()) {
+    		showMessage("Value field should be Empty!");
+    		return false;
+    	}    		
+    	switch(gatewayType) {
+  			case Greater:			  		
+  			case GreaterThanOrEqualTo:			  		
+  			case LessThan:			  		
+  			case LessThanOrEqualTo:
+  				if (!isNumeric(paramValue)) {
+  					showMessage("Value Should be Numeric!");
+  					return false;
+  				}
+  				break;
+  			case Range:
+  				if (!isNumericRange(paramValue)) {
+  					showMessage("Incorrect Numeric range!");
+  					return false; 
+  				}
+  				break;
+  			default:  	  			
+  				break;		
+    	}
+    	String selectedParam = conditionText.getText();
+    	switch(gatewayType) {
+    		case Contains: 
+	  		case DoesNotContain:
+	  			selectedValue = String.format(conditionExpression, getStringArray(paramValue), selectedParam);
+	  			break;
+	  		case Range:
+	  			List<String> items = Arrays.asList(paramValue.split("\\s*,\\s*"));
+	  			selectedValue = String.format(conditionExpression, selectedParam, items.get(0), selectedParam, items.get(1));
+	  			break;
+	  		default:
+	  			selectedValue = String.format(conditionExpression, selectedParam, paramValue);
+	  			break;	
+    	}
+    	return true;
     }
 }
