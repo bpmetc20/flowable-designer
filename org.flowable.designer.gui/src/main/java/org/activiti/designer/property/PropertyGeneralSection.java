@@ -53,6 +53,7 @@ public class PropertyGeneralSection extends ActivitiPropertySection implements I
   public void createFormControls(TabbedPropertySheetPage aTabbedPropertySheetPage) {
     idText = createTextControl(false);
     createLabel("Id", idText);
+    idText.setEnabled(false);
     languages = PreferencesUtil.getStringArray(Preferences.ACTIVITI_LANGUAGES, ActivitiPlugin.getDefault());
     if (languages != null && languages.size() > 0) {
     	for (String language : languages) {
@@ -62,6 +63,7 @@ public class PropertyGeneralSection extends ActivitiPropertySection implements I
     	}
     } else {
 	    nameText = createTextControl(false);
+	    nameText.setEnabled(false);
 	    createLabel("Name", nameText);
     }
   }
