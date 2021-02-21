@@ -85,10 +85,10 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
     		setConditionButton.addSelectionListener(new SelectionAdapter() {
     		@Override
     		public void widgetSelected(SelectionEvent evt) {
-    			String conditionExpression = conditionExpressionText.getText();    			
-    			GatewayType gatewayType = CreateCustomGatewayFeature.getKey(customGatewayName);    			
-    			MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, 
-    					gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false));
+    			String conditionExpression = CreateCustomGatewayFeature.getCondition(customGatewayName);    			
+    			GatewayType gatewayType = CreateCustomGatewayFeature.getKey(customGatewayName);
+                MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, 
+    					gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false), conditionExpressionText.getText());
     		 	dialog.create();
     			dialog.open();
     			conditionExpressionText.setText(dialog.getConditionValue());    			

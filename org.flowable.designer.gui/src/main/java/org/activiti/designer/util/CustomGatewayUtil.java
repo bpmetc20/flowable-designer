@@ -43,7 +43,7 @@ public class CustomGatewayUtil {
 		String conditionExpression = CreateCustomGatewayFeature.getCondition(customGatewayName);
 		GatewayType gatewayType = CreateCustomGatewayFeature.getKey(customGatewayName);
 		MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, 
-				gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false));
+				gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false), sequenceFlow.getConditionExpression());
 	 	dialog.create();
 		dialog.open();
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());

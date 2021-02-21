@@ -4,13 +4,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 
+import java.awt.Image;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.activiti.designer.PluginImage;
+
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
 import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -19,8 +21,6 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -38,11 +38,14 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     private Map<String, String> projectParams;
     String conditionExpression;
     private Text valueText; // store radio button selection
-    private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
-
-                
+    private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");    
+    
+    private String retrievedValue = "";   
+    private String retrievedParam = "";
+    
+    
     public MyGatewayAreaDialog(String connectionLabel, String getewayLabel, GatewayType gatewayType,
-    		String conditionExpression, Map<String, String> projectParams) {
+    		String conditionExpression, Map<String, String> projectParams, String assignedValue) {
     	super(ActivitiPlugin.getShell());
         
     	this.connectionLabel = connectionLabel;
@@ -50,6 +53,8 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	this.gatewayLabel = getewayLabel;
     	this.gatewayType = gatewayType;
     	this.projectParams = projectParams;
+    	if (assignedValue != null && !assignedValue.isEmpty())
+    		parseAssignedValue(assignedValue);
     }
 
     @Override
@@ -57,7 +62,9 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         super.create();
         
         setTitle(String.format(title, gatewayLabel, connectionLabel));
-        setMessage("", IMessageProvider.INFORMATION);                       
+        setMessage("", IMessageProvider.INFORMATION); 
+        //org.eclipse.swt.graphics.Image image = org.activiti.designer.Activator.getImage(PluginImage.IMG_GATEWAY_NotEqual);
+        //setTitleImage(image);
     }
 
     @Override
@@ -80,7 +87,10 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         conditionText.setLayoutData(gridData);
         Set<String> keys = projectParams.keySet();
         conditionText.setItems(keys.toArray(new String[keys.size()]));
-        conditionText.select(0);
+        if (retrievedParam.isEmpty())
+        	conditionText.select(0);
+        else
+        	conditionText.setText(retrievedParam);
         
         conditionText.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent event) {				
@@ -103,6 +113,8 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         }
         valueText = new Text(container, SWT.BORDER);           
         valueText.setLayoutData(gridData);
+        if (!retrievedValue.isEmpty())
+        	valueText.setText(retrievedValue);
         return area;
     }    
     
@@ -217,5 +229,19 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
 	  			break;	
     	}
     	return true;
+    }
+    
+    private void parseAssignedValue(String assignedValue) {
+    	Pattern pBetweenQuotes = Pattern.compile("\\'.*?\\'");
+    	Pattern pBetweenBracket = Pattern.compile("\\{.*?\\}");
+    	
+    	Matcher m = pBetweenQuotes.matcher(assignedValue);
+    	if (m.find()) 
+    		retrievedValue = (String)m.group().subSequence(1, m.group().length() - 1);
+    	
+    	m = pBetweenBracket.matcher(assignedValue);
+    	if (m.find())
+    		retrievedParam = (String)m.group().subSequence(1, m.group().length() - 1);
+    	
     }
 }
