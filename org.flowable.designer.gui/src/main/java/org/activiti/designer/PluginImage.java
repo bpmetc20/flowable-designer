@@ -63,14 +63,27 @@ public enum PluginImage {
   IMG_GATEWAY_Equals("gateway.equal", "type.gateway.equal.png"), //$NON-NLS-1s
   IMG_GATEWAY_NotEqual("gateway.notequal", "type.gateway.notequal.png"), //$NON-NLS-1s  
   IMG_GATEWAY_Contains("gateway.contains", "type.gateway.contains.png"), //$NON-NLS-1s
-  IMG_GATEWAY_DoesNotContain("gateway.doesnotcontain", "type.gateway.doesnotcontain.png"), //$NON-NLS-1s
+  IMG_GATEWAY_ContainsNot("gateway.containsnot", "type.gateway.containsnot.png"), //$NON-NLS-1s
   IMG_GATEWAY_Greater("gateway.greater", "type.gateway.greater.png"), //$NON-NLS-1s
-  IMG_GATEWAY_GreaterThanOrEqualTo("gateway.greaterthanorequalto", "type.gateway.greaterthanorequalto.png"), //$NON-NLS-1s
-  IMG_GATEWAY_LessThan("gateway.lessthan", "type.gateway.lessthan.png"), //$NON-NLS-1s
-  IMG_GATEWAY_LessThanOrEqualTo("gateway.lessthanorequalto", "type.gateway.lessthanorequalto.png"), //$NON-NLS-1s
+  IMG_GATEWAY_GreaterEqual("gateway.greaterequal", "type.gateway.greaterequal.png"), //$NON-NLS-1s
+  IMG_GATEWAY_Less("gateway.less", "type.gateway.less.png"), //$NON-NLS-1s
+  IMG_GATEWAY_LessEqual("gateway.lessequal", "type.gateway.lessequal.png"), //$NON-NLS-1s
   IMG_GATEWAY_StartWith("gateway.startwith", "type.gateway.startwith.png"), //$NON-NLS-1s
   IMG_GATEWAY_EndWith("gateway.endwith", "type.gateway.endwith.png"), //$NON-NLS-1s
   IMG_GATEWAY_Range("gateway.range", "type.gateway.range.png"), //$NON-NLS-1s
+  
+  IMG_GATEWAY_EqualsLarge("gateway.equal.large", "type.gateway.equal.large.png"), //$NON-NLS-1s
+  IMG_GATEWAY_NotEqualLarge("gateway.notequal.large", "type.gateway.notequal.large.png"), //$NON-NLS-1s  
+  IMG_GATEWAY_ContainsLarge("gateway.contains.large", "type.gateway.contains..largepng"), //$NON-NLS-1s
+  IMG_GATEWAY_ContainsNotLarge("gateway.containsnot.large", "type.gateway.containsnot.large.png"), //$NON-NLS-1s
+  IMG_GATEWAY_GreaterLarge("gateway.greater.large", "type.gateway.greater.large.png"), //$NON-NLS-1s
+  IMG_GATEWAY_GreaterEqualLarge("gateway.greaterequal.large", "type.gateway.greaterequal.large.png"), //$NON-NLS-1s
+  IMG_GATEWAY_LessLarge("gateway.less.large", "type.gateway.less.large.png"), //$NON-NLS-1s
+  IMG_GATEWAY_LessEqualLarge("gateway.lessequal.large", "type.gateway.lessequal.large.png"), //$NON-NLS-1s
+  IMG_GATEWAY_StartWithLarge("gateway.startwith", "type.gateway.startwith.png"), //$NON-NLS-1s
+  IMG_GATEWAY_EndWithLarge("gateway.endwith.large", "type.gateway.endwith.large.png"), //$NON-NLS-1s
+  IMG_GATEWAY_RangeLarge("gateway.range.large", "type.gateway.range.large.png"), //$NON-NLS-1s
+  
   
   // Task image icons
   IMG_FTD_USERTASK("ftdusertask", "type.user.ftd.png"), //$NON-NLS-1$

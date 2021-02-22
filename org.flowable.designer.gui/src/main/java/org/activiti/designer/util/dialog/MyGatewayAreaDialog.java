@@ -101,7 +101,7 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
         Label valueLabel = new Label(container, SWT.NONE);
         switch(gatewayType) {
 			case Contains:			  		
-			case DoesNotContain:		
+			case ContainsNot:		
 				valueLabel.setText("Values separated by , ");				
 				break;
 			case Range:
@@ -197,9 +197,9 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	}    		
     	switch(gatewayType) {
   			case Greater:			  		
-  			case GreaterThanOrEqualTo:			  		
-  			case LessThan:			  		
-  			case LessThanOrEqualTo:
+  			case GreaterEqual:			  		
+  			case Less:			  		
+  			case LessEqual:
   				if (!isNumeric(paramValue)) {
   					showMessage("Value Should be Numeric!");
   					return false;
@@ -217,7 +217,7 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	String selectedParam = conditionText.getText();
     	switch(gatewayType) {
     		case Contains: 
-	  		case DoesNotContain:
+	  		case ContainsNot:
 	  			selectedValue = String.format(conditionExpression, getStringArray(paramValue), selectedParam);
 	  			break;
 	  		case Range:

@@ -279,19 +279,19 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
     		  CreateCustomGatewayFeature.GatewayType.Contains); 
        
       CreateCustomGatewayFeature doesNotContainGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
-    		  CreateCustomGatewayFeature.GatewayType.DoesNotContain); 
+    		  CreateCustomGatewayFeature.GatewayType.ContainsNot); 
         
       CreateCustomGatewayFeature greaterGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.Greater); 
       
       CreateCustomGatewayFeature greaterThanOrEqualToGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
-    		  CreateCustomGatewayFeature.GatewayType.GreaterThanOrEqualTo); 
+    		  CreateCustomGatewayFeature.GatewayType.GreaterEqual); 
       
       CreateCustomGatewayFeature lessThanGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
-    		  CreateCustomGatewayFeature.GatewayType.LessThan); 
+    		  CreateCustomGatewayFeature.GatewayType.Less); 
       
       CreateCustomGatewayFeature lessThanOrEqualToGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
-    		  CreateCustomGatewayFeature.GatewayType.LessThanOrEqualTo); 
+    		  CreateCustomGatewayFeature.GatewayType.LessEqual); 
       
       CreateCustomGatewayFeature startWithGatewayFeature = new CreateCustomGatewayFeature(getFeatureProvider(), 
     		  CreateCustomGatewayFeature.GatewayType.StartWith); 

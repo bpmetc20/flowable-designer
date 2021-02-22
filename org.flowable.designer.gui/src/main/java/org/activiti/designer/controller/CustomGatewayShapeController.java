@@ -87,7 +87,7 @@ public class CustomGatewayShapeController extends AbstractBusinessObjectShapeCon
     ExclusiveGateway exclusiveGatewa = (ExclusiveGateway)businessObject;
     String getewayName = CreateCustomGatewayFeature.isCustomGatewayRef(exclusiveGatewa.getId());
     GatewayType gatewayType = CreateCustomGatewayFeature.getKey(getewayName);    
-    final Image image = gaService.createImage(shape, CreateCustomGatewayFeature.getImageKey(gatewayType));
+    final Image image = gaService.createImage(shape, CreateCustomGatewayFeature.getImageKeyLarge(gatewayType));
     image.setWidth(IMAGE_SIZE);
     image.setHeight(IMAGE_SIZE);
 

@@ -309,9 +309,9 @@ public class ActivitiBPMNFeatureProvider extends DefaultFeatureProvider {
              
         //Custom Gateways
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Equals), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.NotEqual),
-        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Contains), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.DoesNotContain),
-        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Greater), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.GreaterThanOrEqualTo),
-        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.LessThan), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.LessThanOrEqualTo),
+        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Contains), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.ContainsNot),
+        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Greater), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.GreaterEqual),
+        new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Less), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.LessEqual),
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.StartWith), new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.EndWith),
         new CreateCustomGatewayFeature(this, CreateCustomGatewayFeature.GatewayType.Range),
         
