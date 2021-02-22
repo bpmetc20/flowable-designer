@@ -74,13 +74,13 @@ public enum PluginImage {
   
   IMG_GATEWAY_EqualsLarge("gateway.equal.large", "type.gateway.equal.large.png"), //$NON-NLS-1s
   IMG_GATEWAY_NotEqualLarge("gateway.notequal.large", "type.gateway.notequal.large.png"), //$NON-NLS-1s  
-  IMG_GATEWAY_ContainsLarge("gateway.contains.large", "type.gateway.contains..largepng"), //$NON-NLS-1s
+  IMG_GATEWAY_ContainsLarge("gateway.contains.large", "type.gateway.contains.large.png"), //$NON-NLS-1s
   IMG_GATEWAY_ContainsNotLarge("gateway.containsnot.large", "type.gateway.containsnot.large.png"), //$NON-NLS-1s
   IMG_GATEWAY_GreaterLarge("gateway.greater.large", "type.gateway.greater.large.png"), //$NON-NLS-1s
   IMG_GATEWAY_GreaterEqualLarge("gateway.greaterequal.large", "type.gateway.greaterequal.large.png"), //$NON-NLS-1s
   IMG_GATEWAY_LessLarge("gateway.less.large", "type.gateway.less.large.png"), //$NON-NLS-1s
   IMG_GATEWAY_LessEqualLarge("gateway.lessequal.large", "type.gateway.lessequal.large.png"), //$NON-NLS-1s
-  IMG_GATEWAY_StartWithLarge("gateway.startwith", "type.gateway.startwith.png"), //$NON-NLS-1s
+  IMG_GATEWAY_StartWithLarge("gateway.startwith.large", "type.gateway.startwith.large.png"), //$NON-NLS-1s
   IMG_GATEWAY_EndWithLarge("gateway.endwith.large", "type.gateway.endwith.large.png"), //$NON-NLS-1s
   IMG_GATEWAY_RangeLarge("gateway.range.large", "type.gateway.range.large.png"), //$NON-NLS-1s
   
