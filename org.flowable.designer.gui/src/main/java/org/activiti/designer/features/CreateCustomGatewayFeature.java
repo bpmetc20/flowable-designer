@@ -90,7 +90,7 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
   public static String isCustomGatewayRef(String sourceRef) {
 	  List<String> gatewayNames = new ArrayList<String>(nameMap.values());
 	  for (String name : gatewayNames) {
-		  if (sourceRef.toLowerCase().contains(name.toLowerCase()))
+		  if (sourceRef.toLowerCase().startsWith(name.toLowerCase()))
 			  return name;		 
 	  }
 	  return "";
