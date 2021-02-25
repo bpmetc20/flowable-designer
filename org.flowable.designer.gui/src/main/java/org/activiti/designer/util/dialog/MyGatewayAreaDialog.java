@@ -54,7 +54,7 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	this.gatewayType = gatewayType;
     	this.projectParams = projectParams;
     	if (assignedValue != null && !assignedValue.isEmpty())
-    		parseAssignedValue(assignedValue);
+    		parseAssignedValue(assignedValue, gatewayType);
     }
 
     @Override
@@ -231,13 +231,23 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	return true;
     }
     
-    private void parseAssignedValue(String assignedValue) {
+    private void parseAssignedValue(String assignedValue, GatewayType gatewayType) {
     	Pattern pBetweenQuotes = Pattern.compile("\\'.*?\\'");
     	Pattern pBetweenBracket = Pattern.compile("\\{.*?\\}");
     	
     	Matcher m = pBetweenQuotes.matcher(assignedValue);
-    	if (m.find()) 
+    	if (m.find()) {
     		retrievedValue = (String)m.group().subSequence(1, m.group().length() - 1);
+    		if (gatewayType == GatewayType.Range) {    			
+    			int index =  assignedValue.indexOf("&&");
+    			String secomdValue = assignedValue.substring(index + 2, assignedValue.length() - 1);
+    			Matcher b = pBetweenQuotes.matcher(secomdValue);
+    			if (b.find()) {
+    				secomdValue = (String)b.group().subSequence(index + 2, b.group().length() - 1);
+    				retrievedValue += String.format(", %s", secomdValue); 
+    			}
+    		}
+    	}	
     	
     	m = pBetweenBracket.matcher(assignedValue);
     	if (m.find())
