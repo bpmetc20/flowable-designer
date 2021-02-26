@@ -232,26 +232,28 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     }
     
     private void parseAssignedValue(String assignedValue, GatewayType gatewayType) {
-    	Pattern pBetweenQuotes = Pattern.compile("\\'.*?\\'");
     	Pattern pBetweenBracket = Pattern.compile("\\{.*?\\}");
+    	Matcher mBrackets = pBetweenBracket.matcher(assignedValue);
+    	if (mBrackets.find())
+    		retrievedParam = (String) mBrackets.group().subSequence(1, mBrackets.group().length() - 1);
+    	else
+    		retrievedParam = "";
     	
-    	Matcher m = pBetweenQuotes.matcher(assignedValue);
-    	if (m.find()) {
-    		retrievedValue = (String)m.group().subSequence(1, m.group().length() - 1);
+    	Pattern pBetweenQuotes = Pattern.compile("\\'.*?\\'");    	
+    	Matcher mQuotes = pBetweenQuotes.matcher(assignedValue);
+    	if (mQuotes.find()) {
+    		retrievedValue = (String) mQuotes.group().subSequence(1, mQuotes.group().length() - 1);
     		if (gatewayType == GatewayType.Range) {    			
     			int index =  assignedValue.indexOf("&&");
-    			String secomdValue = assignedValue.substring(index + 2, assignedValue.length() - 1);
-    			Matcher b = pBetweenQuotes.matcher(secomdValue);
-    			if (b.find()) {
-    				secomdValue = (String)b.group().subSequence(index + 2, b.group().length() - 1);
-    				retrievedValue += String.format(", %s", secomdValue); 
+    			String secomdValue = assignedValue.substring(index + 2, assignedValue.length());
+    			mQuotes = pBetweenQuotes.matcher(secomdValue);
+    			if (mQuotes.find()) {
+    				secomdValue = (String) mQuotes.group().subSequence(1, mQuotes.group().length() - 1);
+    				retrievedValue = String.format("%s, %s", retrievedValue, secomdValue); 
     			}
     		}
-    	}	
-    	
-    	m = pBetweenBracket.matcher(assignedValue);
-    	if (m.find())
-    		retrievedParam = (String)m.group().subSequence(1, m.group().length() - 1);
+    	} else
+    		retrievedValue = "";
     	
     }
 }
