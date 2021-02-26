@@ -168,7 +168,7 @@ public class CreateAssociationFeature extends AbstractCreateBPMNConnectionFeatur
     		  if (!outgoingSequenceFlow.getName().isEmpty()) {
     			  if (outgoingSequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES)) {
     				  String expression = outgoingSequenceFlow.getConditionExpression();
-    				  String text = String.format("%s:\n\n%s", gatewayName, expression);
+    				  String text = String.format("%s: %s", gatewayName, expression);
     				  ta.setText(text);
     				  break;
     			  }																	
