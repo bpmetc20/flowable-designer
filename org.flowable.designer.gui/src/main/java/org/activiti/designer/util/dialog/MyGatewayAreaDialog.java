@@ -239,21 +239,34 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	else
     		retrievedParam = "";
     	
-    	Pattern pBetweenQuotes = Pattern.compile("\\'.*?\\'");    	
-    	Matcher mQuotes = pBetweenQuotes.matcher(assignedValue);
-    	if (mQuotes.find()) {
-    		retrievedValue = (String) mQuotes.group().subSequence(1, mQuotes.group().length() - 1);
-    		if (gatewayType == GatewayType.Range) {    			
-    			int index =  assignedValue.indexOf("&&");
-    			String secomdValue = assignedValue.substring(index + 2, assignedValue.length());
-    			mQuotes = pBetweenQuotes.matcher(secomdValue);
-    			if (mQuotes.find()) {
-    				secomdValue = (String) mQuotes.group().subSequence(1, mQuotes.group().length() - 1);
-    				retrievedValue = String.format("%s, %s", retrievedValue, secomdValue); 
-    			}
-    		}
-    	} else
-    		retrievedValue = "";
-    	
+    	switch(gatewayType) {
+    		case Contains: 
+    		case ContainsNot:
+    			Pattern pBetweenRectangualar = Pattern.compile("\\[.*?\\]"); 
+    			Matcher mRectangualar = pBetweenRectangualar.matcher(assignedValue);
+    			if (mRectangualar.find()) {    		
+    				retrievedValue = (String) mRectangualar.group().subSequence(1, mRectangualar.group().length() - 1);
+    				retrievedValue = retrievedValue.replace("'", "");
+    			} else
+    				retrievedValue = "";  	
+    			break;
+    		default:	
+    			Pattern pBetweenQuotes = Pattern.compile("\\'.*?\\'");    	
+    			Matcher mQuotes = pBetweenQuotes.matcher(assignedValue);
+    			if (mQuotes.find()) {    		
+    				retrievedValue = (String) mQuotes.group().subSequence(1, mQuotes.group().length() - 1);
+    				if (gatewayType == GatewayType.Range) {    			
+    					int index =  assignedValue.indexOf("&&");
+    					String secomdValue = assignedValue.substring(index + 2, assignedValue.length());
+    					mQuotes = pBetweenQuotes.matcher(secomdValue);
+    					if (mQuotes.find()) {
+    						secomdValue = (String) mQuotes.group().subSequence(1, mQuotes.group().length() - 1);
+    						retrievedValue = String.format("%s, %s", retrievedValue, secomdValue); 
+    					}
+    				}
+    			} else
+    				retrievedValue = "";    
+    			break;  
+    	}
     }
 }
