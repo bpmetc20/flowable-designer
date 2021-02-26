@@ -72,7 +72,7 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
 	    myMap.put(GatewayType.Equals, "EqualGateway");
 	    myMap.put(GatewayType.NotEqual, "NotEqualGateway");
 	    myMap.put(GatewayType.Contains, "ContainsGateway");
-	    myMap.put(GatewayType.ContainsNot, "ContainsNotGateway");
+	    myMap.put(GatewayType.ContainsNot, "DoesNotContainGateway");
 	    myMap.put(GatewayType.Greater, "GreaterGateway");
 	    myMap.put(GatewayType.GreaterEqual, "GreaterEqualGateway");
 	    myMap.put(GatewayType.Less, "LessGateway");
