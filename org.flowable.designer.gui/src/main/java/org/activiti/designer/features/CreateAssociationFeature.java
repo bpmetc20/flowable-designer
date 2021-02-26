@@ -13,12 +13,16 @@
  */
 package org.activiti.designer.features;
 
+import java.util.List;
+
 import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.Association;
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BoundaryEvent;
 import org.activiti.bpmn.model.CompensateEventDefinition;
+import org.activiti.bpmn.model.ExclusiveGateway;
 import org.activiti.bpmn.model.Lane;
+import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.bpmn.model.SubProcess;
 import org.activiti.bpmn.model.TextAnnotation;
 import org.activiti.designer.PluginImage;
@@ -78,6 +82,11 @@ public class CreateAssociationFeature extends AbstractCreateBPMNConnectionFeatur
       final AddConnectionContext addContext = new AddConnectionContext(sourceAnchor, targetAnchor);
       addContext.setNewObject(association);
       
+      if (sourceBo instanceof ExclusiveGateway)
+    	  setGatewayCondition((ExclusiveGateway) sourceBo, (TextAnnotation) targetBo);
+      else	if (targetBo instanceof ExclusiveGateway)
+    	  setGatewayCondition((ExclusiveGateway) targetBo, (TextAnnotation) sourceBo);  
+         
       return (Connection) getFeatureProvider().addIfPossible(addContext);
     }
   }
@@ -150,5 +159,21 @@ public class CreateAssociationFeature extends AbstractCreateBPMNConnectionFeatur
     }
     
     return null;
+  }
+  
+  private void setGatewayCondition(ExclusiveGateway bo, TextAnnotation ta) {
+	  String gatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(bo.getId());
+      if (!gatewayName.isEmpty()) { 
+    	  for (SequenceFlow outgoingSequenceFlow : bo.getOutgoingFlows()) {					
+    		  if (!outgoingSequenceFlow.getName().isEmpty()) {
+    			  if (outgoingSequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES)) {
+    				  String expression = outgoingSequenceFlow.getConditionExpression();
+    				  String text = String.format("%s:\n\n%s", gatewayName, expression);
+    				  ta.setText(text);
+    				  break;
+    			  }																	
+    		  }
+    	  }
+      }
   }
 }
