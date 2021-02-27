@@ -172,7 +172,7 @@ public class CreateAssociationFeature extends AbstractCreateBPMNConnectionFeatur
     				  String expression = outgoingSequenceFlow.getConditionExpression();
     				  String text = String.format("%s: %s", gatewayName, expression);
     				  ta.setText(text);
-    				  DiagramHandler.refreshCurrentDiagram();
+    				  DiagramHandler.refreshDiagram();
     				  break;
     			  }																	
     		  }

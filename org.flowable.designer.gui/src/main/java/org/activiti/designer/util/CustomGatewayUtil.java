@@ -3,6 +3,7 @@ package org.activiti.designer.util;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.features.CreateCustomGatewayFeature;
 import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
 import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
@@ -47,7 +48,7 @@ public class CustomGatewayUtil {
 	 	dialog.create();
 		dialog.open();
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());
-		sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_YES);
+		sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_YES);		
 	}
 }
  
