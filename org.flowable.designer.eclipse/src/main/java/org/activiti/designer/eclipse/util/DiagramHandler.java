@@ -29,7 +29,13 @@ import org.eclipse.draw2d.graph.NodeList;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
 import org.activiti.designer.util.extension.UserTaskProperties;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
@@ -213,6 +219,58 @@ public class DiagramHandler {
 		 return false;
 	 }
 	 
+	 public static boolean refreshDiagram(IFile currentDiagram, String newDiagramName, String modelId) {			 
+		 String xmlString;	
+		 String errorMessge = "Error while saving the model " + newDiagramName;	
+		 IFile ifile;
+		 try {			 
+			 if (ActivitiDiagramEditor.get().isDirty()) {
+				 ifile = FileService.getDiagramFile(newDiagramName);
+				 ActivitiDiagramEditor.get().doSave(ifile, "id-" + modelId);
+				 ActivitiDiagramEditor.get().setDirty();
+				 ActivitiDiagramEditor.get().updateDirtyState();
+				 xmlString = FileService.getFileContent(ifile);				 
+			 } else {
+				 xmlString = FileService.getFileContent(currentDiagram);
+				 ifile = FileService.getDiagramFile(newDiagramName);
+				 FileService.writeDiagramToIFile(ifile, xmlString);	
+			 }			 
+			 xmlString = updateProcessAttributes(xmlString, modelId, newDiagramName); 	     
+		 } catch (Exception e) {
+			 showMessageBoxError(errorMessge);
+			 return false; 
+		 }	
+		 	
+		 closeActiveEditor();
+		 
+		 try {			 		 
+			 if (!xmlString.isEmpty() && RestClient.updateModelSource(modelId, xmlString)) {				 			 
+				 return openDiagramForBpmnFile(ifile).isOK();				 
+			 }			 	 
+		 } catch(Exception e) {			 
+		 }	
+		 return false;
+	 }
+	 
+	 public static void closeActiveEditor() {
+		 IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		 IWorkbenchPage page = workbenchWindow.getActivePage();
+
+		 IEditorReference[] editorRefs = page.getEditorReferences();
+		 
+		 //Get the actual editor part from the references with:
+		 IEditorPart editor = editorRefs[1].getEditor(true);
+		 
+		 //Get the editor input:
+		 IEditorInput input = editor.getEditorInput();
+		 //Get the file the editor is editing:
+
+		 //IFile file = (IFile)input.getAdapter(IFile.class);
+		 //Close an editor:
+
+		 page.closeEditor(editor, true);
+	 }
+	 
 	 public static void saveAllDiagrams() {	
 		 Set<IFile> diagrams = FileService.getAllDiagramDataFiles();
 		 for (IFile dataFile : diagrams) {
@@ -334,7 +392,17 @@ public class DiagramHandler {
 		  .stream()
 		  .filter(entry -> value.equals(entry.getValue()))
 		  .map(Map.Entry::getKey);
-	  }
+	 }
+	 
+	 public static void refreshCurrentDiagram() {
+		 IFile dataFile = FileService.getActiveDiagramFile();
+		 String diagramName = FileService.getDiagramName(dataFile);
+		 final Map<String, String> model = getDiagramByName(diagramName, ActivitiPlugin.getModels(false));
+		 String id = getDiagramId(model);
+		 //ActivitiDiagramEditor.get().doSave(dataFile, getSavedModelId(model));
+		 //openDiagramForBpmnFile(dataFile);
+		 refreshDiagram(dataFile, diagramName, id);
+	 }
 	 
 	 //////////////////////////////////////
 	 

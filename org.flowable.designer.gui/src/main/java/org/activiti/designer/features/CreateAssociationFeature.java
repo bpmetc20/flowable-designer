@@ -26,6 +26,8 @@ import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.bpmn.model.SubProcess;
 import org.activiti.bpmn.model.TextAnnotation;
 import org.activiti.designer.PluginImage;
+import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.util.editor.ModelHandler;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -170,6 +172,7 @@ public class CreateAssociationFeature extends AbstractCreateBPMNConnectionFeatur
     				  String expression = outgoingSequenceFlow.getConditionExpression();
     				  String text = String.format("%s: %s", gatewayName, expression);
     				  ta.setText(text);
+    				  DiagramHandler.refreshCurrentDiagram();
     				  break;
     			  }																	
     		  }
