@@ -476,6 +476,11 @@
             name="Delete Diagram">
       </command> 
       <command
+            defaultHandler="org.activiti.designer.handlers.RefreshProcessHandler"
+            id="org.activiti.designer.commands.RefreshProcessHandler"
+            name="Refresh Diagram">
+      </command> 
+      <command
             defaultHandler="org.activiti.designer.handlers.DeploymenProcesstHandler"
             id="org.activiti.designer.commands.DeploymenProcesstHandler"
             name="Deploy Process">
@@ -528,7 +533,7 @@
                   	style="push"
                   	tooltip="Save As process and diagrams">
             	</command>             	                   	          
-         </menu>
+         </menu>        
          <menu
             id="processMenu"
             label="Processes">
@@ -545,6 +550,17 @@
              label="Processes">
             	<command
                 	icon="icons/type.user.ftd.png"
+                	commandId="org.activiti.designer.commands.RefreshProcessHandler"
+                	label="Refresh"
+                	style="push"
+                	tooltip="Refresh diagrams">
+            	</command>  	
+         </menu>   
+         <menu         	 
+             id="processMenu"
+             label="Processes">
+            	<command
+                	icon="icons/type.user.ftd.png"
                 	commandId="org.activiti.designer.commands.DeleteProcessHandler"
                 	label="Delete"
                 	style="push"
@@ -554,7 +570,7 @@
           	name="additions"
             visible="true">  
          	</separator>  	    	          
-         </menu>                                       
+         </menu>                                              
          <menu          	       	         	 
              id="processMenu"
              label="Processes">
