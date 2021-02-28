@@ -2,7 +2,9 @@ package org.activiti.designer.util;
 
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.SequenceFlow;
+import org.activiti.bpmn.model.TextAnnotation;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
+import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.features.CreateCustomGatewayFeature;
 import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
 import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
@@ -49,5 +51,22 @@ public class CustomGatewayUtil {
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());
 		sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_YES);		
 	}
+	
+	static public void setGatewayCondition(ExclusiveGateway bo, TextAnnotation ta) {
+		  String gatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(bo.getId());
+	      if (!gatewayName.isEmpty()) { 
+	    	  for (SequenceFlow outgoingSequenceFlow : bo.getOutgoingFlows()) {					
+	    		  if (!outgoingSequenceFlow.getName().isEmpty()) {
+	    			  if (outgoingSequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES)) {
+	    				  String expression = outgoingSequenceFlow.getConditionExpression();
+	    				  String text = String.format("%s: %s", gatewayName, expression);
+	    				  ta.setText(text);
+	    				  DiagramHandler.refreshDiagram();
+	    				  break;
+	    			  }																	
+	    		  }
+	    	  }
+	      }
+	  }
 }
  
