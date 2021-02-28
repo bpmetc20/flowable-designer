@@ -49,7 +49,8 @@ public class CustomGatewayUtil {
 	 	dialog.create();
 		dialog.open();
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());
-		sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_YES);		
+		sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_YES);	
+		DiagramHandler.refreshDiagram();
 	}
 	
 	static public void setGatewayCondition(ExclusiveGateway bo, TextAnnotation ta) {
