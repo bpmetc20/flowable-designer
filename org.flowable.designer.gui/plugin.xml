@@ -545,43 +545,43 @@
                   	tooltip="Save all diagrams">
             	</command>             	                   	          
          </menu>
-         <menu         	 
-             id="processMenu"
-             label="Processes">
-            	<command
-                	icon="icons/type.user.ftd.png"
-                	commandId="org.activiti.designer.commands.RefreshProcessHandler"
-                	label="Refresh"
-                	style="push"
-                	tooltip="Refresh diagrams">
-            	</command>  	
-         </menu>   
-         <menu         	 
-             id="processMenu"
-             label="Processes">
-            	<command
-                	icon="icons/type.user.ftd.png"
-                	commandId="org.activiti.designer.commands.DeleteProcessHandler"
-                	label="Delete"
-                	style="push"
-                	tooltip="Delete diagrams">
-            	</command>  
-            	<separator
-          	name="additions"
-            visible="true">  
-         	</separator>  	    	          
-         </menu>                                              
-         <menu          	       	         	 
-             id="processMenu"
-             label="Processes">
-            	<command
-                	icon="icons/flowable.logo.16x16.png"
-                	commandId="org.activiti.designer.commands.DeploymenProcesstHandler"
-                	label="Create deployment process"
-                	style="push"
-                	tooltip="Deploy process and diagrams">
-            	</command>
-         </menu>
-      </menuContribution>
-   </extension>  
-   </plugin>
+         <!--  <menu
+              id="processMenu"
+              label="Processes">
+                 <command
+                     icon="icons/type.user.ftd.png"
+                     commandId="org.activiti.designer.commands.RefreshProcessHandler"
+                     label="Refresh"
+                     style="push"
+                     tooltip="Refresh diagrams">
+                 </command>
+          </menu>   -->
+          <menu
+              id="processMenu"
+              label="Processes">
+                 <command
+                     icon="icons/type.user.ftd.png"
+                     commandId="org.activiti.designer.commands.DeleteProcessHandler"
+                     label="Delete"
+                     style="push"
+                     tooltip="Delete diagrams">
+                 </command>
+                 <separator
+               name="additions"
+             visible="true">
+              </separator>
+          </menu>
+          <menu
+              id="processMenu"
+              label="Processes">
+                 <command
+                     icon="icons/flowable.logo.16x16.png"
+                     commandId="org.activiti.designer.commands.DeploymenProcesstHandler"
+                     label="Create deployment process"
+                     style="push"
+                     tooltip="Deploy process and diagrams">
+                 </command>
+          </menu>
+       </menuContribution>
+    </extension>
+    </plugin>
