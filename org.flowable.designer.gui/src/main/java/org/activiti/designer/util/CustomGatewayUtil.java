@@ -4,7 +4,7 @@ import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.bpmn.model.TextAnnotation;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
-import org.activiti.designer.eclipse.util.DiagramHandler;
+import org.activiti.designer.eclipse.util.RefreshDiagramHandler;
 import org.activiti.designer.features.CreateCustomGatewayFeature;
 import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
 import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
@@ -50,7 +50,7 @@ public class CustomGatewayUtil {
 		dialog.open();
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());
 		sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_YES);	
-		DiagramHandler.refreshDiagram();
+		RefreshDiagramHandler.refreshDiagram(null);
 	}
 	
 	static public void setGatewayCondition(ExclusiveGateway bo, TextAnnotation ta) {
@@ -62,7 +62,7 @@ public class CustomGatewayUtil {
 	    				  String expression = outgoingSequenceFlow.getConditionExpression();
 	    				  String text = String.format("%s: %s", gatewayName, expression);
 	    				  ta.setText(text);
-	    				  DiagramHandler.refreshDiagram();
+	    				  RefreshDiagramHandler.refreshDiagram(null);
 	    				  break;
 	    			  }																	
 	    		  }

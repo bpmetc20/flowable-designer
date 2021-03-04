@@ -2,6 +2,7 @@ package org.activiti.designer.handlers;
 
 import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.eclipse.util.FileService;
+import org.activiti.designer.eclipse.util.RefreshDiagramHandler;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -18,7 +19,7 @@ public class RefreshProcessHandler extends AbstractHandler {
 		if (dataFile == null) {
 			DiagramHandler.showMessageBoxError("Please load diagram first!");			
 		} else {
-			DiagramHandler.refreshDiagram();
+			RefreshDiagramHandler.refreshDiagram(null);
 		}		
 		return window;
 		

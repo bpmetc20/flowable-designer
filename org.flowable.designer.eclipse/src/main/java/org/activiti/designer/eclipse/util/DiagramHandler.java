@@ -1,6 +1,5 @@
 package org.activiti.designer.eclipse.util;
 
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.text.ParseException;
@@ -11,11 +10,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.swing.text.Document;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
@@ -25,21 +22,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFileState;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.draw2d.graph.NodeList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
-import org.activiti.designer.util.editor.ModelHandler;
 import org.activiti.designer.util.extension.UserTaskProperties;
 import org.activiti.designer.util.workspace.ActivitiWorkspaceUtil;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
@@ -220,11 +207,7 @@ public class DiagramHandler {
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
 						 new PartInitException("Can't save diagram " + newDiagramName)));
 		 return false;
-	 }
-	 
-	 public static void refreshDiagram() {			 
-		 new RefreshDiagramThread().start();
-	 }	 
+	 }	  
 	 
 	 public static void saveAllDiagrams() {	
 		 Set<IFile> diagrams = FileService.getAllDiagramDataFiles();
@@ -349,6 +332,21 @@ public class DiagramHandler {
 		  .map(Map.Entry::getKey);
 	 }	
 	 
+	 public static IStatus openDiagramForBpmnFile(IFile dataFile) {
+		 if (!dataFile.exists()) {
+			return new Status(IStatus.INFO, ActivitiPlugin.getID(), errorMessage, 
+					new PartInitException("Can't find diagram")); 				
+		 }
+		 
+		 IStatus status = new Status(IStatus.OK, ActivitiPlugin.getID(), errorMessage, null); 			
+		 try {
+			 FileService.openDiagramForBpmnFile(dataFile);
+		 } catch (PartInitException exception) {
+			 status =  new Status(IStatus.ERROR, ActivitiPlugin.getID(), errorMessage, exception); 
+	     }
+		 return status;
+	 }	 
+	 
 	 //////////////////////////////////////
 	 
 	 private static boolean saveDiagram(IFile dataFile, List<Map<String, String>> listModels) {
@@ -369,21 +367,6 @@ public class DiagramHandler {
 	 
 	 private static String getSavedModelId(final Map<String, String> model) {
 		 return "id-" + getDiagramId(model);
-	 }
-	 
-	 private static IStatus openDiagramForBpmnFile(IFile dataFile) {
-		 if (!dataFile.exists()) {
-			return new Status(IStatus.INFO, ActivitiPlugin.getID(), errorMessage, 
-					new PartInitException("Can't find diagram")); 				
-		 }
-		 
-		 IStatus status = new Status(IStatus.OK, ActivitiPlugin.getID(), errorMessage, null); 			
-		 try {
-			 FileService.openDiagramForBpmnFile(dataFile);
-		 } catch (PartInitException exception) {
-			 status =  new Status(IStatus.ERROR, ActivitiPlugin.getID(), errorMessage, exception); 
-	     }
-		 return status;
 	 }	 
 	 
 	 private static boolean showYesNoMessageBox(String message) {
@@ -412,49 +395,7 @@ public class DiagramHandler {
 		 }			     
 		 byte[] xmlBytes = bpmnConverter.convertToXML(model);
 		 return new String(xmlBytes, "UTF-8");		
-	 }
+	 } 
 	 
-	 static class RefreshDiagramThread extends Thread {
-	     @Override
-	     public void run() {
-	    	 Display display = Display.getDefault();
-	         display.syncExec(new Runnable() {
-	        	 @Override
-	             public void run() {
-	        		 refresh();  
-	             }
-	         });
-
-	      }    
-	  }
 	 
-	 private static void refresh() {
-		 IFile dataFile = FileService.getActiveDiagramFile();
-		 String name = dataFile.getName();
-		 String diagramName = FileService.getDiagramName(dataFile);
-		 final Map<String, String> model = getDiagramByName(diagramName, ActivitiPlugin.getModels(false));
-		 String id = getDiagramId(model);
-		 //Save the bpmn diagram file
-		 ActivitiDiagramEditor.get().doSave(dataFile, id); 
-		 	
-		 //close current editor
-		 IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		 IWorkbenchPage page = workbenchWindow.getActivePage();
-		 IEditorReference[] editorRefs = page.getEditorReferences();
-		 
-		 //Get the actual editor part from the references with:
-		 for (IEditorReference editorRef : editorRefs) {
-			 IEditorPart editor = editorRef.getEditor(true);		 
-			 //Get the editor input:
-			 IEditorInput input = editor.getEditorInput();
-			 //Get the file the editor is editing:
-			 IFile file = (IFile)input.getAdapter(IFile.class);
-			 if (file.getName().startsWith(name)) {
-				 //Close an editor:
-				 page.closeEditor(editor, true);
-				 break;
-			 }
-		 }
-		 openDiagramForBpmnFile(dataFile).isOK();		 
-	 }
 }
