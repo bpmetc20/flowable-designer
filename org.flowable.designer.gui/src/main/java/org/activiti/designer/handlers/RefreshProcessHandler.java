@@ -19,7 +19,7 @@ public class RefreshProcessHandler extends AbstractHandler {
 		if (dataFile == null) {
 			DiagramHandler.showMessageBoxError("Please load diagram first!");			
 		} else {
-			RefreshDiagramHandler.refreshDiagram(null);
+			RefreshDiagramHandler.refreshDiagram();
 		}		
 		return window;
 		

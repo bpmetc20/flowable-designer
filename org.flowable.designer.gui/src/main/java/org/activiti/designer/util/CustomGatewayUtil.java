@@ -50,7 +50,7 @@ public class CustomGatewayUtil {
 		dialog.open();
 		sequenceFlow.setConditionExpression(dialog.getConditionValue());
 		sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_YES);	
-		RefreshDiagramHandler.refreshDiagram(null);
+		RefreshDiagramHandler.refreshDiagram();
 	}
 	
 	static public void setGatewayCondition(ExclusiveGateway bo, TextAnnotation ta) {
@@ -62,7 +62,7 @@ public class CustomGatewayUtil {
 	    				  String expression = outgoingSequenceFlow.getConditionExpression();
 	    				  String text = String.format("%s: %s", gatewayName, expression);
 	    				  ta.setText(text);
-	    				  RefreshDiagramHandler.refreshDiagram(null);
+	    				  RefreshDiagramHandler.refreshDiagram();
 	    				  break;
 	    			  }																	
 	    		  }

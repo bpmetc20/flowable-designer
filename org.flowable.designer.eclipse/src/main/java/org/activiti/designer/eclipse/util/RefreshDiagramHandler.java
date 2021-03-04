@@ -15,51 +15,25 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 public class RefreshDiagramHandler {		
-	public static void refreshDiagram(Object refreshObject) {
-		new RefreshDiagramThread(refreshObject).start();
+	public static void refreshDiagram() {
+		new RefreshDiagramThread().start();
 	}
 	
 	static class RefreshDiagramThread extends Thread {
-		private Object refreshObject; 
-		
-		RefreshDiagramThread(Object refreshObject) {
-			this.refreshObject = refreshObject;  
-		}
-		
-	     @Override
+		@Override
 	     public void run() {
 	    	 Display display = Display.getDefault();
 	         display.syncExec(new Runnable() {
 	        	 @Override
 	             public void run() {
-	        		 refresh(refreshObject);  
+	        		 refresh();  
 	             }
 	         });
 
 	      }    
-	}
+	}	
 	
-	static class RefreshObjectThread extends Thread {
-		private Object refreshObject; 
-		
-		RefreshObjectThread(Object refreshObject) {
-			this.refreshObject = refreshObject;  
-		}
-		
-	     @Override
-	     public void run() {
-	    	 Display display = Display.getDefault();
-	         display.syncExec(new Runnable() {
-	        	 @Override
-	             public void run() {
-	        		 refreshObj(refreshObject);  
-	             }
-	         });
-
-	      }    
-	}
-	
-	private static void refresh(Object refreshObject) {
+	private static void refresh() {
 		 IFile dataFile = FileService.getActiveDiagramFile();
 		 String name = dataFile.getName();
 		 String diagramName = FileService.getDiagramName(dataFile);
@@ -86,13 +60,6 @@ public class RefreshDiagramHandler {
 				 break;
 			 }
 		 }
-		 DiagramHandler.openDiagramForBpmnFile(dataFile).isOK();		 
-	}
-	
-	private static void refreshObj(Object refreshObject) {
-		if (refreshObject instanceof SequenceFlow) {
-			SequenceFlow sequenceFlow = (SequenceFlow) refreshObject;
-			sequenceFlow.setName("Yes");
-		}
-	}
+		 DiagramHandler.openDiagramForBpmnFile(dataFile).isOK();
+	}	
 }
