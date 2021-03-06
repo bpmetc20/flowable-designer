@@ -183,8 +183,7 @@ public class DiagramHandler {
 			 if (ActivitiDiagramEditor.get().isDirty()) {
 				 ifile = FileService.getDiagramFile(newDiagramName);
 				 ActivitiDiagramEditor.get().doSave(ifile, "id-" + modelId);
-				 ActivitiDiagramEditor.get().setDirty();
-				 ActivitiDiagramEditor.get().updateDirtyState();
+				 ActivitiDiagramEditor.get().setDirty();				 
 				 xmlString = FileService.getFileContent(ifile);				 
 			 } else {
 				 xmlString = FileService.getFileContent(currentDiagram);

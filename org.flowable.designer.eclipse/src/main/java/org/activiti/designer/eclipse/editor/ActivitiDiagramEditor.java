@@ -214,6 +214,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   
   public void setDirty() {
 	  firePropertyChange(PROP_DIRTY);
+	  updateDirtyState();
   }
   
   public boolean doSave(IFile dataFile, String id) {
