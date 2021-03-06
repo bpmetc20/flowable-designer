@@ -170,11 +170,14 @@ public class DeleteFlowElementFeature extends DefaultDeleteFeature {
 	    if (sourceElement instanceof ExclusiveGateway) {
 			  String gatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(sourceElement.getId());
 		      if (!gatewayName.isEmpty()) {
+		    	  boolean refresh = false;
 		    	  List<Process> processes = ModelHandler.getModel(EcoreUtil.getURI(getDiagram())).getBpmnModel().getProcesses();
 		    	  for (Process process : processes) {
-		    		  removeCustomGatewayAssociation(process.getArtifacts(), ((FlowNode) sourceElement));
+		    		  if (removeCustomGatewayAssociation(process.getArtifacts(), ((FlowNode) sourceElement)))
+		    			  refresh = true;
 		    	  }
-		    	  RefreshDiagramHandler.refreshDiagram();
+		    	  if (refresh) 
+		    		  RefreshDiagramHandler.refreshDiagram();
 		      }
 		}	  
 	  }
@@ -200,29 +203,37 @@ public class DeleteFlowElementFeature extends DefaultDeleteFeature {
     }
   }
 	
-  protected void removeCustomGatewayAssociation(Collection<Artifact> artifacts, FlowNode flowNode) {
-	    List<Artifact> toDeleteAssociations = new ArrayList<Artifact>();
-	    List<Artifact> toDeleteTextAnnotation = new ArrayList<Artifact>();
-	    for (Artifact artifact : artifacts) {
+  protected boolean removeCustomGatewayAssociation(Collection<Artifact> artifacts, FlowNode flowNode) {
+	  	List<Association> associations = new ArrayList<Association>();
+	  	List<Artifact> toDelete = new ArrayList<Artifact>();
+	    //review association pointed to gateway
+	  	for (Artifact artifact : artifacts) {
 	      if (artifact instanceof Association) {
 	        Association association = (Association) artifact;
 	        if (association.getSourceRef().equals(flowNode.getId()) || association.getTargetRef().equals(flowNode.getId())) {
-	          toDeleteAssociations.add(association);
+	        	associations.add(association);	        }
+	        	toDelete.add(association);
 	        }
-	      }
+	    }
+	      
+	  	//review annotations associated with gateway
+  		for (Artifact artifact : artifacts) {
 	      if (artifact instanceof TextAnnotation) {
-	    	  TextAnnotation association = (TextAnnotation) artifact;
-	    	  toDeleteTextAnnotation.add(association);
-	      }
+	    	  TextAnnotation annotation = (TextAnnotation) artifact;
+	    	  for (Association association : associations) {
+	    		  if (association.getSourceRef().equals(annotation.getId()) || association.getTargetRef().equals(annotation.getId())) {
+	    			  toDelete.add(annotation);
+	    		  }	
+	    	  }
+	       }
 	    }
+  		associations.clear();
 	    
-	    for (Artifact deleteObject : toDeleteAssociations) {
-	      removeArtifact(deleteObject);
-	    }
-	    
-	    for (Artifact deleteObject : toDeleteTextAnnotation) {
+	    for (Artifact deleteObject : toDelete) {
 	        removeArtifact(deleteObject);
 	    }
+	    
+	    return toDelete.size() > 0;
   }	
   
   protected void removeAssociation(Collection<Artifact> artifacts, FlowNode flowNode) {
