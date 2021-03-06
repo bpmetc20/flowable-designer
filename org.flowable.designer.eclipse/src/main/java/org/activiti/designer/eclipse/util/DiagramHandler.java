@@ -354,7 +354,7 @@ public class DiagramHandler {
 		 final Map<String, String> model = getDiagramByName(diagramName, listModels);
 		 		 	
 		 ActivitiDiagramEditor editor = ActivitiDiagramEditor.get();		 
-		 if (FileService.isDiagramOpen(dataFile) && editor.isDirty() && !ActivitiDiagramEditor.get().doSave(dataFile, getSavedModelId(model))) {
+		 if (FileService.isDiagramOpen(dataFile) && editor.isDirty() && !editor.doSave(dataFile, getSavedModelId(model))) {
 			 //no message box needed
 			 return false;
 		 } 
