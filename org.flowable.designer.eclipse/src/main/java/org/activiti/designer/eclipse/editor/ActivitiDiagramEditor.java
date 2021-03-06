@@ -141,6 +141,11 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	  return ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
   } 
   
+  public List<Process> getProcesses() {
+	  BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
+      return model.getBpmnModel().getProcesses();
+  }
+  
   public void createNewDiagram(IFile dataFile) throws CoreException {
 	  
 	  // now generate the temporary diagram file

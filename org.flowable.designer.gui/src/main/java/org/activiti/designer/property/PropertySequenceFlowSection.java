@@ -13,10 +13,15 @@
  */
 package org.activiti.designer.property;
 
+import org.activiti.bpmn.model.ExclusiveGateway;
+import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.designer.eclipse.common.ActivitiPlugin;
+import org.activiti.designer.eclipse.editor.ActivitiDiagramEditor;
+import org.activiti.designer.eclipse.util.RefreshDiagramHandler;
 import org.activiti.designer.features.CreateCustomGatewayFeature;
 import org.activiti.designer.features.CreateCustomGatewayFeature.GatewayType;
+import org.activiti.designer.util.CustomGatewayUtil;
 import org.activiti.designer.util.TextUtil;
 import org.activiti.designer.util.dialog.MyGatewayAreaDialog;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
@@ -91,7 +96,13 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
     					gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false), conditionExpressionText.getText());
     		 	dialog.create();
     			dialog.open();
-    			conditionExpressionText.setText(dialog.getConditionValue());    			
+    			String conditionValue = dialog.getConditionValue();
+    			conditionExpressionText.setText(dialog.getConditionValue()); 
+    			FlowElement sourceElement = ActivitiDiagramEditor.get().getModel().getFlowElement(sequenceFlow.getSourceRef());
+				ExclusiveGateway exclusiveGateway = (ExclusiveGateway)sourceElement; 
+				if (CustomGatewayUtil.updateCustomGatewayAssociation(exclusiveGateway, conditionValue)) {
+					RefreshDiagramHandler.refreshDiagram();
+				}
     		}
     		});
     	  }
