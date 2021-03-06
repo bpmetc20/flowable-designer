@@ -26,6 +26,7 @@ import org.activiti.bpmn.model.BoundaryEvent;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.CallActivity;
 import org.activiti.bpmn.model.Event;
+import org.activiti.bpmn.model.ExclusiveGateway;
 import org.activiti.bpmn.model.FlowElement;
 import org.activiti.bpmn.model.FlowElementsContainer;
 import org.activiti.bpmn.model.FlowNode;
@@ -35,6 +36,8 @@ import org.activiti.bpmn.model.Process;
 import org.activiti.bpmn.model.SequenceFlow;
 import org.activiti.bpmn.model.SubProcess;
 import org.activiti.bpmn.model.Task;
+import org.activiti.bpmn.model.TextAnnotation;
+import org.activiti.designer.eclipse.util.RefreshDiagramHandler;
 import org.activiti.designer.util.editor.BpmnMemoryModel;
 import org.activiti.designer.util.editor.ModelHandler;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -155,14 +158,27 @@ public class DeleteFlowElementFeature extends DefaultDeleteFeature {
 	
 	protected void deletedConnectingFlows(SequenceFlow sequenceFlow) {
 	  BpmnModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagram())).getBpmnModel();
-	  FlowElement sourceElement = model.getFlowElement(sequenceFlow.getSourceRef());
-	  FlowElement targetElement = model.getFlowElement(sequenceFlow.getTargetRef());
+	  FlowElement sourceElement = model.getFlowElement(sequenceFlow.getSourceRef());	  
+	  FlowElement targetElement = model.getFlowElement(sequenceFlow.getTargetRef());	  
+	  
+	  if (targetElement != null) {
+		  deleteSequenceFlowFromFlows(sequenceFlow.getId(), ((FlowNode) targetElement).getIncomingFlows());
+	  }
+	  
 	  if (sourceElement != null) {
 	    deleteSequenceFlowFromFlows(sequenceFlow.getId(), ((FlowNode) sourceElement).getOutgoingFlows());
-    }
-    if (targetElement != null) {
-      deleteSequenceFlowFromFlows(sequenceFlow.getId(), ((FlowNode) targetElement).getIncomingFlows());
-    }
+	    if (sourceElement instanceof ExclusiveGateway) {
+			  String gatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(sourceElement.getId());
+		      if (!gatewayName.isEmpty()) {
+		    	  List<Process> processes = ModelHandler.getModel(EcoreUtil.getURI(getDiagram())).getBpmnModel().getProcesses();
+		    	  for (Process process : processes) {
+		    		  removeCustomGatewayAssociation(process.getArtifacts(), ((FlowNode) sourceElement));
+		    	  }
+		    	  RefreshDiagramHandler.refreshDiagram();
+		      }
+		}	  
+	  }
+	  
 	}
 	
 	protected void deleteAssociations(FlowNode flowNode) {
@@ -183,6 +199,31 @@ public class DeleteFlowElementFeature extends DefaultDeleteFeature {
       }
     }
   }
+	
+  protected void removeCustomGatewayAssociation(Collection<Artifact> artifacts, FlowNode flowNode) {
+	    List<Artifact> toDeleteAssociations = new ArrayList<Artifact>();
+	    List<Artifact> toDeleteTextAnnotation = new ArrayList<Artifact>();
+	    for (Artifact artifact : artifacts) {
+	      if (artifact instanceof Association) {
+	        Association association = (Association) artifact;
+	        if (association.getSourceRef().equals(flowNode.getId()) || association.getTargetRef().equals(flowNode.getId())) {
+	          toDeleteAssociations.add(association);
+	        }
+	      }
+	      if (artifact instanceof TextAnnotation) {
+	    	  TextAnnotation association = (TextAnnotation) artifact;
+	    	  toDeleteTextAnnotation.add(association);
+	      }
+	    }
+	    
+	    for (Artifact deleteObject : toDeleteAssociations) {
+	      removeArtifact(deleteObject);
+	    }
+	    
+	    for (Artifact deleteObject : toDeleteTextAnnotation) {
+	        removeArtifact(deleteObject);
+	    }
+  }	
   
   protected void removeAssociation(Collection<Artifact> artifacts, FlowNode flowNode) {
     List<Association> toDeleteAssociations = new ArrayList<Association>();
@@ -192,12 +233,17 @@ public class DeleteFlowElementFeature extends DefaultDeleteFeature {
         if (association.getSourceRef().equals(flowNode.getId()) || association.getTargetRef().equals(flowNode.getId())) {
           toDeleteAssociations.add(association);
         }
-      }
+      }      
     }
     
     for (Association deleteObject : toDeleteAssociations) {
       deletedConnectingFlows(deleteObject);
       removeArtifact(deleteObject);
+    }
+    
+    for (Association deleteObject : toDeleteAssociations) {
+        deletedConnectingFlows(deleteObject);
+        removeArtifact(deleteObject);
     }
   }
   
