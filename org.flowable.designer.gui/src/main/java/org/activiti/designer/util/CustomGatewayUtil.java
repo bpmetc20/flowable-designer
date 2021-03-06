@@ -60,8 +60,7 @@ public class CustomGatewayUtil {
 	    		  if (!outgoingSequenceFlow.getName().isEmpty()) {
 	    			  if (outgoingSequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES)) {
 	    				  String expression = outgoingSequenceFlow.getConditionExpression();
-	    				  String text = String.format("%s: %s", gatewayName, expression);
-	    				  ta.setText(text);
+	    				  ta.setText(expression);
 	    				  RefreshDiagramHandler.refreshDiagram();
 	    				  break;
 	    			  }																	
