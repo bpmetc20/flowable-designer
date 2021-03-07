@@ -287,7 +287,13 @@ public class DiagramHandler {
 			 showMessageBoxError(errorMessge);
 			 saveDiagramASTemp(tempDiagramName, xmlString); 			 
 			 return false;
-		 }		 
+		 }	
+		 /*
+		 if (ActivitiDiagramEditor.get().isDirty()) {
+			 //this case were refresh happened and editor still dirty
+			 RefreshDiagramHandler.refreshDiagram(false);	
+		 }	
+		 */ 
 		 return true;
 	 }	 
 	 

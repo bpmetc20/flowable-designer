@@ -101,7 +101,7 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
     			FlowElement sourceElement = ActivitiDiagramEditor.get().getModel().getFlowElement(sequenceFlow.getSourceRef());
 				ExclusiveGateway exclusiveGateway = (ExclusiveGateway)sourceElement; 
 				if (CustomGatewayUtil.updateCustomGatewayAssociation(exclusiveGateway, conditionValue)) {
-					RefreshDiagramHandler.refreshDiagram();
+					RefreshDiagramHandler.refreshDiagram(true);
 				}
     		}
     		});

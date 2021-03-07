@@ -177,7 +177,7 @@ public class DeleteFlowElementFeature extends DefaultDeleteFeature {
 		    			  refresh = true;
 		    	  }
 		    	  if (refresh) 
-		    		  RefreshDiagramHandler.refreshDiagram();
+		    		  RefreshDiagramHandler.refreshDiagram(true);
 		      }
 		}	  
 	  }

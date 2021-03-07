@@ -61,7 +61,7 @@ public class CustomGatewayUtil {
 		sequenceFlow.setConditionExpression(conditionValue);
 		sequenceFlow.setName(CreateCustomGatewayFeature.FLOW_YES);
 		updateCustomGatewayAssociation(exclusiveGateway, conditionValue);
-		RefreshDiagramHandler.refreshDiagram();
+		RefreshDiagramHandler.refreshDiagram(true);
 	}
 	
 	static public void setGatewayCondition(ExclusiveGateway bo, TextAnnotation ta) {
@@ -72,7 +72,7 @@ public class CustomGatewayUtil {
 	    			  if (outgoingSequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES)) {
 	    				  String expression = outgoingSequenceFlow.getConditionExpression();
 	    				  ta.setText(expression);
-	    				  RefreshDiagramHandler.refreshDiagram();
+	    				  RefreshDiagramHandler.refreshDiagram(true);
 	    				  break;
 	    			  }																	
 	    		  }

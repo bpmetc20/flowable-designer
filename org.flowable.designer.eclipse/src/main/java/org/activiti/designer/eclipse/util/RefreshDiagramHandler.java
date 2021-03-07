@@ -19,18 +19,24 @@ import org.eclipse.ui.PlatformUI;
 public class RefreshDiagramHandler {		
 	static List<String> refreshedEditors = new ArrayList<String>();	
 	
-	public static void refreshDiagram() {
-		new RefreshDiagramThread().start();
+	public static void refreshDiagram(boolean asDirty) {		
+		new RefreshDiagramThread(asDirty).start();
 	}
 	
 	static class RefreshDiagramThread extends Thread {
+		boolean dirty = false;
+		
+		RefreshDiagramThread(boolean asDirty) {
+			dirty = asDirty;
+		}
+		
 		@Override
 	     public void run() {
 	    	 Display display = Display.getDefault();
 	         display.syncExec(new Runnable() {
 	        	 @Override
 	             public void run() {
-	        		 refresh();  
+	        		 refresh(dirty);  
 	             }
 	         });
 
@@ -48,7 +54,7 @@ public class RefreshDiagramHandler {
 		return false;
 	}
 	
-	private static void refresh() {
+	private static void refresh(boolean asDirty) {
 		 IFile dataFile = FileService.getActiveDiagramFile();
 		 String name = dataFile.getName();
 		 String diagramName = FileService.getDiagramName(dataFile);
@@ -75,9 +81,10 @@ public class RefreshDiagramHandler {
 				 break;
 			 }
 		 }
-		 refreshedEditors.add(name);
+		 if (asDirty)
+			 refreshedEditors.add(name);
 		 DiagramHandler.openDiagramForBpmnFile(dataFile).isOK();	
-		 refreshedEditors.remove(name);
-	}
-	
+		 if (asDirty)
+			 refreshedEditors.remove(name);
+	}	
 }
