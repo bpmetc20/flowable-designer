@@ -59,6 +59,7 @@ import org.activiti.designer.eclipse.ui.ExportMarshallerRunnable;
 import org.activiti.designer.eclipse.util.DiagramHandler;
 import org.activiti.designer.eclipse.util.ExtensionPointUtil;
 import org.activiti.designer.eclipse.util.FileService;
+import org.activiti.designer.eclipse.util.RefreshDiagramHandler;
 import org.activiti.designer.integration.annotation.Property;
 import org.activiti.designer.integration.servicetask.CustomServiceTask;
 import org.activiti.designer.integration.usertask.CustomUserTask;
@@ -126,6 +127,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   private TransactionalEditingDomain transactionalEditingDomain;
   
   private IEditorInput editorInput = null;
+  private boolean editorDirty = false;
   
   public static ActivitiDiagramEditor get() {
 	  if (INSTANCE == null)
@@ -186,10 +188,12 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     try {
       if (input instanceof ActivitiDiagramEditorInput) {
         finalInput = input;
-        editorInput = finalInput;
+        editorInput = finalInput;        
       } else {
         finalInput = createNewDiagramEditorInput(input);
         editorInput = finalInput;
+        String name = ((ActivitiDiagramEditorInput) editorInput).getDataFile().getName();
+        editorDirty = RefreshDiagramHandler.isDiagramRefreshed(name);
       }
     } catch (CoreException exception) {
       exception.printStackTrace();
@@ -220,7 +224,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   public void setDirty() {
 	  firePropertyChange(PROP_DIRTY);
 	  updateDirtyState();
-  }
+  }  
   
   public boolean doSave(IFile dataFile, String id) {
 	  return save(dataFile, id);	  
@@ -468,7 +472,12 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     TransactionalEditingDomain editingDomain = getEditingDomain();
     // Check that the editor is not yet disposed
     if (editingDomain != null && editingDomain.getCommandStack() != null) {
-      return ((BasicCommandStack) editingDomain.getCommandStack()).isSaveNeeded();
+      boolean isSaveNeeded = 	((BasicCommandStack) editingDomain.getCommandStack()).isSaveNeeded();	
+      if (isSaveNeeded) {
+    	  if (editorDirty)
+    		  editorDirty = false;  
+      }
+      return isSaveNeeded || editorDirty;
     }
     return false;
   }  

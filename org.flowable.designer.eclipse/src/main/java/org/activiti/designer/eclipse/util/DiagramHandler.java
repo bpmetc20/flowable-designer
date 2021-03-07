@@ -206,7 +206,34 @@ public class DiagramHandler {
 				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
 						 new PartInitException("Can't save diagram " + newDiagramName)));
 		 return false;
+	 }	
+	 
+	 public static boolean saveDiagramASTemp(String diagramName, String xmlString) {			 
+		 String modelId = RestClient.createNewModel(diagramName);		 
+		 String errorMessge = "Error while saving the model " + diagramName;			 
+		 IFile ifile;
+		 try {			
+			ifile = FileService.getDiagramFile(diagramName);
+			FileService.writeDiagramToIFile(ifile, xmlString);				 		 
+			xmlString = updateProcessAttributes(xmlString, modelId, diagramName);
+			ActivitiDiagramEditor.get().doSave(ifile, "id-" + modelId);
+		 } catch (Exception e) {
+			 showMessageBoxError(errorMessge);
+			 return false; 
+		 }		 
+		 
+		 try {			 		 
+			 if (!xmlString.isEmpty() && RestClient.saveNewModel(diagramName, xmlString, modelId) != null) {				 			 
+				 return openDiagramForBpmnFile(ifile).isOK();				 
+			 }			 	 
+		 } catch(Exception e) {			 
+		 }		 
+		 ErrorDialog.openError(ActivitiPlugin.getShell(), DiagramHandler.errorMessage, "", 
+				 new Status(IStatus.ERROR, ActivitiPlugin.getID(), "Error while opening new editor.", 
+						 new PartInitException("Can't save diagram " + diagramName)));
+		 return false;
 	 }	  
+	 
 	 
 	 public static void saveAllDiagrams() {	
 		 Set<IFile> diagrams = FileService.getAllDiagramDataFiles();
@@ -231,33 +258,38 @@ public class DiagramHandler {
 	 
 	 public static boolean saveDiagramInCloud(IFile dataFile, Map<String, String> model) {
 		 String diagramName = FileService.getDiagramName(dataFile);	
-		 String xmlString;
-		 String errorMessge = "Error while saving the model " + diagramName;
-		 try {
-			 xmlString = FileService.getFileContent(dataFile);
-		 } catch (Exception e) {
-			 showMessageBoxError(errorMessge);
-			 return false; 
-		 }		 	  
-		 			
 		 if (model.isEmpty()) {
 			 //new diagram
 			 saveDiagramAS(dataFile, diagramName); 
 			 return true;
-		 }
+		 }		 
+		 
+		 String tempDiagramName = diagramName + "-Temp";
+		 String xmlString = "";
+		 String errorMessge = String.format("Error while saving %s. To preserve changes your Diagram will be saved As %s!", diagramName, tempDiagramName);	 
+		 
+		 try {
+			 xmlString = FileService.getFileContent(dataFile);
+		 } catch (Exception e) {			 
+			 showMessageBoxError(errorMessge);
+			 saveDiagramASTemp(tempDiagramName, xmlString); 
+			 return false; 
+		 }	 
 	 		 
 		 String id = getDiagramId(model);
 		 if (id.isEmpty()) {
 			 showMessageBoxError(errorMessge);
+			 saveDiagramASTemp(tempDiagramName, xmlString);			  
 			 return false;
 		 } 
 			 
 		 if (!RestClient.updateModelSource(id, xmlString)) {
-			 showMessageBoxError(errorMessge);		 
+			 showMessageBoxError(errorMessge);
+			 saveDiagramASTemp(tempDiagramName, xmlString); 			 
 			 return false;
 		 }		 
 		 return true;
-	 }
+	 }	 
 	 
 	 public static boolean deployModel(IFile dataFile, String name) {
 		 List<Map<String, String>> listModels = ActivitiPlugin.getModels(true);
@@ -394,7 +426,5 @@ public class DiagramHandler {
 		 }			     
 		 byte[] xmlBytes = bpmnConverter.convertToXML(model);
 		 return new String(xmlBytes, "UTF-8");		
-	 } 
-	 
-	 
+	 }	 
 }

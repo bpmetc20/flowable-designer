@@ -1,5 +1,7 @@
 package org.activiti.designer.eclipse.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.activiti.bpmn.model.SequenceFlow;
@@ -15,6 +17,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 public class RefreshDiagramHandler {		
+	static List<String> refreshedEditors = new ArrayList<String>();	
+	
 	public static void refreshDiagram() {
 		new RefreshDiagramThread().start();
 	}
@@ -31,7 +35,18 @@ public class RefreshDiagramHandler {
 	         });
 
 	      }    
-	}	
+	}
+	
+	public static boolean isDiagramRefreshed(String name) {
+		if (refreshedEditors.isEmpty())
+			return false;
+		for (String refresheNames : refreshedEditors) {
+			if (refresheNames.equals(name)) {
+				return true;
+			}		
+		}
+		return false;
+	}
 	
 	private static void refresh() {
 		 IFile dataFile = FileService.getActiveDiagramFile();
@@ -60,6 +75,9 @@ public class RefreshDiagramHandler {
 				 break;
 			 }
 		 }
-		 DiagramHandler.openDiagramForBpmnFile(dataFile).isOK();
-	}	
+		 refreshedEditors.add(name);
+		 DiagramHandler.openDiagramForBpmnFile(dataFile).isOK();	
+		 refreshedEditors.remove(name);
+	}
+	
 }
