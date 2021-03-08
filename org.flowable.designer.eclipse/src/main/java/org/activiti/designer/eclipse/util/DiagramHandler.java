@@ -267,21 +267,16 @@ public class DiagramHandler {
 		 String tempDiagramName = diagramName + "-Temp";
 		 String xmlString = "";
 		 String errorMessge = String.format("Error while saving %s. To preserve changes your Diagram will be saved As %s!", diagramName, tempDiagramName);	 
+		 String id = getDiagramId(model);
 		 
 		 try {
 			 xmlString = FileService.getFileContent(dataFile);
+			 xmlString = updateProcessAttributes(xmlString, id, diagramName);
 		 } catch (Exception e) {			 
 			 showMessageBoxError(errorMessge);
 			 saveDiagramASTemp(tempDiagramName, xmlString); 
 			 return false; 
-		 }	 
-	 		 
-		 String id = getDiagramId(model);
-		 if (id.isEmpty()) {
-			 showMessageBoxError(errorMessge);
-			 saveDiagramASTemp(tempDiagramName, xmlString);			  
-			 return false;
-		 } 
+		 }		
 			 
 		 if (!RestClient.updateModelSource(id, xmlString)) {
 			 showMessageBoxError(errorMessge);
