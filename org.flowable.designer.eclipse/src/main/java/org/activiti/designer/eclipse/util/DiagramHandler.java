@@ -288,12 +288,8 @@ public class DiagramHandler {
 			 saveDiagramASTemp(tempDiagramName, xmlString); 			 
 			 return false;
 		 }	
-		 /*
-		 if (ActivitiDiagramEditor.get().isDirty()) {
-			 //this case were refresh happened and editor still dirty
-			 RefreshDiagramHandler.refreshDiagram(false);	
-		 }	
-		 */ 
+		 
+		 ActivitiDiagramEditor.get().clearDirty();
 		 return true;
 	 }	 
 	 

@@ -224,7 +224,13 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   public void setDirty() {
 	  firePropertyChange(PROP_DIRTY);
 	  updateDirtyState();
-  }  
+  } 
+  
+  public void clearDirty() {
+	  ((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
+	  updateDirtyState();
+  }
+	  
   
   public boolean doSave(IFile dataFile, String id) {
 	  return save(dataFile, id);	  
@@ -263,8 +269,6 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   }
   
   private boolean save(IFile dataFile, String id) {
-	  boolean saved = false;
-	  
 	  try {		      
 	      BpmnMemoryModel model = ModelHandler.getModel(EcoreUtil.getURI(getDiagramTypeProvider().getDiagram()));
 	      List<Process> processes =  model.getBpmnModel().getProcesses();
@@ -286,7 +290,8 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 
 	      // Invoke export marshallers to produce additional output
 	      doInvokeExportMarshallers(model);
-	      saved = true;
+	      clearDirty();
+		  return true;
 	      
 	    } catch (Exception e) {
 	      // TODO Auto-generated catch block
@@ -294,12 +299,9 @@ public class ActivitiDiagramEditor extends DiagramEditor {
 	        messageBox.setText("Warning");
 	        messageBox.setMessage("Error while saving the model " + e.getLocalizedMessage());
 	        messageBox.open();
-	    }
-
-	    ((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
-	    updateDirtyState();
+	    }	    
 	    
-	    return saved;
+	    return false;
   }
   
   private void doSaveImage(final String diagramFileString, BpmnMemoryModel model) {
