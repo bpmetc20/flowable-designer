@@ -270,8 +270,7 @@ public class DiagramHandler {
 		 String id = getDiagramId(model);
 		 
 		 try {
-			 xmlString = FileService.getFileContent(dataFile);
-			 xmlString = updateProcessAttributes(xmlString, id, diagramName);
+			 xmlString = FileService.getFileContent(dataFile);			 
 		 } catch (Exception e) {			 
 			 showMessageBoxError(errorMessge);
 			 saveDiagramASTemp(tempDiagramName, xmlString); 
@@ -317,6 +316,13 @@ public class DiagramHandler {
 		 		 return getDiagramId(model);			
 		 }
 		 return "";
+	 }
+	 
+	 public static String getSavedDiagramId(IFile dataFile) {
+		 List<Map<String, String>> listModels = ActivitiPlugin.getModels(true);
+		 String diagramName = FileService.getDiagramName(dataFile);
+		 Map<String, String> model = DiagramHandler.getDiagramByName(diagramName, listModels);
+		 return getSavedModelId(model);
 	 }
 	 
 	 public static Map<String, String> getDiagramByName(String diagramName, List<Map<String, String>> listModels) {
@@ -393,7 +399,7 @@ public class DiagramHandler {
 		 return true;	 
      }	 	
 	 
-	 private static String getSavedModelId(final Map<String, String> model) {
+	 public static String getSavedModelId(final Map<String, String> model) {
 		 return "id-" + getDiagramId(model);
 	 }	 
 	 

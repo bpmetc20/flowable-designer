@@ -242,8 +242,9 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     
     //calling while closing tab and save  
     IFile dataFile = ((ActivitiDiagramEditorInput) editorInput).getDataFile();
-    
-    if (save(dataFile, "")) {    	
+    String savedId = DiagramHandler.getSavedDiagramId(dataFile);
+        
+    if (save(dataFile, savedId)) {    	
         DiagramHandler.saveDiagramInCloud(dataFile);
     }
   }
