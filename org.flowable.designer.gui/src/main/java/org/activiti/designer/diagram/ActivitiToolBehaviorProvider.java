@@ -832,7 +832,29 @@ public class ActivitiToolBehaviorProvider extends DefaultToolBehaviorProvider {
         } else if ("compensationthrowingevent".equalsIgnoreCase(toolEntry.getLabel())) {
           intermediateEventCompartmentEntry.getToolEntries().add(toolEntry);
         } else if ("nonethrowingevent".equalsIgnoreCase(toolEntry.getLabel())) {
-          intermediateEventCompartmentEntry.getToolEntries().add(toolEntry);
+          intermediateEventCompartmentEntry.getToolEntries().add(toolEntry);        
+        } else if ("EqualGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);
+        } else if ("NotEqualGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);
+        } else if ("ContainsGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);
+        } else if ("DoesNotContainGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);
+        } else if ("GreaterGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);
+        } else if ("GreaterEqualGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry); 
+        } else if ("LessGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);
+        } else if ("LessEqualGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);
+        } else if ("StartWithGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);
+        } else if ("EndWithGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry);        
+        } else if ("RangeGateway".equalsIgnoreCase(toolEntry.getLabel())) {
+            gatewayCompartmentEntry.getToolEntries().add(toolEntry); 
         } else if ("parallelgateway".equalsIgnoreCase(toolEntry.getLabel())) {
           gatewayCompartmentEntry.getToolEntries().add(toolEntry);
         } else if ("exclusivegateway".equalsIgnoreCase(toolEntry.getLabel())) {

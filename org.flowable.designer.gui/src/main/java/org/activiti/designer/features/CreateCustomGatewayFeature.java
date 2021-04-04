@@ -62,7 +62,7 @@ public class CreateCustomGatewayFeature extends AbstractCreateFastBPMNFeature {
 
 
   public CreateCustomGatewayFeature(IFeatureProvider fp, GatewayType getewayType) {
-	  super(fp, "ExclusiveGateway", "Add " + getFeatureName(getewayType));
+	  super(fp, getFeatureName(getewayType), "Add " + getFeatureName(getewayType));
 	  
 	  this.getewayType = getewayType;	  
   }
