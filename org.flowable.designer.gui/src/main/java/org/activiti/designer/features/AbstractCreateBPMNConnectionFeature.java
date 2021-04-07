@@ -16,6 +16,8 @@
  */
 package org.activiti.designer.features;
 
+import java.util.UUID;
+
 import org.activiti.bpmn.model.BaseElement;
 import org.activiti.designer.util.eclipse.ActivitiUiUtil;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -41,4 +43,7 @@ public abstract class AbstractCreateBPMNConnectionFeature extends AbstractCreate
     return ActivitiUiUtil.getNextId(getFeatureClass(), getFeatureIdKey(), getDiagram());
   }
 
+  protected static String getUUid() {
+	  return UUID.randomUUID().toString();
+  }
 }

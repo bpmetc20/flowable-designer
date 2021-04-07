@@ -21,7 +21,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateErrorEndEventFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "errorendevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateErrorEndEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

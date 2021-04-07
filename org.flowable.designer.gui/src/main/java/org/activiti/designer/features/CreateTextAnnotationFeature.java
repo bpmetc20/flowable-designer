@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateTextAnnotationFeature extends AbstractCreateFastBPMNFeature {
 
-	public static final String FEATURE_ID_KEY = "textannotation";
+	public static final String FEATURE_ID_KEY = getUUid();
 	
 	public CreateTextAnnotationFeature(final IFeatureProvider fp) {
 		super(fp, "Annotation", "Provides additional textual information");

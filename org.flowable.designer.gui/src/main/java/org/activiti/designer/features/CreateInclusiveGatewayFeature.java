@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateInclusiveGatewayFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "inclusivegateway";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateInclusiveGatewayFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

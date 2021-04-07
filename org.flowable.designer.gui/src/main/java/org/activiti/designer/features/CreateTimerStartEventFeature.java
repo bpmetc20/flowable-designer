@@ -22,7 +22,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateTimerStartEventFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "timerstartevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateTimerStartEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

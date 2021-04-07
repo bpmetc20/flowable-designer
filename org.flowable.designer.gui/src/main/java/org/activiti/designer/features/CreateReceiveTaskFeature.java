@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateReceiveTaskFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "receivetask";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateReceiveTaskFeature(IFeatureProvider fp) {
     super(fp, "ReceiveTask", "Add receive task");

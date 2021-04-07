@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateMailTaskFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "mailtask";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateMailTaskFeature(IFeatureProvider fp) {
     super(fp, "MailTask", "Add mail task");

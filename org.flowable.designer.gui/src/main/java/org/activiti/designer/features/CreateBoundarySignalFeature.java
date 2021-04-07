@@ -13,6 +13,8 @@
  */
 package org.activiti.designer.features;
 
+import java.util.UUID;
+
 import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.BoundaryEvent;
 import org.activiti.bpmn.model.SignalEventDefinition;
@@ -22,7 +24,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateBoundarySignalFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "boundarysignal";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateBoundarySignalFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

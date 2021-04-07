@@ -21,8 +21,8 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateCancelEndEventFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "cancelendevent";
-
+  public static final String FEATURE_ID_KEY = getUUid();
+  
   public CreateCancelEndEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature
     super(fp, "CancelEndEvent", "Add cancel end event");

@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateScriptTaskFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "scripttask";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateScriptTaskFeature(IFeatureProvider fp) {
     super(fp, "ScriptTask", "Add script task");

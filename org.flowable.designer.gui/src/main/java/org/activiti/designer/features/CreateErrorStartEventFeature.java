@@ -22,7 +22,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateErrorStartEventFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "errorstartevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateErrorStartEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

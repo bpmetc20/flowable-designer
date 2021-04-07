@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateEmbeddedSubProcessFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "subprocess";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateEmbeddedSubProcessFeature(IFeatureProvider fp) {
     super(fp, "SubProcess", "Add sub process");

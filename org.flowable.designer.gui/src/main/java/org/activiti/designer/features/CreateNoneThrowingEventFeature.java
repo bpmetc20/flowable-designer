@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateNoneThrowingEventFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "noneintermediatethrowevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateNoneThrowingEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

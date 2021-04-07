@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateCallActivityFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "callactivity";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateCallActivityFeature(IFeatureProvider fp) {
     super(fp, "CallActivity", "Add call activity");

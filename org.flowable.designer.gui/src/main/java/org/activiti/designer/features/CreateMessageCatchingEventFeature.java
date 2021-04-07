@@ -21,7 +21,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateMessageCatchingEventFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "messageintermediatecatchevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateMessageCatchingEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

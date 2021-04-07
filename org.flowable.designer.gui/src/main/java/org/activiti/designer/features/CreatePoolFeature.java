@@ -31,7 +31,7 @@ import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 
 public class CreatePoolFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "pool";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreatePoolFeature(IFeatureProvider fp) {
     super(fp, "Pool", "Add pool");

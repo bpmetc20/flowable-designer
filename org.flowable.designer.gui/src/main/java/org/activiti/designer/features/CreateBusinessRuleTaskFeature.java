@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateBusinessRuleTaskFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "businessruletask";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateBusinessRuleTaskFeature(IFeatureProvider fp) {
     super(fp, "BusinessRuleTask", "Add business rule task");

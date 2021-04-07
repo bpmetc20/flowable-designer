@@ -23,7 +23,7 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 
 public class CreateEventSubProcessFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "eventsubprocess";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateEventSubProcessFeature(IFeatureProvider fp) {
     super(fp, "EventSubProcess", "Add event sub process");

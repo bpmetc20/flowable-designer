@@ -21,7 +21,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateSignalThrowingEventFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "signalintermediatethrowevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateSignalThrowingEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

@@ -23,7 +23,7 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 
 public class CreateTransactionFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "transaction";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateTransactionFeature(IFeatureProvider fp) {
     super(fp, "Transaction", "Add transaction");

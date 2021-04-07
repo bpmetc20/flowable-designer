@@ -45,7 +45,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateUserTaskFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "usertask";
+  public static final String FEATURE_ID_KEY = getUUid();
   
   private String customUserTaskId;
 

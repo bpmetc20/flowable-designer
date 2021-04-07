@@ -21,7 +21,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateCompensationThrowingEventFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "compensationintermediatethrowevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateCompensationThrowingEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

@@ -21,7 +21,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateTerminateEndEventFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "terminateendevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateTerminateEndEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

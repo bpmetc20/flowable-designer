@@ -17,6 +17,7 @@
 package org.activiti.designer.features;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.Artifact;
@@ -216,6 +217,10 @@ public abstract class AbstractCreateBPMNFeature extends AbstractCreateFeature {
   	} else {
   		targetElement.setName(defaultName);
   	}
+  }
+  
+  protected static String getUUid() {
+	  return UUID.randomUUID().toString();
   }
   
   private void setLocation(BaseElement targetElement, CreateContext context) {

@@ -13,6 +13,8 @@
  */
 package org.activiti.designer.features;
 
+import java.util.UUID;
+
 import org.activiti.bpmn.model.Activity;
 import org.activiti.bpmn.model.BoundaryEvent;
 import org.activiti.bpmn.model.CallActivity;
@@ -26,7 +28,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateBoundaryErrorFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "boundaryerror";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateBoundaryErrorFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

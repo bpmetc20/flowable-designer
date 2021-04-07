@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateManualTaskFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "manualtask";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateManualTaskFeature(IFeatureProvider fp) {
     super(fp, "ManualTask", "Add manual task");

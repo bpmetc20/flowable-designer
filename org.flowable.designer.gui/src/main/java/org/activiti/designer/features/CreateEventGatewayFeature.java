@@ -20,7 +20,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateEventGatewayFeature extends AbstractCreateFastBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "eventgateway";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateEventGatewayFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

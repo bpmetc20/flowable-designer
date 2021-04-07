@@ -31,7 +31,7 @@ import org.eclipse.graphiti.mm.pictograms.Diagram;
 
 public class CreateLaneFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "lane";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateLaneFeature(IFeatureProvider fp) {
     super(fp, "Lane", "Add lane");

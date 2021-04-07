@@ -26,7 +26,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateSignalStartEventFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "signalstartevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateSignalStartEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature

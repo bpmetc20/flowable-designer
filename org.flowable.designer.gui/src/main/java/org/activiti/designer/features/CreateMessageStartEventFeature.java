@@ -26,7 +26,7 @@ import org.eclipse.graphiti.features.context.ICreateContext;
 
 public class CreateMessageStartEventFeature extends AbstractCreateBPMNFeature {
 
-  public static final String FEATURE_ID_KEY = "messagestartevent";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateMessageStartEventFeature(IFeatureProvider fp) {
     // set name and description of the creation feature
