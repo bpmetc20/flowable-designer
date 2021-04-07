@@ -32,7 +32,7 @@ import org.eclipse.graphiti.mm.pictograms.Connection;
 
 public class CreateMessageFlowFeature extends AbstractCreateBPMNConnectionFeature {
 
-  public static final String FEATURE_ID_KEY = "messageflow";
+  public static final String FEATURE_ID_KEY = getUUid();
 
   public CreateMessageFlowFeature(IFeatureProvider fp) {
     // provide name and description for the UI, e.g. the palette
