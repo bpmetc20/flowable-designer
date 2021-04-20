@@ -162,7 +162,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		});
 
 		dueDateText = createTextControl(false);
-		createLabel("Due date (variable)", dueDateText);
+		createLabel("Task Duration (in days)", dueDateText);
 		//priorityText = createTextControl(false);
 		//createLabel("Priority", priorityText);
 		//task.getPriority();
