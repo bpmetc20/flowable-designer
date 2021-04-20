@@ -44,7 +44,6 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 public class PropertyUserTaskSection extends ActivitiPropertySection implements ITabbedPropertyConstants {
 
 	protected Text dueDateText;
-	protected Text taskDurationText;
 	//protected Text priorityText;
 	protected Combo categoryCombo;
 	//protected Text skipExpressionText;
@@ -164,10 +163,10 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 
 		dueDateText = createTextControl(false);
 		createLabel("Due date (variable)", dueDateText);
-		taskDurationText = createTextControl(false);
-		createLabel("Task Duration", taskDurationText);
 		//priorityText = createTextControl(false);
 		//createLabel("Priority", priorityText);
+		//task.getPriority();
+		//task.setPriority(taskDurationText.getText());
 		
 		categoryCombo = createComboboxMy(categoryValues, 0, false);
 		createLabel("Category", categoryCombo);
@@ -208,8 +207,6 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			return roleAssigneeValue;			
 		} else if (control == dueDateText) {
 			return task.getDueDate();
-		} else if (control == taskDurationText) {
-			return task.getPriority();
 		} else if (control == categoryCombo) {
 			control.setEnabled(!task.isExtended());
 			String taskKey = task.getCategory();
@@ -269,8 +266,6 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 				task.getCandidateGroups().add(groupId);
 		} else if (control == dueDateText) {
 			task.setDueDate(dueDateText.getText());
-		} else if (control == taskDurationText) {
-			task.setPriority(taskDurationText.getText());
 		} else if (control == categoryCombo) {
 			String categoryValue = categoryCombo.getText();
 			if (categoryValue == null || categoryValue.isEmpty())
