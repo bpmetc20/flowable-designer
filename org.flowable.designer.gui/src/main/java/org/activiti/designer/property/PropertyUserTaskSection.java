@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertyConstants;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
@@ -205,7 +206,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 				groupCombo.setText(roleAssigneeValue);
 			lastGroupId = taskKey;
 			return roleAssigneeValue;			
-		} else if (control == dueDateText) {
+		} else if (control == dueDateText) {			
 			return task.getDueDate();
 		} else if (control == categoryCombo) {
 			control.setEnabled(!task.isExtended());
@@ -235,11 +236,11 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			lastFormId = taskKey;
 			return formValue; 
 		} else if (control == selectAssignee) {
-			String assigneeSekection = task.getAssignee();
-			if (assigneeSekection == null || assigneeSekection.isEmpty()) 
-				assigneeSekection = "false";
-			changeSelection(assigneeSekection);
-			return assigneeSekection;
+			String assigneeSelection = task.getAssignee();
+			if (assigneeSelection == null || assigneeSelection.isEmpty()) 
+				assigneeSelection = "false";
+			changeSelection(assigneeSelection);
+			return assigneeSelection;
 		}
 		return null;
 	}
@@ -265,7 +266,17 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			if (groupId != null && !groupId.isEmpty())
 				task.getCandidateGroups().add(groupId);
 		} else if (control == dueDateText) {
-			task.setDueDate(dueDateText.getText());
+			String dueDate = dueDateText.getText();	
+			try{
+		        Float.parseFloat(dueDate);
+		        task.setDueDate(dueDate);
+		    } catch(NumberFormatException e){
+		    	MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK);
+		        messageBox.setText("Warning");
+		        messageBox.setMessage("Incorrect value!" + e.getLocalizedMessage());
+		        messageBox.open();
+		        dueDateText.setText("");
+		    }			
 		} else if (control == categoryCombo) {
 			String categoryValue = categoryCombo.getText();
 			if (categoryValue == null || categoryValue.isEmpty())
