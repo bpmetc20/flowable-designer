@@ -207,7 +207,11 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			lastGroupId = taskKey;
 			return roleAssigneeValue;			
 		} else if (control == dueDateText) {			
-			return task.getDueDate();
+			String dueDate = task.getDueDate();
+			if (dueDate == null || dueDate.isEmpty())
+				return "";
+			dueDateText.setText(dueDate);
+			return dueDate;
 		} else if (control == categoryCombo) {
 			control.setEnabled(!task.isExtended());
 			String taskKey = task.getCategory();
@@ -267,16 +271,18 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 				task.getCandidateGroups().add(groupId);
 		} else if (control == dueDateText) {
 			String dueDate = dueDateText.getText();	
+			if (dueDate == null || dueDate.isEmpty())
+				return;
 			try{
-		        Float.parseFloat(dueDate);
-		        task.setDueDate(dueDate);
-		    } catch(NumberFormatException e){
-		    	MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK);
-		        messageBox.setText("Warning");
-		        messageBox.setMessage("Incorrect value!" + e.getLocalizedMessage());
-		        messageBox.open();
-		        dueDateText.setText("");
-		    }			
+				Integer.parseInt(dueDate);
+				task.setDueDate(dueDate);
+			} catch(NumberFormatException e){
+				MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK);
+				messageBox.setText("Warning");
+				messageBox.setMessage("Incorrect value " + e.getLocalizedMessage());
+				messageBox.open();
+				dueDateText.setText("");
+			}			
 		} else if (control == categoryCombo) {
 			String categoryValue = categoryCombo.getText();
 			if (categoryValue == null || categoryValue.isEmpty())
