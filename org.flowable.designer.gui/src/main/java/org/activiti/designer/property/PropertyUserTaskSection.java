@@ -62,6 +62,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 	private String lastUserId = "";
 	private String lastGroupId = "";
 	private String lastCategoryId = "";
+	private String lastDueDate = "";
 	
 	private Map<String, String> loadedForms = new HashMap<String, String>();
 	
@@ -210,7 +211,9 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			String dueDate = task.getDueDate();
 			if (dueDate == null || dueDate.isEmpty())
 				return "";
-			dueDateText.setText(dueDate);
+			if (lastDueDate.isEmpty() || !lastDueDate.equals(dueDate))
+				dueDateText.setText(dueDate);			
+			lastDueDate = dueDate;
 			return dueDate;
 		} else if (control == categoryCombo) {
 			control.setEnabled(!task.isExtended());
