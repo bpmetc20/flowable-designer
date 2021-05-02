@@ -63,7 +63,7 @@ public class PropertyGeneralSection extends ActivitiPropertySection implements I
     	}
     } else {
 	    nameText = createTextControl(false);
-	    nameText.setEnabled(false);
+	    //nameText.setEnabled(false);
 	    createLabel("Name", nameText);
     }
   }
