@@ -211,8 +211,18 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			String dueDate = task.getDueDate();
 			if (dueDate == null || dueDate.isEmpty())
 				return "";
-			if (lastDueDate.isEmpty() || !lastDueDate.equals(dueDate))
-				dueDateText.setText(dueDate);			
+			if (lastDueDate.isEmpty() || !lastDueDate.equals(dueDate)) {
+				//remove first P
+				if (dueDate.charAt(0) == 'P') {
+					dueDate = dueDate.substring(1);
+				}
+				//remove last D
+				int len = dueDate.length() - 1;
+				if (dueDate.charAt(len) == 'D') {
+					dueDate = dueDate.substring(0, len);
+				}				
+				dueDateText.setText(dueDate);	
+			}
 			lastDueDate = dueDate;
 			return dueDate;
 		} else if (control == categoryCombo) {
@@ -277,8 +287,8 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 			if (dueDate == null || dueDate.isEmpty())
 				return;
 			try{
-				Integer.parseInt(dueDate);
-				task.setDueDate(dueDate);
+				int val= Integer.parseInt(dueDate);
+				task.setDueDate(String.format("P%dD", val));
 			} catch(NumberFormatException e){
 				MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK);
 				messageBox.setText("Warning");
