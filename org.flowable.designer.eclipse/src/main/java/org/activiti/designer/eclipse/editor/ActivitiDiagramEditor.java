@@ -224,11 +224,13 @@ public class ActivitiDiagramEditor extends DiagramEditor {
   public void setDirty() {
 	  firePropertyChange(PROP_DIRTY);
 	  updateDirtyState();
+	  editorDirty = true;
   } 
   
   public void clearDirty() {
 	  ((BasicCommandStack) getEditingDomain().getCommandStack()).saveIsDone();
-	  updateDirtyState();
+	  editorDirty = false;
+	  updateDirtyState();	  
   }
 	  
   
@@ -475,11 +477,7 @@ public class ActivitiDiagramEditor extends DiagramEditor {
     TransactionalEditingDomain editingDomain = getEditingDomain();
     // Check that the editor is not yet disposed
     if (editingDomain != null && editingDomain.getCommandStack() != null) {
-      boolean isSaveNeeded = 	((BasicCommandStack) editingDomain.getCommandStack()).isSaveNeeded();	
-      if (isSaveNeeded) {
-    	  if (editorDirty)
-    		  editorDirty = false;  
-      }
+      boolean isSaveNeeded = ((BasicCommandStack) editingDomain.getCommandStack()).isSaveNeeded();	
       return isSaveNeeded || editorDirty;
     }
     return false;

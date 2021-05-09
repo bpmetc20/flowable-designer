@@ -103,12 +103,14 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
     				dialog.open();
     				String conditionValue = dialog.getConditionValue();
     				conditionExpressionText.setText(conditionValue);
-    				storeValueInModel(control, businessObject);	  			
+    				storeValueInModel(control, businessObject);	     				
 	  			FlowElement sourceElement = ActivitiDiagramEditor.get().getModel().getFlowElement(flowReference);
 				ExclusiveGateway exclusiveGateway = (ExclusiveGateway)sourceElement; 
 				if (CustomGatewayUtil.updateCustomGatewayAssociation(exclusiveGateway, conditionValue)) {
 					RefreshDiagramHandler.refreshDiagram(true);
-				}				
+				}
+				ActivitiDiagramEditor editor = ActivitiDiagramEditor.get();
+				editor.setDirty();
 	  		}
     		});
     	}
