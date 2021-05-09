@@ -47,29 +47,40 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
   protected Text skipExpressionText;
   protected Button setConditionButton;
   
+  private boolean buttonSelectedListener = false;
+  
   @Override
   public void createFormControls(TabbedPropertySheetPage aTabbedPropertySheetPage) {
-    flowLabelWidthText = createTextControl(false);
-    //createLabel("Label width (50-500)", flowLabelWidthText);
-    skipExpressionText = createTextControl(false);
-    setConditionButton = getWidgetFactory().createButton(formComposite, "Set Condition", SWT.PUSH);
-	setConditionButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_SELECTION));
-	setConditionButton.setVisible(false);
-	setConditionButton.addSelectionListener(new SelectionAdapter() {
-	@Override
-	public void widgetSelected(SelectionEvent evt) {
-			
-	}
-	});
-	
-    //createLabel("Skip expression", skipExpressionText);    
-    conditionExpressionText = createTextControl(true);
-    createLabel("Condition", conditionExpressionText);    
+	  setConditionButton = getWidgetFactory().createButton(formComposite, "Set Condition", SWT.PUSH);
+	  setConditionButton.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_LIST_SELECTION));
+	  setConditionButton.setEnabled(false);	
+	  
+	  conditionExpressionText = createTextControl(true);
+	  createLabel("Condition", conditionExpressionText);  	    
+	    
+	  skipExpressionText = createTextControl(false);
+	  createLabel("Skip expression", skipExpressionText); 
+	  flowLabelWidthText = createTextControl(false);
+	  flowLabelWidthText.setEnabled(false);   
+	  createLabel("Label", flowLabelWidthText);   
   }
 
   @Override
   protected Object getModelValueForControl(Control control, Object businessObject) {
-    SequenceFlow sequenceFlow = (SequenceFlow) businessObject;
+	SequenceFlow sequenceFlow = (SequenceFlow) businessObject;  
+	String flowReference = sequenceFlow.getSourceRef();
+	String customGatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(flowReference);
+	boolean isCustom = !customGatewayName.isEmpty() && sequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES);
+	if (isCustom) {
+		conditionExpressionText.setEnabled(false);
+	    skipExpressionText.setEnabled(false);   
+	  	setConditionButton.setEnabled(true);	  	
+	} else {
+		conditionExpressionText.setEnabled(true);
+	    skipExpressionText.setEnabled(true);   
+	  	setConditionButton.setEnabled(false);
+	} 
+    
     if (control == flowLabelWidthText) {
       EList<ConnectionDecorator> decoratorList = ((FreeFormConnection) getSelectedPictogramElement()).getConnectionDecorators();
       for (ConnectionDecorator decorator : decoratorList) {
@@ -77,40 +88,33 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
           org.eclipse.graphiti.mm.algorithms.MultiText text = (org.eclipse.graphiti.mm.algorithms.MultiText) decorator.getGraphicsAlgorithm();
           return "" + text.getWidth();
         }
-      }
-      
+      }      
     } else if (control == conditionExpressionText) {
-      String customGatewayName = CreateCustomGatewayFeature.isCustomGatewayRef(sequenceFlow.getSourceRef());	
-      if (!customGatewayName.isEmpty()) {
-    	  control.setEnabled(false);
-    	  skipExpressionText.setVisible(false);
-    	  flowLabelWidthText.setVisible(false);
-    	  if (sequenceFlow.getName().equals(CreateCustomGatewayFeature.FLOW_YES)) {
-    		setConditionButton.setVisible(true);
+    	if (isCustom && !buttonSelectedListener) {
+    		buttonSelectedListener = true;
     		setConditionButton.addSelectionListener(new SelectionAdapter() {
-    		@Override
-    		public void widgetSelected(SelectionEvent evt) {
-    			String conditionExpression = CreateCustomGatewayFeature.getCondition(customGatewayName);    			
-    			GatewayType gatewayType = CreateCustomGatewayFeature.getKey(customGatewayName);
-                MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, 
-    					gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false), conditionExpressionText.getText());
-    		 	dialog.create();
-    			dialog.open();
-    			String conditionValue = dialog.getConditionValue();
-    			conditionExpressionText.setText(dialog.getConditionValue()); 
-    			FlowElement sourceElement = ActivitiDiagramEditor.get().getModel().getFlowElement(sequenceFlow.getSourceRef());
+    			@Override
+    			public void widgetSelected(SelectionEvent evt) {
+    				String conditionExpression = CreateCustomGatewayFeature.getCondition(customGatewayName);    			
+    				GatewayType gatewayType = CreateCustomGatewayFeature.getKey(customGatewayName);
+    				MyGatewayAreaDialog dialog = new MyGatewayAreaDialog(CreateCustomGatewayFeature.FLOW_YES, customGatewayName, 
+	  					gatewayType, conditionExpression, ActivitiPlugin.getProjectsParam(false), conditionExpressionText.getText());
+    				dialog.create();
+    				dialog.open();
+    				String conditionValue = dialog.getConditionValue();
+    				conditionExpressionText.setText(conditionValue);
+    				sequenceFlow.setConditionExpression(conditionValue);	  			
+	  			FlowElement sourceElement = ActivitiDiagramEditor.get().getModel().getFlowElement(flowReference);
 				ExclusiveGateway exclusiveGateway = (ExclusiveGateway)sourceElement; 
 				if (CustomGatewayUtil.updateCustomGatewayAssociation(exclusiveGateway, conditionValue)) {
 					RefreshDiagramHandler.refreshDiagram(true);
-				}
-    		}
+				}				
+	  		}
     		});
-    	  }
-      }
-      return sequenceFlow.getConditionExpression();
-      
+    	}
+    	return sequenceFlow.getConditionExpression();      
     } else if (control == skipExpressionText) {
-      return sequenceFlow.getSkipExpression();
+    	return sequenceFlow.getSkipExpression();
     }
     return null;
   }
