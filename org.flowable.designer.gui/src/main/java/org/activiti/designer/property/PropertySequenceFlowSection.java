@@ -103,7 +103,7 @@ public class PropertySequenceFlowSection extends ActivitiPropertySection impleme
     				dialog.open();
     				String conditionValue = dialog.getConditionValue();
     				conditionExpressionText.setText(conditionValue);
-    				sequenceFlow.setConditionExpression(conditionValue);	  			
+    				storeValueInModel(control, businessObject);	  			
 	  			FlowElement sourceElement = ActivitiDiagramEditor.get().getModel().getFlowElement(flowReference);
 				ExclusiveGateway exclusiveGateway = (ExclusiveGateway)sourceElement; 
 				if (CustomGatewayUtil.updateCustomGatewayAssociation(exclusiveGateway, conditionValue)) {
