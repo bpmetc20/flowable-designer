@@ -294,7 +294,18 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 				messageBox.setText("Warning");
 				messageBox.setMessage("Incorrect value " + e.getLocalizedMessage());
 				messageBox.open();
-				dueDateText.setText("");
+				//set old date back
+				String oldDate = task.getDueDate();
+				//remove first P
+				if (oldDate.charAt(0) == 'P') {
+					oldDate = oldDate.substring(1);
+				}
+				//remove last D
+				int len = oldDate.length() - 1;
+				if (oldDate.charAt(len) == 'D') {
+					oldDate = oldDate.substring(0, len);
+				}
+				dueDateText.setText(oldDate);
 			}			
 		} else if (control == categoryCombo) {
 			String categoryValue = categoryCombo.getText();
