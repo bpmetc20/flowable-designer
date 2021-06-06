@@ -138,6 +138,12 @@ public class MyGatewayAreaDialog extends TitleAreaDialog {
     	if (validateInput())
     		super.okPressed();        
     }
+    
+    @Override
+    protected void cancelPressed() {
+    	if (validateInput())
+    		super.okPressed();        
+    }
 
     public String getConditionValue() {
         return selectedValue;
