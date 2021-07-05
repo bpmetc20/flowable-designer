@@ -20,6 +20,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.time.Instant;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -235,4 +237,11 @@ public class Util {
     }
     return result;
   }
+  
+  public static Long getUtcTimeMs() {
+	  Instant instant = Instant.now();
+	  return Long.parseLong(instant.getEpochSecond() + "" + instant.get(ChronoField.MILLI_OF_SECOND));
+  }
+  
+ 
 }
