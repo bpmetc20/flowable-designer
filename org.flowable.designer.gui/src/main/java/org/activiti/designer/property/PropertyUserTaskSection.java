@@ -242,7 +242,7 @@ public class PropertyUserTaskSection extends ActivitiPropertySection implements 
 		} else if (control == formTypeCombo) {
 			String taskKey = task.getFormKey();	
 			if (taskKey == null || taskKey.isEmpty()) {
-				formTypeCombo.setText(ActivitiPlugin.NEW_FORM);
+				//formTypeCombo.setText(ActivitiPlugin.NEW_FORM);
 				return "";
 			}
 			String formValue = loadedForms.get(taskKey);
